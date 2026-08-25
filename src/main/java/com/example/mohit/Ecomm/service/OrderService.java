@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -89,6 +91,24 @@ public class OrderService {
     	            orders.getUser() != null ? orders.getUser().getEmail() : "Unknown",
     	            orderItems
     	    );
+    	}
+
+
+     public List<OrderDTO> getOrderByUser(Long userId) {
+
+    	    Optional<User> userOp = userRepository.findById(userId);
+
+    	    if (userOp.isEmpty()) {
+    	        throw new RuntimeException("User not found");
+    	    }
+
+    	    User user = userOp.get();
+
+    	    List<Orders> ordersList = orderRepository.findByUser(user);
+
+    	    return ordersList.stream()
+    	            .map(this::convertToDTO)
+    	            .collect(Collectors.toList());
     	}
 }
 	
