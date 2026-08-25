@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.mohit.Ecomm.dto.OrderDTO;
 import com.example.mohit.Ecomm.dto.OrderItemDTO;
@@ -20,6 +21,7 @@ import com.example.mohit.Ecomm.repo.OrderRepository;
 import com.example.mohit.Ecomm.repo.ProductRepository;
 import com.example.mohit.Ecomm.repo.UserRepository;
 
+@Service
 public class OrderService {
 
 	@Autowired
