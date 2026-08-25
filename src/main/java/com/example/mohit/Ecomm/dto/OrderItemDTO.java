@@ -21,6 +21,14 @@ public class OrderItemDTO {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	
+	public OrderItemDTO(String productName, double productPrice, int quantity) {
+		super();
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.quantity = quantity;
+	}
+	
 	private String productName;
 	private double productPrice;
 	private int quantity;

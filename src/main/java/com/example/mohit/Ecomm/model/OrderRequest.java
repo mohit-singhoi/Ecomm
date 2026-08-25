@@ -5,6 +5,9 @@ import java.util.Map;
 
 public class OrderRequest {
 	
+	// key - product-id
+	// value - quantities
+	
 	private Map<Long, Integer> productQuantities;
 	private double totalAmount;
 	
