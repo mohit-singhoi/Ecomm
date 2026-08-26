@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <nav th:fragment="navbar"
+         class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+
+        <div class="container">
+
+            <!-- BRAND -->
+            <a class="navbar-brand fw-bold fs-4" href="/">
+                <i class="fa-solid fa-bag-shopping me-2"></i>
+                ShopSphere
+            </a>
+
+            <!-- MOBILE TOGGLE -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <!-- NAVBAR CONTENT -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- NAVIGATION LINKS -->
+                <ul class="navbar-nav mx-auto gap-lg-2">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fa-solid fa-house me-2"></i>
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">
+                            <i class="fa-solid fa-store me-2"></i>
+                            Products
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categories">
+                            <i class="fa-solid fa-layer-group me-2"></i>
+                            Categories
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            About Us
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">
+                            <i class="fa-solid fa-phone me-2"></i>
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+                <!-- RIGHT SIDE -->
+                <div class="d-flex align-items-center gap-3">
+
+                    <!-- SEARCH -->
+                    <a href="/search"
+                       class="nav-action"
+                       title="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
+
+                    <!-- WISHLIST -->
+                    <a href="/wishlist"
+                       class="nav-action position-relative"
+                       title="Wishlist">
+
+                        <i class="fa-regular fa-heart"></i>
+                        <span class="cart-badge">0</span>
+
+                    </a>
+
+                    <!-- CART -->
+                    <a href="/cart"
+                       class="nav-action position-relative"
+                       title="Shopping Cart">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart-badge">0</span>
+
+                    </a>
+
+                    <!-- LOGIN -->
+                    <a href="/login"
+                       class="login-btn">
+
+                        <i class="fa-solid fa-user me-2"></i>
+                        Login
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+/* =====================================================
+   SHOPSPHERE FOOTER
+   ===================================================== */
+
+.shop-footer {
+    background: #212529;
+    color: #ffffff;
+    padding: 60px 0 20px;
+    margin-top: 50px;
+}
+
+
+/* BRAND */
+
+.footer-brand {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+
+.footer-text {
+    color: #adb5bd;
+    line-height: 1.7;
+    max-width: 350px;
+}
+
+
+/* SECTION TITLES */
+
+.footer-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+
+/* LINKS */
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+
+.footer-links a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+
+.footer-links a:hover {
+    color: #ffffff;
+    padding-left: 5px;
+}
+
+
+/* SOCIAL ICONS */
+
+.footer-social {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+
+.footer-social a {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #495057;
+    border-radius: 50%;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    transition: 0.3s ease;
+}
+
+
+.footer-social a:hover {
+    background: #ffffff;
+    color: #212529;
+}
+
+
+/* CONTACT */
+
+.footer-contact p {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    color: #adb5bd;
+    margin-bottom: 15px;
+}
+
+
+.footer-contact i {
+    width: 18px;
+    margin-top: 4px;
+    color: #ffffff;
+}
+
+
+/* DIVIDER */
+
+.footer-divider {
+    border-color: #495057;
+    margin: 40px 0 20px;
+}
+
+
+/* BOTTOM */
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.footer-bottom p {
+    color: #adb5bd;
+    margin: 0;
+}
+
+
+.footer-bottom strong {
+    color: #ffffff;
+}
+
+
+.footer-bottom-links {
+    display: flex;
+    gap: 20px;
+}
+
+
+.footer-bottom-links a {
+    color: #adb5bd;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+
+.footer-bottom-links a:hover {
+    color: #ffffff;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+    .shop-footer {
+        padding: 45px 0 20px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-bottom-links {
+        justify-content: center;
+    }
+
+}

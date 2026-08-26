@@ -1,0 +1,143 @@
+/* =====================================================
+   SHOPSPHERE NAVBAR
+   ===================================================== */
+
+.navbar {
+    padding: 14px 0;
+    background: #212529 !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 0.3px;
+}
+
+
+/* NAVIGATION */
+
+.navbar-nav {
+    align-items: center;
+}
+
+.navbar .nav-link {
+    color: #adb5bd;
+    font-weight: 500;
+    padding: 10px 14px !important;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+}
+
+
+/* HOVER */
+
+.navbar .nav-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ACTIVE */
+
+.navbar .nav-link.active {
+    color: #ffffff;
+}
+
+
+/* RIGHT SIDE ICONS */
+
+.nav-action {
+    position: relative;
+    color: #ffffff;
+    font-size: 1.25rem;
+    text-decoration: none;
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.25s ease;
+}
+
+.nav-action:hover {
+    color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+
+/* BADGE */
+
+.cart-badge {
+    position: absolute;
+
+    top: -5px;
+    right: -7px;
+
+    background: #dc3545;
+    color: #ffffff;
+
+    min-width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* LOGIN BUTTON */
+
+.login-btn {
+    color: #ffffff;
+    text-decoration: none;
+
+    border: 1px solid #ffffff;
+    border-radius: 25px;
+
+    padding: 7px 17px;
+
+    font-weight: 500;
+
+    transition: all 0.25s ease;
+}
+
+.login-btn:hover {
+    background: #ffffff;
+    color: #212529;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 991px) {
+
+    .navbar-collapse {
+        padding-top: 15px;
+    }
+
+    .navbar-nav {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .navbar .nav-item {
+        width: 100%;
+    }
+
+    .navbar .nav-link {
+        width: 100%;
+        padding: 12px 15px !important;
+    }
+
+    .d-flex.align-items-center.gap-3 {
+        margin-top: 15px;
+        justify-content: flex-start;
+    }
+
+}
