@@ -13,16 +13,6 @@
     <title>ShopSphere | Online Store</title>
 
 
-    <!-- Navbar CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/navbar.css}">
-
-
-    <!-- Footer CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/footer.css}">
-
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -32,39 +22,699 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+
+    <!-- Navbar CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
+
+
+    <!-- Home CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/home.css}">
+	
+	<!-- Footer CSS -->
+	<link rel="stylesheet"
+		   th:href="@{/css/footer.css}">
+
 </head>
 
 
 <body>
 
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- =========================
+         NAVBAR
+         ========================= -->
 
-	<div th:replace="~{fragments/navbar :: navbar}"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 
-    <!-- ================= HOME CONTENT ================= -->
 
-    <main>
+    <!-- =========================
+         HERO SECTION
+         ========================= -->
 
-        <div class="container py-5">
+    <section class="hero-section">
 
-            <h1 class="text-center">
-                Welcome to ShopSphere
-            </h1>
+        <div class="container">
 
-            <p class="text-center">
-                Your one-stop online shopping destination.
-            </p>
+            <div class="row align-items-center min-vh-75">
+
+                <div class="col-lg-6">
+
+                    <span class="badge bg-primary mb-3 px-3 py-2">
+                        Welcome to ShopSphere
+                    </span>
+
+                    <h1 class="display-3 fw-bold mb-4">
+
+                        Everything You Need,
+
+                        <span class="text-primary">
+                            All in One Place.
+                        </span>
+
+                    </h1>
+
+                    <p class="lead text-muted mb-4">
+
+                        Discover quality products, amazing deals
+                        and a smooth shopping experience with
+                        ShopSphere.
+
+                    </p>
+
+
+                    <div class="d-flex gap-3 flex-wrap">
+
+                        <a href="/products"
+                           class="btn btn-primary btn-lg px-4">
+
+                            <i class="fa-solid fa-bag-shopping me-2"></i>
+
+                            Shop Now
+
+                        </a>
+
+
+                        <a href="/categories"
+                           class="btn btn-outline-dark btn-lg px-4">
+
+                            Explore Categories
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-6 text-center mt-5 mt-lg-0">
+
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80"
+                         alt="Online Shopping"
+                         class="img-fluid rounded-4 shadow-lg">
+
+                </div>
+
+            </div>
 
         </div>
 
-    </main>
+    </section>
 
 
-    <!-- ================= FOOTER ================= -->
 
-     <div th:replace="~{fragments/footer :: footer}"></div>
+    <!-- =========================
+         CATEGORIES
+         ========================= -->
+
+    <section class="py-5 bg-light">
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="text-primary fw-semibold">
+                    SHOP BY CATEGORY
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Explore Our Categories
+                </h2>
+
+                <p class="text-muted">
+                    Find exactly what you're looking for.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- ELECTRONICS -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <a href="/products?category=Electronics"
+                       class="text-decoration-none">
+
+                        <div class="card category-card border-0 shadow-sm h-100">
+
+                            <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=600&q=80"
+                                 class="card-img-top"
+                                 alt="Electronics">
+
+                            <div class="card-body text-center">
+
+                                <i class="fa-solid fa-laptop fa-2x text-primary mb-3"></i>
+
+                                <h5 class="fw-bold text-dark">
+                                    Electronics
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Latest gadgets and devices
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- CLOTHING -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <a href="/products?category=Clothing"
+                       class="text-decoration-none">
+
+                        <div class="card category-card border-0 shadow-sm h-100">
+
+                            <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=600&q=80"
+                                 class="card-img-top"
+                                 alt="Clothing">
+
+                            <div class="card-body text-center">
+
+                                <i class="fa-solid fa-shirt fa-2x text-primary mb-3"></i>
+
+                                <h5 class="fw-bold text-dark">
+                                    Clothing
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Fashion for every style
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- JEWELRY -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <a href="/products?category=Jewelry"
+                       class="text-decoration-none">
+
+                        <div class="card category-card border-0 shadow-sm h-100">
+
+                            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80"
+                                 class="card-img-top"
+                                 alt="Jewelry">
+
+                            <div class="card-body text-center">
+
+                                <i class="fa-solid fa-gem fa-2x text-primary mb-3"></i>
+
+                                <h5 class="fw-bold text-dark">
+                                    Jewelry
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Elegant and beautiful pieces
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- HOME ITEMS -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <a href="/products?category=Home"
+                       class="text-decoration-none">
+
+                        <div class="card category-card border-0 shadow-sm h-100">
+
+                            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80"
+                                 class="card-img-top"
+                                 alt="Home Items">
+
+                            <div class="card-body text-center">
+
+                                <i class="fa-solid fa-house fa-2x text-primary mb-3"></i>
+
+                                <h5 class="fw-bold text-dark">
+                                    Home Items
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Make your home beautiful
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FEATURED PRODUCTS
+         ========================= -->
+
+    <section class="py-5">
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="text-primary fw-semibold">
+                    OUR PRODUCTS
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Featured Products
+                </h2>
+
+                <p class="text-muted">
+                    Check out some of our popular products.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- PRODUCT 1 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card product-card border-0 shadow-sm h-100">
+
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+                             class="card-img-top"
+                             alt="Wireless Headphones">
+
+                        <div class="card-body">
+
+                            <small class="text-muted">
+                                Electronics
+                            </small>
+
+                            <h5 class="fw-bold mt-2">
+                                Wireless Headphones
+                            </h5>
+
+                            <div class="mb-2">
+
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-regular fa-star text-warning"></i>
+
+                            </div>
+
+                            <h5 class="text-primary fw-bold">
+                                ₹2,499
+                            </h5>
+
+                        </div>
+
+
+                        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/1}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRODUCT 2 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card product-card border-0 shadow-sm h-100">
+
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
+                             class="card-img-top"
+                             alt="Premium T-Shirt">
+
+                        <div class="card-body">
+
+                            <small class="text-muted">
+                                Clothing
+                            </small>
+
+                            <h5 class="fw-bold mt-2">
+                                Premium T-Shirt
+                            </h5>
+
+                            <div class="mb-2">
+
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+
+                            </div>
+
+                            <h5 class="text-primary fw-bold">
+                                ₹799
+                            </h5>
+
+                        </div>
+
+
+                        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/2}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRODUCT 3 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card product-card border-0 shadow-sm h-100">
+
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"
+                             class="card-img-top"
+                             alt="Classic Watch">
+
+                        <div class="card-body">
+
+                            <small class="text-muted">
+                                Jewelry
+                            </small>
+
+                            <h5 class="fw-bold mt-2">
+                                Classic Watch
+                            </h5>
+
+                            <div class="mb-2">
+
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-regular fa-star text-warning"></i>
+
+                            </div>
+
+                            <h5 class="text-primary fw-bold">
+                                ₹1,999
+                            </h5>
+
+                        </div>
+
+
+                        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/3}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRODUCT 4 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card product-card border-0 shadow-sm h-100">
+
+                        <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=600&q=80"
+                             class="card-img-top"
+                             alt="Home Decor">
+
+                        <div class="card-body">
+
+                            <small class="text-muted">
+                                Home Items
+                            </small>
+
+                            <h5 class="fw-bold mt-2">
+                                Modern Home Decor
+                            </h5>
+
+                            <div class="mb-2">
+
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+
+                            </div>
+
+                            <h5 class="text-primary fw-bold">
+                                ₹1,499
+                            </h5>
+
+                        </div>
+
+
+                        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/4}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         WHY SHOPSPHERE
+         ========================= -->
+
+    <section class="py-5 bg-light">
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="text-primary fw-semibold">
+                    WHY SHOPSPHERE?
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Shopping Made Simple
+                </h2>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="text-center">
+
+                        <div class="feature-icon mb-3">
+
+                            <i class="fa-solid fa-truck-fast"></i>
+
+                        </div>
+
+                        <h5 class="fw-bold">
+                            Fast Delivery
+                        </h5>
+
+                        <p class="text-muted">
+                            Quick and reliable delivery to your doorstep.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="text-center">
+
+                        <div class="feature-icon mb-3">
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                        </div>
+
+                        <h5 class="fw-bold">
+                            Secure Payment
+                        </h5>
+
+                        <p class="text-muted">
+                            Your transactions are safe and secure.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="text-center">
+
+                        <div class="feature-icon mb-3">
+
+                            <i class="fa-solid fa-headset"></i>
+
+                        </div>
+
+                        <h5 class="fw-bold">
+                            24/7 Support
+                        </h5>
+
+                        <p class="text-muted">
+                            Our support team is always ready to help.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="text-center">
+
+                        <div class="feature-icon mb-3">
+
+                            <i class="fa-solid fa-rotate-left"></i>
+
+                        </div>
+
+                        <h5 class="fw-bold">
+                            Easy Returns
+                        </h5>
+
+                        <p class="text-muted">
+                            Simple and hassle-free return process.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CALL TO ACTION
+         ========================= -->
+
+    <section class="py-5">
+
+        <div class="container">
+
+            <div class="bg-primary text-white rounded-4 p-5 text-center">
+
+                <h2 class="fw-bold mb-3">
+                    Ready to Start Shopping?
+                </h2>
+
+                <p class="lead mb-4">
+
+                    Explore our products and find something
+                    you'll love.
+
+                </p>
+
+                <a href="/products"
+                   class="btn btn-light btn-lg px-5">
+
+                    Start Shopping
+
+                    <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
 
 
     <!-- Bootstrap JavaScript -->
@@ -75,3 +725,4 @@
 </body>
 
 </html>
+

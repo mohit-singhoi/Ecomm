@@ -1,0 +1,115 @@
+/* =========================
+   SHOPSPHERE HOME PAGE
+   ========================= */
+
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+
+/* HERO */
+
+.hero-section {
+    background: linear-gradient(
+        135deg,
+        #f8f9fa,
+        #ffffff
+    );
+    padding: 40px 0;
+}
+
+.hero-image-wrapper img {
+    max-height: 500px;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+/* CATEGORY CARDS */
+
+.category-card {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.category-card img {
+    height: 190px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+}
+
+.category-card:hover img {
+    transform: scale(1.05);
+}
+
+
+/* PRODUCT CARDS */
+
+.product-card {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+}
+
+.product-card img {
+    height: 230px;
+    object-fit: cover;
+}
+
+
+/* FEATURE ICONS */
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e7f1ff;
+    color: #0d6efd;
+
+    font-size: 28px;
+}
+
+
+/* BUTTON */
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .hero-section {
+        text-align: center;
+    }
+
+    .hero-section h1 {
+        font-size: 2.4rem;
+    }
+
+    .hero-image-wrapper {
+        margin-top: 30px;
+    }
+
+}
