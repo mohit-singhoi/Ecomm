@@ -14,19 +14,28 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    // Get all products
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    public Product getProductById(Long Id) {
-        return productRepository.findById(Id).orElse(null);
+    // Get product by ID
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 
+    // Get products by category
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findByCategoryIgnoreCase(category);
+    }
+
+    // Add product
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public void deleteProduct(Long Id) {
-        productRepository.deleteById(Id);
+    // Delete product
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }

@@ -58,46 +58,68 @@
 
 
 <!-- ================= CATEGORY FILTER ================= -->
-
 <section class="py-4">
 
     <div class="container">
 
         <div class="d-flex justify-content-center flex-wrap gap-2">
 
-            <a href="/products"
+            <!-- ALL -->
+            <a th:href="@{/products}"
                class="btn btn-dark">
+
                 All
+
             </a>
 
-            <a href="/products/category/Electronics"
+
+            <!-- ELECTRONICS -->
+            <a th:href="@{/products/category/{category}(category='Electronics')}"
                class="btn btn-outline-dark">
+
                 <i class="fa-solid fa-laptop me-1"></i>
                 Electronics
+
             </a>
 
-            <a href="/products/category/Cloths"
+
+            <!-- CLOTHES -->
+            <a th:href="@{/products/category/{category}(category='Clothes')}"
                class="btn btn-outline-dark">
+
                 <i class="fa-solid fa-shirt me-1"></i>
-                Cloths
+                Clothes
+
             </a>
 
-            <a href="/products/category/Stationery"
+
+            <!-- STATIONERY -->
+            <a th:href="@{/products/category/{category}(category='Stationery')}"
                class="btn btn-outline-dark">
+
                 <i class="fa-solid fa-pen me-1"></i>
                 Stationery
+
             </a>
 
-            <a href="/products/category/Jewelry"
+
+            <!-- JEWELRY -->
+            <a th:href="@{/products/category/{category}(category='Jewelry')}"
                class="btn btn-outline-dark">
+
                 <i class="fa-solid fa-gem me-1"></i>
                 Jewelry
+
             </a>
 
-            <a href="/products/category/Home"
+
+            <!-- HOME ITEMS -->
+            <a th:href="@{/products/category/{category}(category='Home Items')}"
                class="btn btn-outline-dark">
+
                 <i class="fa-solid fa-house me-1"></i>
                 Home Items
+
             </a>
 
         </div>
@@ -157,27 +179,40 @@
                         </div>
 
                         <!-- BUTTONS -->
-                        <div class="product-buttons">
+						<div class="d-flex gap-2">
 
-                            <!-- VIEW -->
-                            <a th:href="@{/products/{id}(id=${product.id})}"
-                               class="btn btn-outline-dark w-50">
+						    <!-- VIEW PRODUCT -->
 
-                                <i class="fa-solid fa-eye"></i>
-                                View
+						    <a th:href="@{/products/{id}(id=${product.id})}"
+						       class="btn btn-outline-dark flex-fill">
 
-                            </a>
+						        <i class="fa-solid fa-eye me-1"></i>
+						        View
 
-                            <!-- CART -->
-                            <button type="button"
-                                    class="btn btn-dark w-50">
+						    </a>
 
-                                <i class="fa-solid fa-cart-plus"></i>
-                                Cart
 
-                            </button>
+						    <!-- ADD TO CART -->
 
-                        </div>
+						    <form th:action="@{/cart/add/{id}(id=${product.id})}"
+						          method="post"
+						          class="flex-fill">
+
+						        <input type="hidden"
+						               name="quantity"
+						               value="1">
+
+						        <button type="submit"
+						                class="btn btn-dark w-100">
+
+						            <i class="fa-solid fa-cart-plus me-1"></i>
+						            Cart
+
+						        </button>
+
+						    </form>
+
+						</div>
 
                     </div>
 

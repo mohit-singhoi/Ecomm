@@ -22,8 +22,7 @@ public class ProductController {
     // ==============================
     // SHOW ALL PRODUCTS
     // ==============================
-    @SuppressWarnings("null")
-	@GetMapping
+    @GetMapping
     public String getAllProducts(Model model) {
 
         List<Product> products = productService.getAllProducts();
@@ -33,17 +32,35 @@ public class ProductController {
         return "products";
     }
 
- // ==============================
- // SHOW PRODUCT DETAILS
- // ==============================
+    // ==============================
+    // SHOW PRODUCTS BY CATEGORY
+    // ==============================
+    @GetMapping("/category/{category}")
+    public String getProductsByCategory(
+            @PathVariable String category,
+            Model model) {
 
- @GetMapping("/{id}")
- public String productDetails(@PathVariable Long id, Model model) {
+        List<Product> products =
+                productService.getProductsByCategory(category);
 
-     Product product = productService.getProductById(id);
+        model.addAttribute("products", products);
+        model.addAttribute("selectedCategory", category);
 
-     model.addAttribute("product", product);
+        return "products";
+    }
 
-     return "product-details";
- }
+    // ==============================
+    // SHOW PRODUCT DETAILS
+    // ==============================
+    @GetMapping("/{id}")
+    public String productDetails(
+            @PathVariable Long id,
+            Model model) {
+
+        Product product = productService.getProductById(id);
+
+        model.addAttribute("product", product);
+
+        return "product-details";
+    }
 }

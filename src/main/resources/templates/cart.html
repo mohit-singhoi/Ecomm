@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | ShopSphere</title>
+
+
+    <!-- ================================================= -->
+    <!-- BOOTSTRAP -->
+    <!-- ================================================= -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+
+    <!-- ================================================= -->
+    <!-- FONT AWESOME -->
+    <!-- ================================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- ================================================= -->
+    <!-- NAVBAR CSS -->
+    <!-- ================================================= -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
+
+
+    <!-- ================================================= -->
+    <!-- FOOTER CSS -->
+    <!-- ================================================= -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/footer.css}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================= -->
+<!-- NAVBAR -->
+<!-- ================================================= -->
+
+<div th:replace="~{fragments/navbar :: navbar}">
+</div>
+
+
+<!-- ================================================= -->
+<!-- CART SECTION -->
+<!-- ================================================= -->
+
+<section class="py-5">
+
+    <div class="container">
+
+
+        <!-- ================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ================================================= -->
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h1 class="fw-bold mb-2">
+
+                    <i class="fa-solid fa-cart-shopping me-2"></i>
+
+                    Your Shopping Cart
+
+                </h1>
+
+                <p class="text-muted mb-0">
+
+                    Review your products before checkout.
+
+                </p>
+
+            </div>
+
+
+            <!-- CONTINUE SHOPPING -->
+
+            <a th:href="@{/products}"
+               class="btn btn-outline-dark">
+
+                <i class="fa-solid fa-arrow-left me-2"></i>
+
+                Continue Shopping
+
+            </a>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SUCCESS MESSAGE -->
+        <!-- ================================================= -->
+
+        <div th:if="${successMessage}"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-check me-2"></i>
+
+            <span th:text="${successMessage}">
+                Product added successfully.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ERROR MESSAGE -->
+        <!-- ================================================= -->
+
+        <div th:if="${errorMessage}"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+            <span th:text="${errorMessage}">
+                Something went wrong.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- EMPTY CART -->
+        <!-- ================================================= -->
+
+        <div th:if="${#lists.isEmpty(cartItems)}"
+             class="text-center py-5">
+
+            <div class="mb-4">
+
+                <i class="fa-solid fa-cart-shopping fa-4x text-muted">
+                </i>
+
+            </div>
+
+
+            <h2 class="fw-bold">
+
+                Your cart is empty
+
+            </h2>
+
+
+            <p class="text-muted mb-4">
+
+                Looks like you haven't added anything
+                to your cart yet.
+
+            </p>
+
+
+            <a th:href="@{/products}"
+               class="btn btn-dark px-4">
+
+                <i class="fa-solid fa-shop me-2"></i>
+
+                Start Shopping
+
+            </a>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CART ITEMS -->
+        <!-- ================================================= -->
+
+        <div th:unless="${#lists.isEmpty(cartItems)}">
+
+
+            <!-- ================================================= -->
+            <!-- CART TABLE -->
+            <!-- ================================================= -->
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <!-- ================================================= -->
+                    <!-- TABLE HEADER -->
+                    <!-- ================================================= -->
+
+                    <thead class="table-dark">
+
+                    <tr>
+
+                        <th class="py-3">
+                            Product
+                        </th>
+
+                        <th class="py-3">
+                            Price
+                        </th>
+
+                        <th class="py-3">
+                            Quantity
+                        </th>
+
+                        <th class="py-3">
+                            Total
+                        </th>
+
+                        <th class="py-3">
+                            Action
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <!-- ================================================= -->
+                    <!-- TABLE BODY -->
+                    <!-- ================================================= -->
+
+                    <tbody>
+
+                    <tr th:each="item : ${cartItems}">
+
+
+                        <!-- ================================================= -->
+                        <!-- PRODUCT -->
+                        <!-- ================================================= -->
+
+                        <td>
+
+                            <div class="d-flex align-items-center">
+
+
+                                <!-- PRODUCT IMAGE -->
+
+                                <img th:src="${item.product.imageUrl}"
+                                     th:alt="${item.product.name}"
+                                     width="90"
+                                     height="90"
+                                     class="me-3 rounded border"
+                                     style="object-fit: contain; background-color: #f8f9fa;">
+
+
+                                <!-- PRODUCT INFORMATION -->
+
+                                <div>
+
+                                    <h6 class="fw-bold mb-1"
+                                        th:text="${item.product.name}">
+
+                                        Product Name
+
+                                    </h6>
+
+
+                                    <small class="text-muted"
+                                           th:text="${item.product.category}">
+
+                                        Category
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ================================================= -->
+                        <!-- PRICE -->
+                        <!-- ================================================= -->
+
+                        <td>
+
+                            <strong>
+
+                                ₹<span th:text="${item.product.price}">
+                                    0
+                                </span>
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- ================================================= -->
+                        <!-- QUANTITY -->
+                        <!-- ================================================= -->
+
+                        <td>
+
+                            <form th:action="@{/cart/update/{id}(id=${item.id})}"
+                                  method="post"
+                                  class="d-flex align-items-center">
+
+
+                                <input type="number"
+                                       name="quantity"
+                                       th:value="${item.quantity}"
+                                       min="1"
+                                       class="form-control"
+                                       style="width: 80px;"
+                                       required>
+
+
+                                <button type="submit"
+                                        class="btn btn-outline-dark ms-2"
+                                        title="Update Quantity">
+
+                                    <i class="fa-solid fa-arrows-rotate">
+                                    </i>
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                        <!-- ================================================= -->
+                        <!-- ITEM TOTAL -->
+                        <!-- ================================================= -->
+
+                        <td>
+
+                            <strong>
+
+                                ₹<span th:text="${item.product.price * item.quantity}">
+                                    0
+                                </span>
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- ================================================= -->
+                        <!-- ACTIONS -->
+                        <!-- ================================================= -->
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+
+                                <!-- ========================================= -->
+                                <!-- SAVE FOR LATER -->
+                                <!-- ========================================= -->
+
+                                <form th:action="@{/cart/save-for-later/{id}(id=${item.id})}"
+                                      method="post">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-warning"
+                                            title="Save for Later">
+
+                                        <i class="fa-solid fa-bookmark">
+                                        </i>
+
+                                    </button>
+
+                                </form>
+
+
+                                <!-- ========================================= -->
+                                <!-- REMOVE -->
+                                <!-- ========================================= -->
+
+                                <form th:action="@{/cart/remove/{id}(id=${item.id})}"
+                                      method="post">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger"
+                                            title="Remove from Cart">
+
+                                        <i class="fa-solid fa-trash">
+                                        </i>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- CART SUMMARY -->
+            <!-- ================================================= -->
+
+            <div class="row justify-content-end mt-4">
+
+                <div class="col-md-5">
+
+
+                    <div class="card shadow-sm border-0">
+
+                        <div class="card-body p-4">
+
+
+                            <!-- ================================================= -->
+                            <!-- SUMMARY TITLE -->
+                            <!-- ================================================= -->
+
+                            <h4 class="fw-bold mb-4">
+
+                                <i class="fa-solid fa-receipt me-2"></i>
+
+                                Cart Summary
+
+                            </h4>
+
+
+                            <!-- ================================================= -->
+                            <!-- SUBTOTAL -->
+                            <!-- ================================================= -->
+
+                            <div class="d-flex justify-content-between mb-3">
+
+                                <span>
+
+                                    Subtotal
+
+                                </span>
+
+                                <strong>
+
+                                    ₹<span th:text="${total}">
+                                        0
+                                    </span>
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- ================================================= -->
+                            <!-- SHIPPING -->
+                            <!-- ================================================= -->
+
+                            <div class="d-flex justify-content-between mb-3">
+
+                                <span>
+
+                                    Shipping
+
+                                </span>
+
+                                <span class="text-success">
+
+                                    FREE
+
+                                </span>
+
+                            </div>
+
+
+                            <hr>
+
+
+                            <!-- ================================================= -->
+                            <!-- GRAND TOTAL -->
+                            <!-- ================================================= -->
+
+                            <div class="d-flex justify-content-between mb-4">
+
+                                <strong>
+
+                                    Total
+
+                                </strong>
+
+                                <strong class="fs-4">
+
+                                    ₹<span th:text="${total}">
+                                        0
+                                    </span>
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- ================================================= -->
+                            <!-- CHECKOUT -->
+                            <!-- ================================================= -->
+
+                            <a th:href="@{/checkout}"
+                               class="btn btn-success w-100 mb-2">
+
+                                <i class="fa-solid fa-credit-card me-2">
+                                </i>
+
+                                Proceed to Checkout
+
+                            </a>
+
+
+                            <!-- ================================================= -->
+                            <!-- CLEAR CART -->
+                            <!-- ================================================= -->
+
+                            <form th:action="@{/cart/clear}"
+                                  method="post">
+
+                                <button type="submit"
+                                        class="btn btn-outline-danger w-100">
+
+                                    <i class="fa-solid fa-trash-can me-2">
+                                    </i>
+
+                                    Clear Cart
+
+                                </button>
+
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<div th:replace="~{fragments/footer :: footer}">
+</div>
+
+
+<!-- ================================================= -->
+<!-- BOOTSTRAP JS -->
+<!-- ================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>
