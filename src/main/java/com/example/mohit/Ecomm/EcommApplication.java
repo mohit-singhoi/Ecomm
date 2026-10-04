@@ -1,4 +1,4 @@
-//EComm Web Application Main Page
+// EComm Web Application Main Page
 
 package com.example.mohit.Ecomm;
 
