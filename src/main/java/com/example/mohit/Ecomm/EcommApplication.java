@@ -1,3 +1,5 @@
+//EComm Web Application Main Page
+
 package com.example.mohit.Ecomm;
 
 import org.springframework.boot.SpringApplication;
