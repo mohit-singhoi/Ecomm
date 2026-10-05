@@ -1,0 +1,479 @@
+/* =====================================================
+   SHOPSPHERE - CATEGORIES PAGE
+   DO NOT STYLE NAVBAR HERE
+   ===================================================== */
+
+
+/* =====================================================
+   FEATURED PRODUCTS
+   ===================================================== */
+
+.featured-products {
+
+    background: #f8f9fa;
+
+    padding: 45px 0 55px;
+}
+
+
+.featured-heading {
+
+    margin-bottom: 28px;
+}
+
+
+.featured-badge {
+
+    display: inline-block;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    padding: 7px 16px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+}
+
+
+.featured-heading h1 {
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    color: #212529;
+
+    margin-bottom: 8px;
+}
+
+
+.featured-heading h1 span {
+
+    color: #0d6efd;
+}
+
+
+.featured-heading p {
+
+    color: #6c757d;
+
+    margin-bottom: 0;
+}
+
+
+/* =====================================================
+   FEATURED PRODUCT CARD
+   ===================================================== */
+
+.featured-product-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    height: 100%;
+
+    transition: all 0.3s ease;
+}
+
+
+.featured-product-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+}
+
+
+/* =====================================================
+   PRODUCT IMAGE
+   ===================================================== */
+
+.featured-product-image {
+
+    height: 190px;
+
+    background: #f8f9fa;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+.featured-product-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.4s ease;
+}
+
+
+.featured-product-card:hover
+.featured-product-image img {
+
+    transform: scale(1.05);
+}
+
+
+/* =====================================================
+   PRODUCT BODY
+   ===================================================== */
+
+.featured-product-body {
+
+    padding: 16px;
+}
+
+
+.featured-category {
+
+    color: #0d6efd;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    display: block;
+
+    margin-bottom: 5px;
+}
+
+
+.featured-product-body h5 {
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    margin-bottom: 8px;
+}
+
+
+.featured-price {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-bottom: 12px;
+}
+
+
+.featured-product-body .btn {
+
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   CAROUSEL CONTROLS
+   ===================================================== */
+
+#featuredProductCarousel {
+
+    position: relative;
+
+    padding: 0 50px;
+}
+
+
+#featuredProductCarousel
+.carousel-control-prev,
+#featuredProductCarousel
+.carousel-control-next {
+
+    width: 42px;
+
+    height: 42px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: #212529;
+
+    border-radius: 50%;
+
+    opacity: 1;
+}
+
+
+#featuredProductCarousel
+.carousel-control-prev {
+
+    left: 0;
+}
+
+
+#featuredProductCarousel
+.carousel-control-next {
+
+    right: 0;
+}
+
+
+#featuredProductCarousel
+.carousel-control-prev:hover,
+#featuredProductCarousel
+.carousel-control-next:hover {
+
+    opacity: 0.85;
+}
+
+
+/* =====================================================
+   CATEGORY HEADER
+   ===================================================== */
+
+.categories-header {
+
+    background: #ffffff;
+
+    padding: 55px 0 35px;
+}
+
+
+.category-badge {
+
+    display: inline-block;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    padding: 7px 16px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+}
+
+
+.categories-header h1 {
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    color: #212529;
+
+    margin-bottom: 10px;
+}
+
+
+.categories-header h1 span {
+
+    color: #0d6efd;
+}
+
+
+.categories-header p {
+
+    color: #6c757d;
+
+    font-size: 17px;
+
+    margin-bottom: 0;
+}
+
+
+/* =====================================================
+   CATEGORY SECTION
+   ===================================================== */
+
+.categories-section {
+
+    background: #f8f9fa;
+
+    padding: 40px 0 80px;
+}
+
+
+/* =====================================================
+   CATEGORY CARD
+   ===================================================== */
+
+.category-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    padding: 35px 25px;
+
+    text-align: center;
+
+    height: 100%;
+
+    transition: all 0.3s ease;
+}
+
+
+.category-card:hover {
+
+    transform: translateY(-6px);
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+}
+
+
+/* =====================================================
+   CATEGORY ICON
+   ===================================================== */
+
+.category-icon {
+
+    width: 80px;
+
+    height: 80px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    font-size: 32px;
+}
+
+
+.category-card h3 {
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    margin-bottom: 12px;
+
+    color: #212529;
+}
+
+
+.category-card p {
+
+    color: #6c757d;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    min-height: 72px;
+
+    margin-bottom: 20px;
+}
+
+
+.category-card .btn {
+
+    padding: 9px 22px;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 992px) {
+
+    #featuredProductCarousel {
+
+        padding: 0 40px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 576px) {
+
+    .featured-products {
+
+        padding: 30px 0 40px;
+    }
+
+
+    .featured-heading h1 {
+
+        font-size: 28px;
+    }
+
+
+    #featuredProductCarousel {
+
+        padding: 0 35px;
+    }
+
+
+    .featured-product-image {
+
+        height: 210px;
+    }
+
+
+    .categories-header {
+
+        padding: 40px 0 25px;
+    }
+
+
+    .categories-header h1 {
+
+        font-size: 32px;
+    }
+
+
+    .categories-section {
+
+        padding: 30px 0 60px;
+    }
+
+}

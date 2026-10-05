@@ -1,131 +1,41 @@
 <!DOCTYPE html>
+
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Categories | ShopSphere</title>
 
+
     <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
 
     <!-- Font Awesome -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <style>
-
-        body {
-            background: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-
-        /* ================= HEADER ================= */
-
-        .category-header {
-            padding: 70px 20px 50px;
-            text-align: center;
-            background: white;
-        }
-
-        .category-header h1 {
-            font-size: 42px;
-            font-weight: 700;
-            color: #212529;
-        }
-
-        .category-header h1 span {
-            color: #0d6efd;
-        }
-
-        .category-header p {
-            color: #6c757d;
-            font-size: 17px;
-            max-width: 650px;
-            margin: 15px auto 0;
-        }
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 
-        /* ================= CATEGORY SECTION ================= */
-
-        .category-section {
-            padding: 50px 0 80px;
-        }
-
-        .category-card {
-            background: white;
-            border-radius: 18px;
-            padding: 35px 25px;
-            text-align: center;
-            height: 100%;
-
-            border: 1px solid #e9ecef;
-
-            transition: all 0.3s ease;
-        }
-
-        .category-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
-        }
+    <!-- EXISTING NAVBAR CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
 
 
-        /* ================= ICON ================= */
-
-        .category-icon {
-
-            width: 85px;
-            height: 85px;
-
-            margin: 0 auto 22px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: #eaf2ff;
-            color: #0d6efd;
-
-            font-size: 34px;
-        }
+    <!-- EXISTING FOOTER CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/footer.css}">
 
 
-        /* ================= TEXT ================= */
-
-        .category-card h3 {
-            font-size: 23px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .category-card p {
-            color: #6c757d;
-            min-height: 50px;
-        }
-
-
-        /* ================= BUTTON ================= */
-
-        .category-btn {
-
-            margin-top: 15px;
-
-            border-radius: 8px;
-
-            padding: 10px 22px;
-
-            font-weight: 600;
-        }
-
-    </style>
+    <!-- ONLY CATEGORY PAGE CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/categories.css}">
 
 </head>
 
@@ -133,24 +43,332 @@
 <body>
 
 
-<!-- ================= NAVBAR FRAGMENT ================= -->
+<!-- ==================================================
+     EXISTING NAVBAR
+     DO NOT CHANGE IT
+     ================================================== -->
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 
-<!-- ================= CATEGORY HEADER ================= -->
 
-<section class="category-header">
+<!-- ==================================================
+     FEATURED PRODUCTS
+     ================================================== -->
+
+<section class="featured-products">
 
     <div class="container">
 
+
+        <!-- Heading -->
+
+        <div class="featured-heading text-center">
+
+            <span class="featured-badge">
+                <i class="fa-solid fa-star"></i>
+                Featured Products
+            </span>
+
+            <h1>
+                Discover Our <span>Popular Products</span>
+            </h1>
+
+            <p>
+                Explore some of our popular products available at ShopSphere.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= CAROUSEL ================= -->
+
+        <div id="featuredProductCarousel"
+             class="carousel slide"
+             data-bs-ride="carousel"
+             data-bs-interval="3000">
+
+
+            <div class="carousel-inner">
+
+
+                <!-- =================================================
+                     SLIDE 1
+                     ================================================= -->
+
+                <div class="carousel-item active">
+
+                    <div class="row g-4">
+
+
+                        <div class="col-lg-3 col-md-6"
+                             th:each="product, stat : ${products}"
+                             th:if="${stat.index < 4}">
+
+                            <div class="featured-product-card">
+
+
+                                <div class="featured-product-image">
+
+                                    <img th:src="${product.imageUrl}"
+                                         th:alt="${product.name}">
+
+                                </div>
+
+
+                                <div class="featured-product-body">
+
+                                    <span th:text="${product.category}"
+                                          class="featured-category">
+                                        Electronics
+                                    </span>
+
+
+                                    <h5 th:text="${product.name}">
+                                        Product Name
+                                    </h5>
+
+
+                                    <div class="featured-price">
+
+                                        ₹<span th:text="${product.price}">
+                                            999
+                                        </span>
+
+                                    </div>
+
+
+                                    <a th:href="@{/products/{id}(id=${product.id})}"
+                                       class="btn btn-dark btn-sm w-100">
+
+                                        <i class="fa-solid fa-eye me-1"></i>
+
+                                        View Product
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SLIDE 2
+                     ================================================= -->
+
+                <div class="carousel-item">
+
+                    <div class="row g-4">
+
+
+                        <div class="col-lg-3 col-md-6"
+                             th:each="product, stat : ${products}"
+                             th:if="${stat.index >= 4 and stat.index < 8}">
+
+                            <div class="featured-product-card">
+
+
+                                <div class="featured-product-image">
+
+                                    <img th:src="${product.imageUrl}"
+                                         th:alt="${product.name}">
+
+                                </div>
+
+
+                                <div class="featured-product-body">
+
+                                    <span th:text="${product.category}"
+                                          class="featured-category">
+                                        Electronics
+                                    </span>
+
+
+                                    <h5 th:text="${product.name}">
+                                        Product Name
+                                    </h5>
+
+
+                                    <div class="featured-price">
+
+                                        ₹<span th:text="${product.price}">
+                                            999
+                                        </span>
+
+                                    </div>
+
+
+                                    <a th:href="@{/products/{id}(id=${product.id})}"
+                                       class="btn btn-dark btn-sm w-100">
+
+                                        <i class="fa-solid fa-eye me-1"></i>
+
+                                        View Product
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SLIDE 3
+                     ================================================= -->
+
+                <div class="carousel-item">
+
+                    <div class="row g-4">
+
+
+                        <div class="col-lg-3 col-md-6"
+                             th:each="product, stat : ${products}"
+                             th:if="${stat.index >= 8 and stat.index < 12}">
+
+                            <div class="featured-product-card">
+
+
+                                <div class="featured-product-image">
+
+                                    <img th:src="${product.imageUrl}"
+                                         th:alt="${product.name}">
+
+                                </div>
+
+
+                                <div class="featured-product-body">
+
+                                    <span th:text="${product.category}"
+                                          class="featured-category">
+                                        Electronics
+                                    </span>
+
+
+                                    <h5 th:text="${product.name}">
+                                        Product Name
+                                    </h5>
+
+
+                                    <div class="featured-price">
+
+                                        ₹<span th:text="${product.price}">
+                                            999
+                                        </span>
+
+                                    </div>
+
+
+                                    <a th:href="@{/products/{id}(id=${product.id})}"
+                                       class="btn btn-dark btn-sm w-100">
+
+                                        <i class="fa-solid fa-eye me-1"></i>
+
+                                        View Product
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= PREVIOUS ================= -->
+
+            <button class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#featuredProductCarousel"
+                    data-bs-slide="prev">
+
+                <span class="carousel-control-prev-icon"></span>
+
+                <span class="visually-hidden">
+                    Previous
+                </span>
+
+            </button>
+
+
+
+            <!-- ================= NEXT ================= -->
+
+            <button class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#featuredProductCarousel"
+                    data-bs-slide="next">
+
+                <span class="carousel-control-next-icon"></span>
+
+                <span class="visually-hidden">
+                    Next
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     CATEGORY HEADER
+     ================================================== -->
+
+<section class="categories-header">
+
+    <div class="container text-center">
+
+        <span class="category-badge">
+
+            <i class="fa-solid fa-layer-group"></i>
+
+            Shop By Category
+
+        </span>
+
+
         <h1>
+
             Explore Our <span>Categories</span>
+
         </h1>
 
+
         <p>
-            Discover a wide range of quality products across different
-            categories, all available at ShopSphere.
+
+            Find everything you need across our wide range
+            of product categories.
+
         </p>
 
     </div>
@@ -159,16 +377,18 @@
 
 
 
-<!-- ================= CATEGORIES ================= -->
+<!-- ==================================================
+     CATEGORY CARDS
+     ================================================== -->
 
-<section class="category-section">
+<section class="categories-section">
 
     <div class="container">
 
         <div class="row g-4">
 
 
-            <!-- ================= ELECTRONICS ================= -->
+            <!-- ELECTRONICS -->
 
             <div class="col-lg-4 col-md-6">
 
@@ -183,15 +403,16 @@
                     <h3>Electronics</h3>
 
                     <p>
-                        Discover smartphones, laptops, accessories,
-                        gadgets and more.
+                        Discover laptops, smartphones, accessories,
+                        gadgets and other electronic products.
                     </p>
 
-                    <a
-                        th:href="@{/products/category/{category}(category='Electronics')}"
-                        class="btn btn-primary category-btn">
+                    <a th:href="@{/products/category/{category}(category='Electronics')}"
+                       class="btn btn-outline-dark">
 
-                        Explore Electronics
+                        <i class="fa-solid fa-arrow-right me-1"></i>
+
+                        Explore
 
                     </a>
 
@@ -201,7 +422,7 @@
 
 
 
-            <!-- ================= CLOTHES ================= -->
+            <!-- CLOTHES -->
 
             <div class="col-lg-4 col-md-6">
 
@@ -220,11 +441,12 @@
                         for your everyday needs.
                     </p>
 
-                    <a
-                        th:href="@{/products/category/{category}(category='Clothes')}"
-                        class="btn btn-primary category-btn">
+                    <a th:href="@{/products/category/{category}(category='Clothes')}"
+                       class="btn btn-outline-dark">
 
-                        Explore Clothes
+                        <i class="fa-solid fa-arrow-right me-1"></i>
+
+                        Explore
 
                     </a>
 
@@ -234,7 +456,7 @@
 
 
 
-            <!-- ================= STATIONERY ================= -->
+            <!-- STATIONERY -->
 
             <div class="col-lg-4 col-md-6">
 
@@ -249,15 +471,16 @@
                     <h3>Stationery</h3>
 
                     <p>
-                        Everything you need for school, college,
-                        office and creative work.
+                        Find useful stationery products for school,
+                        college, office and creative work.
                     </p>
 
-                    <a
-                        th:href="@{/products/category/{category}(category='Stationery')}"
-                        class="btn btn-primary category-btn">
+                    <a th:href="@{/products/category/{category}(category='Stationery')}"
+                       class="btn btn-outline-dark">
 
-                        Explore Stationery
+                        <i class="fa-solid fa-arrow-right me-1"></i>
+
+                        Explore
 
                     </a>
 
@@ -267,7 +490,7 @@
 
 
 
-            <!-- ================= JEWELRY ================= -->
+            <!-- JEWELRY -->
 
             <div class="col-lg-4 col-md-6">
 
@@ -286,11 +509,12 @@
                         for every occasion.
                     </p>
 
-                    <a
-                        th:href="@{/products/category/{category}(category='Jewelry')}"
-                        class="btn btn-primary category-btn">
+                    <a th:href="@{/products/category/{category}(category='Jewelry')}"
+                       class="btn btn-outline-dark">
 
-                        Explore Jewelry
+                        <i class="fa-solid fa-arrow-right me-1"></i>
+
+                        Explore
 
                     </a>
 
@@ -300,7 +524,7 @@
 
 
 
-            <!-- ================= HOME ITEMS ================= -->
+            <!-- HOME ITEMS -->
 
             <div class="col-lg-4 col-md-6">
 
@@ -315,15 +539,16 @@
                     <h3>Home Items</h3>
 
                     <p>
-                        Upgrade your home with useful,
-                        stylish and practical products.
+                        Discover practical and stylish products
+                        for your home.
                     </p>
 
-                    <a
-                        th:href="@{/products/category/{category}(category='Home Items')}"
-                        class="btn btn-primary category-btn">
+                    <a th:href="@{/products/category/{category}(category='Home Items')}"
+                       class="btn btn-outline-dark">
 
-                        Explore Home Items
+                        <i class="fa-solid fa-arrow-right me-1"></i>
+
+                        Explore
 
                     </a>
 
@@ -333,7 +558,7 @@
 
 
 
-            <!-- ================= ALL PRODUCTS ================= -->
+            <!-- ALL PRODUCTS -->
 
             <div class="col-lg-4 col-md-6">
 
@@ -352,11 +577,12 @@
                         available at ShopSphere.
                     </p>
 
-                    <a
-                        th:href="@{/products}"
-                        class="btn btn-dark category-btn">
+                    <a th:href="@{/products}"
+                       class="btn btn-dark">
 
-                        View All Products
+                        <i class="fa-solid fa-store me-1"></i>
+
+                        View Products
 
                     </a>
 
@@ -373,7 +599,9 @@
 
 
 
-<!-- ================= FOOTER FRAGMENT ================= -->
+<!-- ==================================================
+     EXISTING FOOTER
+     ================================================== -->
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
@@ -381,9 +609,9 @@
 
 <!-- Bootstrap JS -->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
+
 
 </body>
 
