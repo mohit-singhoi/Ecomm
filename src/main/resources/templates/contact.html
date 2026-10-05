@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Us | ShopSphere</title>
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+
+    <!-- =====================================================
+         FONT AWESOME
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- =====================================================
+         EXISTING NAVBAR CSS
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
+
+
+    <!-- =====================================================
+         EXISTING FOOTER CSS
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/footer.css}">
+
+
+    <!-- =====================================================
+         CONTACT PAGE CSS
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/contact.css}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+     ========================================================= -->
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+
+<!-- =========================================================
+     HERO SECTION
+     ========================================================= -->
+
+<section class="contact-hero">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+
+            <!-- LEFT CONTENT -->
+
+            <div class="col-lg-7">
+
+                <div class="hero-badge">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    We're Here to Help
+
+                </div>
+
+
+                <h1>
+
+                    Let's Start a
+
+                    <span>Conversation.</span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Have a question about a product, your order,
+                    or anything else? Our team is here to help you
+                    with a smooth and simple shopping experience.
+
+                </p>
+
+
+                <div class="hero-points">
+
+                    <div>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Quick Support
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Customer Focused
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Easy Communication
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT VISUAL -->
+
+            <div class="col-lg-5">
+
+                <div class="hero-contact-card">
+
+                    <div class="hero-contact-icon">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                    </div>
+
+
+                    <h3>
+
+                        Need Assistance?
+
+                    </h3>
+
+
+                    <p>
+
+                        Choose your preferred way to
+                        connect with ShopSphere.
+
+                    </p>
+
+
+                    <div class="hero-contact-item">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <span>
+
+                            Email Support
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-contact-item">
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                        <span>
+
+                            WhatsApp Business
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-contact-item">
+
+                        <i class="fa-solid fa-circle-question"></i>
+
+                        <span>
+
+                            Frequently Asked Questions
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CONTACT OPTIONS
+     ========================================================= -->
+
+<section class="contact-options">
+
+    <div class="container">
+
+
+        <div class="section-heading text-center">
+
+            <span>
+
+                GET IN TOUCH
+
+            </span>
+
+
+            <h2>
+
+                We're Just a Message Away
+
+            </h2>
+
+
+            <p>
+
+                Choose the easiest way to connect with us.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="row g-4 mt-2">
+
+
+            <!-- =================================================
+                 EMAIL
+                 ================================================= -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="contact-option-card">
+
+                    <div class="option-icon email-icon">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                    </div>
+
+
+                    <span class="option-label">
+
+                        EMAIL SUPPORT
+
+                    </span>
+
+
+                    <h3>
+
+                        Email Us
+
+                    </h3>
+
+
+                    <p>
+
+                        Send us your questions, suggestions
+                        or support requests.
+
+                    </p>
+
+
+                    <a href="mailto:support@shopsphere.com"
+                       class="option-link">
+
+                        support.shopsphere@gmail.com
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+			<!-- =================================================
+			     WHATSAPP BUSINESS
+			     ================================================= -->
+
+			<div class="col-lg-4 col-md-6">
+
+			    <div class="contact-option-card whatsapp-card">
+
+			        <div class="option-icon whatsapp-icon">
+
+			            <i class="fa-brands fa-whatsapp"></i>
+
+			        </div>
+
+			        <span class="option-label whatsapp-label">
+
+			            WHATSAPP BUSINESS
+
+			        </span>
+
+			        <h3>
+
+			            Chat With Us
+
+			        </h3>
+
+			        <p>
+
+			            Have a question or need assistance?
+			            Connect with our WhatsApp Business account
+			            and we'll be happy to help.
+
+			        </p>
+
+
+			        <!-- WHATSAPP BUTTON -->
+
+			        <a href="https://wa.me/message/23QXRU2TQWUDN1"
+			           target="_blank"
+			           rel="noopener noreferrer"
+			           class="whatsapp-button">
+
+			            <i class="fa-brands fa-whatsapp"></i>
+
+			            Connect on WhatsApp
+
+			            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+			        </a>
+
+
+			        <div class="whatsapp-note">
+
+			            <i class="fa-solid fa-circle-check"></i>
+
+			            Quick and easy support
+
+			        </div>
+
+			    </div>
+
+			</div>
+
+
+
+            <!-- =================================================
+                 LOCATION
+                 ================================================= -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="contact-option-card">
+
+                    <div class="option-icon location-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+
+                    <span class="option-label">
+
+                        OUR REACH
+
+                    </span>
+
+
+                    <h3>
+
+                        Serving India
+
+                    </h3>
+
+
+                    <p>
+
+                        ShopSphere is an online shopping platform
+                        serving customers across India.
+
+                    </p>
+
+
+                    <div class="location-display">
+
+                        <i class="fa-solid fa-earth-asia"></i>
+
+                        <span>
+
+                            India
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CONTACT FORM SECTION
+     ========================================================= -->
+
+<section class="message-section">
+
+    <div class="container">
+
+        <div class="row g-5 align-items-stretch">
+
+
+            <!-- =================================================
+                 FORM
+                 ================================================= -->
+
+            <div class="col-lg-7">
+
+                <div class="message-card">
+
+                    <div class="message-heading">
+
+                        <span>
+
+                            SEND A MESSAGE
+
+                        </span>
+
+
+                        <h2>
+
+                            How Can We Help?
+
+                        </h2>
+
+
+                        <p>
+
+                            Fill in the details below and tell us
+                            how we can assist you.
+
+                        </p>
+
+                    </div>
+
+
+                    <form>
+
+
+                        <!-- NAME + EMAIL -->
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label for="name">
+
+                                    Full Name
+
+                                </label>
+
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-regular fa-user"></i>
+
+                                    <input type="text"
+                                           id="name"
+                                           name="name"
+                                           placeholder="Your name"
+                                           required>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="email">
+
+                                    Email Address
+
+                                </label>
+
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-regular fa-envelope"></i>
+
+                                    <input type="email"
+                                           id="email"
+                                           name="email"
+                                           placeholder="Your email"
+                                           required>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- SUBJECT -->
+
+                        <div class="form-group">
+
+                            <label for="subject">
+
+                                Subject
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-tag"></i>
+
+                                <input type="text"
+                                       id="subject"
+                                       name="subject"
+                                       placeholder="What can we help you with?"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- MESSAGE -->
+
+                        <div class="form-group">
+
+                            <label for="message">
+
+                                Your Message
+
+                            </label>
+
+
+                            <div class="textarea-wrapper">
+
+                                <i class="fa-regular fa-message"></i>
+
+                                <textarea id="message"
+                                          name="message"
+                                          rows="5"
+                                          placeholder="Write your message here..."
+                                          required></textarea>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- SUBMIT -->
+
+                        <button type="submit"
+                                class="send-button">
+
+                            Send Message
+
+                            <i class="fa-solid fa-paper-plane"></i>
+
+                        </button>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUPPORT INFORMATION
+                 ================================================= -->
+
+            <div class="col-lg-5">
+
+                <div class="support-column">
+
+
+                    <!-- SUPPORT CARD -->
+
+                    <div class="support-card">
+
+                        <div class="support-card-icon">
+
+                            <i class="fa-solid fa-headset"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+
+                                CUSTOMER SUPPORT
+
+                            </span>
+
+
+                            <h3>
+
+                                We're Here for You
+
+                            </h3>
+
+
+                            <p>
+
+                                Whether you have a question about
+                                products, orders or our services,
+                                we're happy to help.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- HOURS -->
+
+                    <div class="hours-card">
+
+                        <div class="hours-title">
+
+                            <div class="hours-icon">
+
+                                <i class="fa-regular fa-clock"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+
+                                    SUPPORT HOURS
+
+                                </span>
+
+                                <h3>
+
+                                    When We're Available
+
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="hours-list">
+
+                            <div class="hours-item">
+
+                                <span>
+
+                                    Monday - Friday
+
+                                </span>
+
+                                <strong>
+
+                                    9:00 AM - 6:00 PM
+
+                                </strong>
+
+                            </div>
+
+
+                            <div class="hours-item">
+
+                                <span>
+
+                                    Saturday
+
+                                </span>
+
+                                <strong>
+
+                                    10:00 AM - 4:00 PM
+
+                                </strong>
+
+                            </div>
+
+
+                            <div class="hours-item">
+
+                                <span>
+
+                                    Sunday
+
+                                </span>
+
+                                <strong class="closed">
+
+                                    Closed
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FAQ -->
+
+                    <div class="faq-mini-card">
+
+                        <div>
+
+                            <i class="fa-solid fa-circle-question"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4>
+
+                                Looking for a Quick Answer?
+
+                            </h4>
+
+
+                            <p>
+
+                                Check our FAQ section for answers
+                                to common questions.
+
+                            </p>
+
+
+                            <a th:href="@{/faq}">
+
+                                Visit FAQ
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FINAL CTA
+     ========================================================= -->
+
+<section class="contact-final">
+
+    <div class="container">
+
+        <div class="final-card">
+
+            <div>
+
+                <span>
+
+                    SHOPSPHERE
+
+                </span>
+
+
+                <h2>
+
+                    Need Something Else?
+
+                </h2>
+
+
+                <p>
+
+                    Explore our products and discover
+                    something you'll love.
+
+                </p>
+
+            </div>
+
+
+            <a th:href="@{/products}"
+               class="final-button">
+
+                Explore Products
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP JS
+     ========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

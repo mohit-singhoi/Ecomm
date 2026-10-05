@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>FAQ | ShopSphere</title>
+
+
+    <!-- =====================================================
+         BOOTSTRAP CSS
+         ===================================================== -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+
+    <!-- =====================================================
+         FONT AWESOME
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+		  <!-- EXISTING NAVBAR CSS -->
+
+		  <link rel="stylesheet"
+		        th:href="@{/css/navbar.css}">
+
+
+		  <!-- EXISTING FOOTER CSS -->
+
+		  <link rel="stylesheet"
+		        th:href="@{/css/footer.css}">
+				
+    <!-- =====================================================
+         FAQ CSS
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/faq.css}">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+         ===================================================== -->
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+
+    <!-- =====================================================
+         FAQ HERO
+         ===================================================== -->
+
+    <section class="faq-hero">
+
+        <div class="container">
+
+            <div class="hero-icon">
+
+                <i class="fa-solid fa-circle-question"></i>
+
+            </div>
+
+
+            <h1>
+                Frequently Asked Questions
+            </h1>
+
+
+            <p>
+                Find quick answers to common questions about
+                ShopSphere, products, orders, payments and support.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FAQ SECTION
+         ===================================================== -->
+
+    <section class="faq-section">
+
+        <div class="container">
+
+
+            <!-- SECTION HEADING -->
+
+            <div class="faq-heading">
+
+                <h2>
+                    How Can We Help?
+                </h2>
+
+                <p>
+                    Browse the questions below to find the information
+                    you need.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FAQ ACCORDION
+                 ================================================= -->
+
+            <div class="faq-accordion accordion"
+                 id="faqAccordion">
+
+
+
+                <!-- =================================================
+                     FAQ 1
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingOne">
+
+                        <button class="accordion-button"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq1"
+                                aria-expanded="true"
+                                aria-controls="faq1">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-store"></i>
+
+                            </span>
+
+                            What is ShopSphere?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq1"
+                         class="accordion-collapse collapse show"
+                         aria-labelledby="headingOne"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            ShopSphere is an online shopping platform
+                            where customers can browse products from
+                            different categories, view product details,
+                            add products to their cart, save products
+                            for later and place orders.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 2
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingTwo">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq2"
+                                aria-expanded="false"
+                                aria-controls="faq2">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-cart-shopping"></i>
+
+                            </span>
+
+                            How can I place an order?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq2"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingTwo"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            First, browse our products and select the
+                            product you want to purchase. Choose the
+                            required quantity and click
+                            <strong>Add to Cart</strong> or
+                            <strong>Buy Now</strong>.
+
+                            <br><br>
+
+                            If you add the product to your cart, you can
+                            review your cart before proceeding to checkout.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 3
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingThree">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq3"
+                                aria-expanded="false"
+                                aria-controls="faq3">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-layer-group"></i>
+
+                            </span>
+
+                            What product categories are available?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq3"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingThree"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            ShopSphere currently offers products in
+                            multiple categories including
+                            <strong>Electronics, Clothes, Stationery,
+                            Jewelry and Home Items.</strong>
+
+                            <br><br>
+
+                            You can visit the Categories page to explore
+                            products according to your interests.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 4
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingFour">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq4"
+                                aria-expanded="false"
+                                aria-controls="faq4">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-heart"></i>
+
+                            </span>
+
+                            Can I save products for later?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq4"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingFour"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            Yes. ShopSphere provides a
+                            <strong>Save for Later</strong> option.
+
+                            <br><br>
+
+                            You can save a product from your shopping cart
+                            and move it back to your cart whenever you are
+                            ready to purchase it.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 5
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingFive">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq5"
+                                aria-expanded="false"
+                                aria-controls="faq5">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-box"></i>
+
+                            </span>
+
+                            How can I view my orders?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq5"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingFive"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            After placing an order, you can view your
+                            previous orders from the
+                            <strong>My Orders</strong> section.
+
+                            <br><br>
+
+                            The My Orders section displays information
+                            such as order details, products, quantity,
+                            total amount and order status.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 6
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingSix">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq6"
+                                aria-expanded="false"
+                                aria-controls="faq6">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </span>
+
+                            Do I need an account to shop?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq6"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingSix"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            An account allows you to manage your orders,
+                            cart, saved items and other shopping activities
+                            more conveniently.
+
+                            <br><br>
+
+                            You can use the
+                            <strong>Login</strong> option from the navbar
+                            to access your account.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 7
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingSeven">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq7"
+                                aria-expanded="false"
+                                aria-controls="faq7">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-credit-card"></i>
+
+                            </span>
+
+                            What payment options are available?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq7"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingSeven"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            Available payment options are displayed
+                            during the checkout process.
+
+                            <br><br>
+
+                            Select your preferred payment method and
+                            complete the required checkout information
+                            before placing the order.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 8
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingEight">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq8"
+                                aria-expanded="false"
+                                aria-controls="faq8">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-phone"></i>
+
+                            </span>
+
+                            How can I contact ShopSphere?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq8"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingEight"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            You can visit our
+                            <strong>Contact Us</strong> page to get in
+                            touch with the ShopSphere support team.
+
+                            <br><br>
+
+                            You can also connect with us through WhatsApp
+                            for quick assistance.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 9
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingNine">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq9"
+                                aria-expanded="false"
+                                aria-controls="faq9">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-truck-fast"></i>
+
+                            </span>
+
+                            How can I check my order status?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq9"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingNine"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            Your order status can be checked from the
+                            <strong>My Orders</strong> section.
+
+                            <br><br>
+
+                            The status may change as your order moves
+                            through the order processing process.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FAQ 10
+                     ================================================= -->
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header"
+                        id="headingTen">
+
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq10"
+                                aria-expanded="false"
+                                aria-controls="faq10">
+
+                            <span class="faq-question-icon">
+
+                                <i class="fa-solid fa-headset"></i>
+
+                            </span>
+
+                            What if I still have a question?
+
+                        </button>
+
+                    </h2>
+
+
+                    <div id="faq10"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingTen"
+                         data-bs-parent="#faqAccordion">
+
+                        <div class="accordion-body">
+
+                            If your question is not answered here, please
+                            visit our Contact Us page and reach out to the
+                            ShopSphere support team.
+
+                            <br><br>
+
+                            We will be happy to assist you.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUPPORT CARD
+                 ================================================= -->
+
+            <div class="faq-support">
+
+                <div class="faq-support-icon">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                </div>
+
+
+                <h3>
+                    Still Have Questions?
+                </h3>
+
+
+                <p>
+                    Can't find the answer you're looking for?
+                    Our support team is ready to help.
+                </p>
+
+
+                <div>
+
+                    <a href="/contact"
+                       class="faq-btn faq-btn-primary">
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        Contact Us
+
+                    </a>
+
+
+                    <a href="/products"
+                       class="faq-btn faq-btn-outline">
+
+                        <i class="fa-solid fa-store"></i>
+
+                        Explore Products
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+
+
+    <!-- =====================================================
+         BOOTSTRAP JAVASCRIPT
+         ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+</body>
+
+</html>

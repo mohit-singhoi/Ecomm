@@ -1,0 +1,1548 @@
+/* =========================================================
+   SHOPSPHERE
+   CONTACT PAGE
+   ========================================================= */
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.contact-hero {
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8faff 0%,
+            #ffffff 55%,
+            #f3f7ff 100%
+        );
+
+    padding: 85px 0;
+
+    overflow: hidden;
+}
+
+
+.contact-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+
+    height: 350px;
+
+    border-radius: 50%;
+
+    background: rgba(13, 110, 253, 0.05);
+
+    top: -180px;
+
+    right: -100px;
+}
+
+
+.contact-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 250px;
+
+    height: 250px;
+
+    border-radius: 50%;
+
+    background: rgba(13, 110, 253, 0.04);
+
+    bottom: -140px;
+
+    left: -100px;
+}
+
+
+.contact-hero .container {
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+
+/* =========================================================
+   HERO BADGE
+   ========================================================= */
+
+.hero-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    padding: 9px 17px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+
+.hero-badge i {
+
+    font-size: 14px;
+}
+
+
+
+/* =========================================================
+   HERO TITLE
+   ========================================================= */
+
+.contact-hero h1 {
+
+    font-size: 56px;
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+
+    color: #171a1f;
+
+    margin-bottom: 22px;
+}
+
+
+.contact-hero h1 span {
+
+    display: block;
+
+    color: #0d6efd;
+}
+
+
+.hero-description {
+
+    max-width: 650px;
+
+    color: #667085;
+
+    font-size: 18px;
+
+    line-height: 1.75;
+
+    margin-bottom: 25px;
+}
+
+
+
+/* =========================================================
+   HERO POINTS
+   ========================================================= */
+
+.hero-points {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 22px;
+}
+
+
+.hero-points div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #343a40;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.hero-points i {
+
+    color: #0d6efd;
+
+}
+
+
+
+/* =========================================================
+   HERO CONTACT CARD
+   ========================================================= */
+
+.hero-contact-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e4e8ee;
+
+    border-radius: 22px;
+
+    padding: 38px;
+
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+
+.hero-contact-icon {
+
+    width: 68px;
+
+    height: 68px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    font-size: 27px;
+
+    margin-bottom: 22px;
+}
+
+
+.hero-contact-card h3 {
+
+    font-size: 26px;
+
+    font-weight: 750;
+
+    margin-bottom: 10px;
+
+    color: #171a1f;
+}
+
+
+.hero-contact-card > p {
+
+    color: #6c757d;
+
+    line-height: 1.6;
+
+    margin-bottom: 24px;
+}
+
+
+.hero-contact-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 14px 0;
+
+    border-top: 1px solid #edf0f3;
+
+    color: #343a40;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+.hero-contact-item i {
+
+    width: 35px;
+
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #f3f6fa;
+
+    border-radius: 9px;
+
+    color: #0d6efd;
+}
+
+
+.hero-contact-item .fa-whatsapp {
+
+    color: #198754;
+}
+
+
+
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.section-heading {
+
+    margin-bottom: 10px;
+}
+
+
+.section-heading span {
+
+    color: #0d6efd;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+
+.section-heading h2 {
+
+    font-size: 38px;
+
+    font-weight: 750;
+
+    color: #171a1f;
+
+    margin: 8px 0 10px;
+}
+
+
+.section-heading p {
+
+    color: #6c757d;
+
+    margin-bottom: 0;
+
+    font-size: 16px;
+}
+
+
+
+/* =========================================================
+   CONTACT OPTIONS
+   ========================================================= */
+
+.contact-options {
+
+    background: #ffffff;
+
+    padding: 85px 0;
+}
+
+
+.contact-option-card {
+
+    height: 100%;
+
+    min-height: 390px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e8ee;
+
+    border-radius: 20px;
+
+    padding: 35px 28px;
+
+    text-align: center;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.contact-option-card:hover {
+
+    transform: translateY(-7px);
+
+    border-color: #d4dce8;
+
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+}
+
+
+
+/* =========================================================
+   OPTION ICON
+   ========================================================= */
+
+.option-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    font-size: 27px;
+
+    margin-bottom: 20px;
+}
+
+
+.email-icon {
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+}
+
+
+.option-label {
+
+    color: #8490a0;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    margin-bottom: 8px;
+}
+
+
+
+
+.contact-option-card h3 {
+
+    color: #171a1f;
+
+    font-size: 23px;
+
+    font-weight: 750;
+
+    margin-bottom: 10px;
+}
+
+
+.contact-option-card > p {
+
+    color: #6c757d;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+
+    max-width: 310px;
+
+    margin-bottom: 18px;
+}
+
+
+
+/* =========================================================
+   EMAIL LINK
+   ========================================================= */
+
+.option-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: auto;
+
+    color: #0d6efd;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    font-size: 15px;
+}
+
+
+.option-link i {
+
+    transition: transform 0.2s ease;
+}
+
+
+.option-link:hover i {
+
+    transform: translateX(4px);
+}
+
+
+
+/* =========================================================
+   WHATSAPP CARD
+   ========================================================= */
+
+.whatsapp-card {
+
+    justify-content: center;
+
+}
+
+
+.whatsapp-icon {
+
+    background: #e8f7ef;
+
+    color: #198754;
+}
+
+
+.whatsapp-label {
+
+    color: #198754;
+}
+
+
+
+/* =========================================================
+   WHATSAPP BUTTON
+   ========================================================= */
+
+.whatsapp-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    margin-top: 20px;
+
+    padding: 12px 22px;
+
+    border-radius: 9px;
+
+    background: #198754;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.whatsapp-button:hover {
+
+    background: #157347;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(25, 135, 84, 0.22);
+}
+
+
+.whatsapp-button i:first-child {
+
+    font-size: 18px;
+}
+
+
+.whatsapp-button i:last-child {
+
+    font-size: 11px;
+
+    opacity: 0.8;
+}
+
+
+
+/* =========================================================
+   WHATSAPP NOTE
+   ========================================================= */
+
+.whatsapp-note {
+
+    margin-top: 18px;
+
+    color: #6c757d;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.whatsapp-note i {
+
+    color: #198754;
+
+    margin-right: 5px;
+}
+
+
+.scan-text {
+
+    color: #198754;
+
+    font-size: 14px;
+
+    font-weight: 750;
+}
+
+
+.scan-text i {
+
+    margin-right: 5px;
+}
+
+
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.location-icon {
+
+    background: #fff1f1;
+
+    color: #dc3545;
+}
+
+
+.location-display {
+
+    margin-top: auto;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: #f8f9fa;
+
+    border: 1px solid #e9ecef;
+
+    padding: 11px 22px;
+
+    border-radius: 30px;
+
+    color: #212529;
+
+    font-weight: 700;
+}
+
+
+.location-display i {
+
+    color: #0d6efd;
+}
+
+
+
+/* =========================================================
+   MESSAGE SECTION
+   ========================================================= */
+
+.message-section {
+
+    background: #f7f9fc;
+
+    padding: 85px 0;
+}
+
+
+
+/* =========================================================
+   MESSAGE CARD
+   ========================================================= */
+
+.message-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e3e7ec;
+
+    border-radius: 22px;
+
+    padding: 38px;
+
+    height: 100%;
+
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+
+.message-heading {
+
+    margin-bottom: 30px;
+}
+
+
+.message-heading span {
+
+    color: #0d6efd;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+
+.message-heading h2 {
+
+    font-size: 32px;
+
+    font-weight: 750;
+
+    color: #171a1f;
+
+    margin: 8px 0 9px;
+}
+
+
+.message-heading p {
+
+    color: #6c757d;
+
+    margin: 0;
+
+    line-height: 1.6;
+}
+
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.message-card label {
+
+    display: block;
+
+    color: #343a40;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+
+.form-group {
+
+    margin-top: 18px;
+}
+
+
+.input-wrapper,
+.textarea-wrapper {
+
+    position: relative;
+}
+
+
+.input-wrapper i,
+.textarea-wrapper i {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #8a94a3;
+
+    z-index: 2;
+}
+
+
+.textarea-wrapper i {
+
+    top: 19px;
+
+    transform: none;
+}
+
+
+.input-wrapper input,
+.textarea-wrapper textarea {
+
+    width: 100%;
+
+    border: 1px solid #d9dee5;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #212529;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.input-wrapper input {
+
+    height: 48px;
+
+    padding: 0 15px 0 43px;
+}
+
+
+.textarea-wrapper textarea {
+
+    resize: vertical;
+
+    min-height: 135px;
+
+    padding: 13px 15px 13px 43px;
+}
+
+
+.input-wrapper input::placeholder,
+.textarea-wrapper textarea::placeholder {
+
+    color: #a0a8b3;
+}
+
+
+.input-wrapper input:focus,
+.textarea-wrapper textarea:focus {
+
+    border-color: #0d6efd;
+
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.10);
+}
+
+
+
+/* =========================================================
+   SEND BUTTON
+   ========================================================= */
+
+.send-button {
+
+    margin-top: 23px;
+
+    border: none;
+
+    background: #212529;
+
+    color: #ffffff;
+
+    padding: 12px 23px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.send-button:hover {
+
+    background: #0d6efd;
+
+    transform: translateY(-2px);
+}
+
+
+
+/* =========================================================
+   SUPPORT COLUMN
+   ========================================================= */
+
+.support-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    height: 100%;
+}
+
+
+
+/* =========================================================
+   SUPPORT CARD
+   ========================================================= */
+
+.support-card {
+
+    background: #212529;
+
+    color: #ffffff;
+
+    border-radius: 20px;
+
+    padding: 28px;
+
+    display: flex;
+
+    gap: 18px;
+}
+
+
+.support-card-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    min-width: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    color: #0d6efd;
+
+    font-size: 22px;
+}
+
+
+.support-card span {
+
+    color: #adb5bd;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+
+.support-card h3 {
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    margin: 5px 0 8px;
+}
+
+
+.support-card p {
+
+    color: #c3c8ce;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    margin: 0;
+}
+
+
+
+/* =========================================================
+   HOURS
+   ========================================================= */
+
+.hours-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e3e7ec;
+
+    border-radius: 20px;
+
+    padding: 28px;
+}
+
+
+.hours-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+
+.hours-icon {
+
+    width: 50px;
+
+    height: 50px;
+
+    min-width: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    font-size: 20px;
+}
+
+
+.hours-title span {
+
+    color: #8490a0;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+
+.hours-title h3 {
+
+    color: #171a1f;
+
+    font-size: 20px;
+
+    font-weight: 750;
+
+    margin: 4px 0 0;
+}
+
+
+.hours-list {
+
+    border-top: 1px solid #edf0f3;
+}
+
+
+.hours-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid #edf0f3;
+
+    font-size: 13px;
+}
+
+
+.hours-item:last-child {
+
+    border-bottom: none;
+
+    padding-bottom: 0;
+}
+
+
+.hours-item span {
+
+    color: #6c757d;
+}
+
+
+.hours-item strong {
+
+    color: #212529;
+
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+.hours-item .closed {
+
+    color: #dc3545;
+}
+
+
+
+/* =========================================================
+   FAQ MINI CARD
+   ========================================================= */
+
+.faq-mini-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e3e7ec;
+
+    border-radius: 20px;
+
+    padding: 25px;
+
+    display: flex;
+
+    gap: 17px;
+
+    align-items: flex-start;
+}
+
+
+.faq-mini-card > div:first-child {
+
+    width: 48px;
+
+    height: 48px;
+
+    min-width: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #fff7e6;
+
+    color: #f59f00;
+
+    font-size: 20px;
+}
+
+
+.faq-mini-card h4 {
+
+    color: #171a1f;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+
+.faq-mini-card p {
+
+    color: #6c757d;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+
+    margin-bottom: 9px;
+}
+
+
+.faq-mini-card a {
+
+    color: #0d6efd;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.faq-mini-card a i {
+
+    margin-left: 5px;
+
+    transition: transform 0.2s ease;
+}
+
+
+.faq-mini-card a:hover i {
+
+    transform: translateX(4px);
+}
+
+
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+
+.contact-final {
+
+    background: #ffffff;
+
+    padding: 70px 0;
+}
+
+
+.final-card {
+
+    background:
+        linear-gradient(
+            110deg,
+            #0d6efd,
+            #0756c9
+        );
+
+    color: #ffffff;
+
+    border-radius: 22px;
+
+    padding: 38px 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    box-shadow: 0 18px 40px rgba(13, 110, 253, 0.18);
+}
+
+
+.final-card span {
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    opacity: 0.75;
+}
+
+
+.final-card h2 {
+
+    font-size: 30px;
+
+    font-weight: 750;
+
+    margin: 7px 0 7px;
+}
+
+
+.final-card p {
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    font-size: 15px;
+}
+
+
+.final-button {
+
+    white-space: nowrap;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: #ffffff;
+
+    color: #212529;
+
+    text-decoration: none;
+
+    padding: 12px 22px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.final-button:hover {
+
+    color: #212529;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+    .contact-hero {
+
+        padding: 65px 0;
+    }
+
+
+    .contact-hero h1 {
+
+        font-size: 48px;
+    }
+
+
+    .hero-contact-card {
+
+        max-width: 600px;
+
+        margin: 0 auto;
+    }
+
+
+    .contact-option-card {
+
+        min-height: 370px;
+    }
+
+
+    .message-card {
+
+        margin-bottom: 0;
+    }
+
+}
+
+
+@media (max-width: 767px) {
+
+    .contact-hero {
+
+        padding: 55px 0;
+    }
+
+
+    .contact-hero h1 {
+
+        font-size: 40px;
+
+        letter-spacing: -0.8px;
+    }
+
+
+    .hero-description {
+
+        font-size: 16px;
+    }
+
+
+    .hero-points {
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .hero-contact-card {
+
+        padding: 30px;
+    }
+
+
+    .contact-options,
+    .message-section {
+
+        padding: 60px 0;
+    }
+
+
+    .section-heading h2 {
+
+        font-size: 31px;
+    }
+
+
+    .message-card {
+
+        padding: 28px 22px;
+    }
+
+
+    .message-heading h2 {
+
+        font-size: 28px;
+    }
+
+
+    .final-card {
+
+        padding: 32px 25px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .final-button {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+}
+
+
+@media (max-width: 575px) {
+
+    .contact-hero h1 {
+
+        font-size: 35px;
+    }
+
+
+    .hero-contact-card {
+
+        padding: 25px;
+    }
+
+
+    .contact-option-card {
+
+        min-height: 0;
+
+        padding: 30px 22px;
+    }
+
+
+    .qr-frame {
+
+        width: 160px;
+
+        height: 160px;
+    }
+
+
+    .message-card {
+
+        padding: 25px 18px;
+    }
+
+
+    .support-card {
+
+        padding: 23px;
+
+        flex-direction: column;
+    }
+
+
+    .hours-item {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 4px;
+    }
+
+
+    .hours-item strong {
+
+        text-align: left;
+    }
+
+
+    .faq-mini-card {
+
+        padding: 22px;
+    }
+
+
+    .final-card h2 {
+
+        font-size: 26px;
+    }
+
+}
