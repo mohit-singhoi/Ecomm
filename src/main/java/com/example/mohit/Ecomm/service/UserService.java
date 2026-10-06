@@ -1,6 +1,7 @@
 package com.example.mohit.Ecomm.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,41 +12,51 @@ import com.example.mohit.Ecomm.repo.UserRepository;
 @Service
 public class UserService {
 
-	@Autowired
-	private UserRepository userRepository;
-	
-	public User registerUser(User user) {
-		try {
-			User newUser = userRepository.save(user);
-			System.out.println("user Successfully Register");
-			return newUser;
-			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-		
-	}
-	
-
-	public User loginUser(String email, String password) {
-		
-		// Check if user is valid  or not
-		User user = userRepository.findByEmail(email);
-		if(user != null && user.getPassword().equals(password))
-		{
-			return user;
-		}
-		
-		return null; // invalid credentials
-	}
+    @Autowired
+    private UserRepository userRepository;
 
 
-	
-	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return userRepository.findAll();
-	}
+    public User registerUser(User user) {
+
+        try {
+
+            User newUser = userRepository.save(user);
+
+            System.out.println("User Successfully Registered");
+
+            return newUser;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return null;
+    }
+
+
+    public User loginUser(String email, String password) {
+
+        Optional<User> userOptional =
+                userRepository.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+
+            User user = userOptional.get();
+
+            if (user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+
+    public List<User> getAllUsers() {
+
+        return userRepository.findAll();
+    }
 
 }

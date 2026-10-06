@@ -1,0 +1,342 @@
+<!-- User Navbar Page -->
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <nav th:fragment="userNavbar"
+         class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+
+        <div class="container">
+
+            <!-- BRAND -->
+
+            <a class="navbar-brand fw-bold fs-4" th:href="@{/}">
+
+                <i class="fa-solid fa-bag-shopping me-2"></i>
+
+                ShopSphere
+
+            </a>
+
+
+            <!-- MOBILE TOGGLE -->
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#userNavbarNav"
+                    aria-controls="userNavbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- NAVBAR CONTENT -->
+
+            <div class="collapse navbar-collapse" id="userNavbarNav">
+
+
+                <!-- NAVIGATION LINKS -->
+
+                <ul class="navbar-nav mx-auto gap-lg-2">
+
+
+                    <!-- HOME -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link active"
+                           th:href="@{/}">
+
+                            <i class="fa-solid fa-house me-2"></i>
+
+                            Home
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- PRODUCTS -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           th:href="@{/products}">
+
+                            <i class="fa-solid fa-store me-2"></i>
+
+                            Products
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- CATEGORIES -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/categories">
+
+                            <i class="fa-solid fa-layer-group me-2"></i>
+
+                            Categories
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- ABOUT -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           th:href="@{/about}">
+
+                            <i class="fa-solid fa-circle-info me-2"></i>
+
+                            About Us
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- CONTACT -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           th:href="@{/contact}">
+
+                            <i class="fa-solid fa-phone me-2"></i>
+
+                            Contact
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- FAQ -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           th:href="@{/faq}">
+
+                            <i class="fa-solid fa-circle-question me-2"></i>
+
+                            FAQ
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="d-flex align-items-center gap-3">
+
+
+                    <!-- SEARCH -->
+
+                    <a th:href="@{/search}"
+                       class="nav-action"
+                       title="Search">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </a>
+
+
+                    <!-- WISHLIST -->
+
+                    <a th:href="@{/wishlist}"
+                       class="nav-action position-relative"
+                       title="Wishlist">
+
+                        <i class="fa-regular fa-heart"></i>
+
+                        <span class="cart-badge">0</span>
+
+                    </a>
+
+
+                    <!-- NOTIFICATIONS -->
+
+                    <a href="#"
+                       class="nav-action position-relative"
+                       title="Notifications">
+
+                        <i class="fa-regular fa-bell"></i>
+
+                        <span class="cart-badge notification-badge">
+                            0
+                        </span>
+
+                    </a>
+
+
+                    <!-- CART -->
+
+                    <a th:href="@{/cart}"
+                       class="nav-action position-relative"
+                       title="Shopping Cart">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                        <span class="cart-badge">0</span>
+
+                    </a>
+
+
+                    <!-- LOGGED-IN USER -->
+
+                    <div class="user-profile-dropdown">
+
+
+                        <button type="button"
+                                class="user-profile-btn">
+
+                            <i class="fa-solid fa-user me-2"></i>
+
+                            <span th:text="${session.loggedInUser.name}">
+                                User
+                            </span>
+
+                            <i class="fa-solid fa-chevron-down ms-2 user-dropdown-arrow"></i>
+
+                        </button>
+
+
+                        <!-- USER DROPDOWN MENU -->
+
+                        <div class="user-profile-menu">
+
+
+                            <!-- USER INFORMATION -->
+
+                            <div class="user-profile-header">
+
+                                <div class="user-profile-icon">
+
+                                    <i class="fa-solid fa-user"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong
+                                        th:text="${session.loggedInUser.name}">
+                                        User
+                                    </strong>
+
+                                    <small
+                                        th:text="${session.loggedInUser.email}">
+                                        user@example.com
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="user-menu-divider"></div>
+
+
+                            <!-- MY PROFILE -->
+
+                            <a th:href="@{/profile}">
+
+                                <i class="fa-regular fa-user"></i>
+
+                                My Profile
+
+                            </a>
+
+
+                            <!-- MY ORDERS -->
+
+                            <a th:href="@{/my-orders}">
+
+                                <i class="fa-solid fa-box"></i>
+
+                                My Orders
+
+                            </a>
+
+
+                            <!-- SAVED ITEMS -->
+
+                            <a th:href="@{/saved-items}">
+
+                                <i class="fa-regular fa-heart"></i>
+
+                                Saved Items
+
+                            </a>
+
+
+                            <!-- MY CART -->
+
+                            <a th:href="@{/cart}">
+
+                                <i class="fa-solid fa-cart-shopping"></i>
+
+                                My Cart
+
+                            </a>
+
+
+                            <!-- ACCOUNT SETTINGS -->
+
+                            <a th:href="@{/account-settings}">
+
+                                <i class="fa-solid fa-gear"></i>
+
+                                Account Settings
+
+                            </a>
+
+
+                            <div class="user-menu-divider"></div>
+
+
+                            <!-- LOGOUT -->
+
+                            <a th:href="@{/logout}"
+                               class="user-logout">
+
+                                <i class="fa-solid fa-right-from-bracket"></i>
+
+                                Logout
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</body>
+
+</html>

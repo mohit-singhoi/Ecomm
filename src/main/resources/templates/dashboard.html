@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - ShopSphere</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Existing Navbar CSS -->
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+
+    <!-- Your existing dashboard CSS -->
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         LOGGED-IN NAVBAR
+         ===================================================== -->
+    <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+
+
+    <!-- =====================================================
+         EXISTING DASHBOARD CONTENT
+         KEEP YOUR CURRENT DASHBOARD CONTENT HERE
+         ===================================================== -->
+
+    <main class="container py-5">
+
+        <!-- Welcome Section -->
+        <div class="mb-4">
+            <h2 class="fw-bold">
+                Welcome,
+                <span th:text="${session.loggedInUser.name}">User</span>!
+            </h2>
+
+            <p class="text-muted">
+                Welcome to your ShopSphere dashboard.
+            </p>
+        </div>
+
+
+        <!-- Dashboard Cards -->
+        <div class="row g-4">
+
+            <!-- My Orders -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-box-open fs-1 mb-3"></i>
+
+                        <h5 class="fw-bold">
+                            My Orders
+                        </h5>
+
+                        <p class="text-muted">
+                            View your previous orders.
+                        </p>
+
+                        <a th:href="@{/my-orders}"
+                           class="btn btn-dark">
+                            View Orders
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- My Cart -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-cart-shopping fs-1 mb-3"></i>
+
+                        <h5 class="fw-bold">
+                            My Cart
+                        </h5>
+
+                        <p class="text-muted">
+                            Check products in your cart.
+                        </p>
+
+                        <a th:href="@{/cart}"
+                           class="btn btn-dark">
+                            View Cart
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Saved Items -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-regular fa-heart fs-1 mb-3"></i>
+
+                        <h5 class="fw-bold">
+                            Saved Items
+                        </h5>
+
+                        <p class="text-muted">
+                            View your saved products.
+                        </p>
+
+                        <a th:href="@{/saved-items}"
+                           class="btn btn-dark">
+                            View Saved
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Profile -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-regular fa-user fs-1 mb-3"></i>
+
+                        <h5 class="fw-bold">
+                            My Profile
+                        </h5>
+
+                        <p class="text-muted">
+                            Manage your account details.
+                        </p>
+
+                        <a th:href="@{/profile}"
+                           class="btn btn-dark">
+                            View Profile
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         EXISTING FOOTER
+         ===================================================== -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+</html>

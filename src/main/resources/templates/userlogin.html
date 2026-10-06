@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>User Login | ShopSphere</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Auth CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/auth.css}">
+</head>
+
+<body class="auth-page">
+	
+	<!-- Temporary Authentication Popup -->
+
+	<div th:if="${successMessage}"
+	     id="authPopup"
+	     class="auth-popup success-popup">
+
+	    <i class="fa-solid fa-circle-check"></i>
+
+	    <span th:text="${successMessage}">
+	        Account created successfully! Please login.
+	    </span>
+
+	</div>
+
+
+	<div th:if="${errorMessage}"
+	     id="authPopup"
+	     class="auth-popup error-popup">
+
+	    <i class="fa-solid fa-circle-exclamation"></i>
+
+	    <span th:text="${errorMessage}">
+	        Something went wrong.
+	    </span>
+
+	</div>
+	
+<div class="auth-container">
+
+    <!-- Left Side -->
+    <div class="auth-left">
+
+        <div class="brand">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>ShopSphere</span>
+        </div>
+
+        <div class="welcome-content">
+
+            <span class="welcome-badge">
+                <i class="fa-solid fa-lock"></i>
+                Secure Shopping
+            </span>
+
+            <h1>
+                Welcome Back!
+            </h1>
+
+            <p>
+                Sign in to your ShopSphere account and continue
+                your shopping journey.
+            </p>
+
+            <div class="benefits">
+
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+
+                    <div>
+                        <h6>Track Your Orders</h6>
+                        <p>Check your orders anytime.</p>
+                    </div>
+                </div>
+
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <div>
+                        <h6>Save Your Favorites</h6>
+                        <p>Keep products in your wishlist.</p>
+                    </div>
+                </div>
+
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+
+                    <div>
+                        <h6>Faster Checkout</h6>
+                        <p>Shop faster with your saved details.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 ShopSphere. All rights reserved.
+        </div>
+
+    </div>
+
+
+    <!-- Right Side -->
+    <div class="auth-right">
+
+        <div class="auth-card">
+
+            <div class="mobile-brand">
+                <i class="fa-solid fa-bag-shopping"></i>
+                ShopSphere
+            </div>
+
+            <div class="auth-heading">
+
+                <div class="auth-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <h2>Sign In</h2>
+
+                <p>
+                    Login to your ShopSphere account
+                </p>
+
+            </div>
+
+
+            <form th:action="@{/userlogin}"
+                  method="post">
+
+                <!-- Email -->
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-regular fa-envelope"></i>
+
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               placeholder="Enter your email"
+                               autocomplete="email"
+                               required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="form-group">
+
+                    <div class="password-label">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <a href="#" class="forgot-password">
+                            Forgot Password?
+                        </a>
+
+                    </div>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required>
+
+                        <button type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()">
+
+                            <i class="fa-regular fa-eye"
+                               id="passwordIcon"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Remember Me -->
+                <div class="remember-row">
+
+                    <label class="remember-label">
+
+                        <input type="checkbox"
+                               name="remember">
+
+                        <span>
+                            Remember me
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <!-- Login Button -->
+                <button type="submit"
+                        class="auth-button">
+
+                    <span>Sign In</span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <!-- Divider -->
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+
+            <!-- Signup -->
+            <div class="signup-text">
+
+                Don't have an account?
+
+                <a th:href="@{/signup}">
+                    Create an Account
+                </a>
+
+            </div>
+
+
+            <!-- Back to Home -->
+            <a th:href="@{/}"
+               class="back-home">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to ShopSphere
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const icon =
+        document.getElementById("passwordIcon");
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        icon.classList.remove("fa-eye");
+
+        icon.classList.add("fa-eye-slash");
+
+    } else {
+
+        password.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+
+        icon.classList.add("fa-eye");
+
+    }
+}
+
+</script>
+
+<script th:src="@{/js/auth.js}"></script>
+
+
+</body>
+</html>

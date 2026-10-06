@@ -1,0 +1,117 @@
+/* =====================================================
+   SHOPSPHERE DASHBOARD
+   ===================================================== */
+
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* =====================================================
+   DASHBOARD MAIN AREA
+   ===================================================== */
+
+main {
+    min-height: 65vh;
+}
+
+main h2 {
+    font-size: 2rem;
+    color: #212529;
+}
+
+main h2 span {
+    color: #0d6efd;
+}
+
+main p {
+    font-size: 15px;
+}
+
+/* =====================================================
+   DASHBOARD CARDS
+   ===================================================== */
+
+.card {
+    border-radius: 12px;
+    transition: all 0.25s ease;
+    background: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10) !important;
+}
+
+.card-body {
+    padding: 30px 20px;
+}
+
+/* =====================================================
+   CARD ICONS
+   ===================================================== */
+
+.card-body > i {
+    color: #212529;
+    transition: all 0.25s ease;
+}
+
+.card:hover .card-body > i {
+    transform: scale(1.08);
+}
+
+/* =====================================================
+   CARD TITLE
+   ===================================================== */
+
+.card h5 {
+    color: #212529;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+/* =====================================================
+   CARD DESCRIPTION
+   ===================================================== */
+
+.card p {
+    min-height: 45px;
+    margin-bottom: 20px;
+    color: #6c757d;
+}
+
+/* =====================================================
+   DASHBOARD BUTTONS
+   ===================================================== */
+
+.card .btn {
+    border-radius: 7px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+
+.card .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 767px) {
+
+    main {
+        padding-top: 30px !important;
+        padding-bottom: 30px !important;
+    }
+
+    main h2 {
+        font-size: 1.6rem;
+    }
+
+    .card-body {
+        padding: 25px 18px;
+    }
+}
