@@ -13,10 +13,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     List<CartItem> findByUser(User user);
 
-    Optional<CartItem> findByUserAndProduct(
-            User user,
-            Product product
-    );
+    Optional<CartItem> findByUserAndProduct(User user, Product product);
 
     void deleteByUser(User user);
+
+    long countByUser(User user);
 }

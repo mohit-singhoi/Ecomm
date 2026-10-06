@@ -25,6 +25,7 @@ public class AuthController {
 
     @GetMapping("/userlogin")
     public String userLogin() {
+
         return "userlogin";
     }
 
@@ -41,19 +42,62 @@ public class AuthController {
             RedirectAttributes redirectAttributes) {
 
         // Find user by email
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user =
+                userRepository.findByEmail(email).orElse(null);
 
-        // Check email and password
+
+        // =================================================
+        // CHECK EMAIL AND PASSWORD
+        // =================================================
+
         if (user != null && user.getPassword().equals(password)) {
 
             // Store logged-in user in session
-            session.setAttribute("loggedInUser", user);
+            session.setAttribute(
+                    "loggedInUser",
+                    user
+            );
 
-            // Go to dashboard
+
+            // =================================================
+            // CHECK ORIGINAL PAGE
+            // =================================================
+
+            String redirectAfterLogin =
+                    (String) session.getAttribute(
+                            "redirectAfterLogin"
+                    );
+
+
+            /*
+             * If the user was redirected to login from
+             * another protected page, send them back there.
+             */
+            if (redirectAfterLogin != null
+                    && !redirectAfterLogin.isBlank()) {
+
+                // Remove it after using it
+                session.removeAttribute(
+                        "redirectAfterLogin"
+                );
+
+                // Redirect to original requested page
+                return "redirect:" + redirectAfterLogin;
+            }
+
+
+            // =================================================
+            // NORMAL LOGIN
+            // =================================================
+
             return "redirect:/dashboard";
         }
 
-        // Invalid login
+
+        // =====================================================
+        // INVALID LOGIN
+        // =====================================================
+
         redirectAttributes.addFlashAttribute(
                 "errorMessage",
                 "Invalid email or password."
@@ -69,6 +113,7 @@ public class AuthController {
 
     @GetMapping("/signup")
     public String signup() {
+
         return "signup";
     }
 
@@ -85,7 +130,11 @@ public class AuthController {
             @RequestParam String confirmPassword,
             RedirectAttributes redirectAttributes) {
 
-        // Check password
+
+        // =================================================
+        // CHECK PASSWORD
+        // =================================================
+
         if (!password.equals(confirmPassword)) {
 
             redirectAttributes.addFlashAttribute(
@@ -97,7 +146,10 @@ public class AuthController {
         }
 
 
-        // Check duplicate email
+        // =================================================
+        // CHECK DUPLICATE EMAIL
+        // =================================================
+
         if (userRepository.findByEmail(email).isPresent()) {
 
             redirectAttributes.addFlashAttribute(
@@ -109,7 +161,10 @@ public class AuthController {
         }
 
 
-        // Create new user
+        // =================================================
+        // CREATE NEW USER
+        // =================================================
+
         User user = new User();
 
         user.setName(name);
@@ -119,11 +174,15 @@ public class AuthController {
         // Normal signup user
         user.setRole("ROLE_USER");
 
+
         // Save user
         userRepository.save(user);
 
 
-        // Success message
+        // =================================================
+        // SUCCESS MESSAGE
+        // =================================================
+
         redirectAttributes.addFlashAttribute(
                 "successMessage",
                 "Account created successfully! Please login."
@@ -145,6 +204,8 @@ public class AuthController {
         // Destroy login session
         session.invalidate();
 
+
+        // Success message
         redirectAttributes.addFlashAttribute(
                 "successMessage",
                 "You have been logged out successfully."
@@ -163,11 +224,18 @@ public class AuthController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
+
         // Get logged-in user
         User loggedInUser =
-                (User) session.getAttribute("loggedInUser");
+                (User) session.getAttribute(
+                        "loggedInUser"
+                );
 
-        // Not logged in
+
+        // =================================================
+        // NOT LOGGED IN
+        // =================================================
+
         if (loggedInUser == null) {
 
             redirectAttributes.addFlashAttribute(
@@ -178,7 +246,11 @@ public class AuthController {
             return "redirect:/userlogin";
         }
 
-        // Logged in
+
+        // =================================================
+        // LOGGED IN
+        // =================================================
+
         return "dashboard";
     }
 }

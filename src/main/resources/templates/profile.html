@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | ShopSphere</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Navbar CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
+
+    <!-- User Navbar CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/user-navbar.css}">
+
+    <!-- Profile CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/profile.css}">
+	
+		
+		  <!-- FOOTER CSS -->
+		  <!-- ================================================= -->
+
+		  <link rel="stylesheet"
+		        th:href="@{/css/footer.css}">
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         LOGGED-IN USER NAVBAR
+         ===================================================== -->
+
+    <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+
+
+    <!-- =====================================================
+         PROFILE
+         ===================================================== -->
+
+    <main class="profile-page">
+
+        <div class="container py-5">
+
+            <!-- PAGE HEADER -->
+
+            <div class="profile-heading mb-4">
+
+                <div>
+                    <h1>
+                        <i class="fa-regular fa-user me-2"></i>
+                        My Profile
+                    </h1>
+
+                    <p>
+                        View and manage your ShopSphere account information.
+                    </p>
+                </div>
+
+                <a th:href="@{/dashboard}"
+                   class="btn btn-dark">
+
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Dashboard
+
+                </a>
+
+            </div>
+
+
+            <!-- PROFILE CARD -->
+
+            <div class="profile-card">
+
+                <!-- PROFILE HEADER -->
+
+                <div class="profile-card-header">
+
+                    <div class="profile-avatar">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 th:text="${session.loggedInUser.name}">
+                            User
+                        </h3>
+
+                        <p>
+                            ShopSphere Customer
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFILE INFORMATION -->
+
+                <div class="profile-details">
+
+                    <!-- NAME -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-icon">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Full Name
+                            </span>
+
+                            <strong th:text="${session.loggedInUser.name}">
+                                User
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-icon">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Email Address
+                            </span>
+
+                            <strong th:text="${session.loggedInUser.email}">
+                                user@example.com
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROLE -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Account Type
+                            </span>
+
+                            <strong>
+                                Customer
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <div class="profile-detail">
+
+                        <div class="profile-detail-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Account Status
+                            </span>
+
+                            <strong class="status-active">
+                                Active
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFILE ACTIONS -->
+
+                <div class="profile-actions">
+
+                    <a th:href="@{/my-orders}"
+                       class="profile-action-btn">
+
+                        <i class="fa-solid fa-box"></i>
+
+                        My Orders
+
+                    </a>
+
+
+                    <a th:href="@{/saved-items}"
+                       class="profile-action-btn">
+
+                        <i class="fa-regular fa-heart"></i>
+
+                        Saved Items
+
+                    </a>
+
+
+                    <a th:href="@{/cart}"
+                       class="profile-action-btn">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                        My Cart
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

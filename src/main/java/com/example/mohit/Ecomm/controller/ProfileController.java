@@ -1,0 +1,26 @@
+package com.example.mohit.Ecomm.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.mohit.Ecomm.model.User;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class ProfileController {
+
+    @GetMapping("/profile")
+    public String profile(HttpSession session) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        // User is not logged in
+        if (loggedInUser == null) {
+            return "redirect:/userlogin";
+        }
+
+        return "profile";
+    }
+}

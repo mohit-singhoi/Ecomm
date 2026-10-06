@@ -6,94 +6,127 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.SavedItemService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
-@RequestMapping("/saved-items")
 public class SavedItemController {
 
     @Autowired
     private SavedItemService savedItemService;
 
 
-    // Temporary logged-in user
-    private final Long USER_ID = 1L;
-
-
-    // ==========================================
+    // =====================================================
     // SHOW SAVED ITEMS
-    // ==========================================
+    // =====================================================
 
-    @GetMapping
-    public String showSavedItems(Model model) {
+    @GetMapping("/saved-items")
+    public String showSavedItems(
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        // User is not logged in
+        if (loggedInUser == null) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to view your saved items."
+            );
+
+            return "redirect:/userlogin";
+        }
+
+        // Get saved items of logged-in user
         model.addAttribute(
                 "savedItems",
-                savedItemService.getSavedItems(USER_ID)
+                savedItemService.getSavedItems(
+                        loggedInUser.getId()
+                )
         );
 
         return "saved-items";
     }
 
 
-    // ==========================================
-    // MOVE TO CART
-    // ==========================================
+    // =====================================================
+    // REMOVE SAVED ITEM
+    // =====================================================
 
-    @PostMapping("/move-to-cart/{id}")
-    public String moveToCart(
+    @PostMapping("/saved-items/remove/{id}")
+    public String removeSavedItem(
             @PathVariable Long id,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        try {
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
 
-            savedItemService.moveToCart(USER_ID, id);
-
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Product moved to cart successfully!"
-            );
-
-        } catch (Exception e) {
+        // User is not logged in
+        if (loggedInUser == null) {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    e.getMessage()
+                    "Please login to continue."
             );
+
+            return "redirect:/userlogin";
         }
+
+        savedItemService.removeSavedItem(
+                loggedInUser.getId(),
+                id
+        );
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Item removed from saved items."
+        );
 
         return "redirect:/saved-items";
     }
 
 
-    // ==========================================
-    // REMOVE
-    // ==========================================
+    // =====================================================
+    // MOVE SAVED ITEM TO CART
+    // =====================================================
 
-    @PostMapping("/remove/{id}")
-    public String removeSavedItem(
+    @PostMapping("/saved-items/move-to-cart/{id}")
+    public String moveToCart(
             @PathVariable Long id,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        try {
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
 
-            savedItemService.removeSavedItem(USER_ID, id);
-
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Product removed from saved items."
-            );
-
-        } catch (Exception e) {
+        // User is not logged in
+        if (loggedInUser == null) {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    e.getMessage()
+                    "Please login to continue."
             );
+
+            return "redirect:/userlogin";
         }
+
+        savedItemService.moveToCart(
+                loggedInUser.getId(),
+                id
+        );
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Item moved to your cart."
+        );
 
         return "redirect:/saved-items";
     }

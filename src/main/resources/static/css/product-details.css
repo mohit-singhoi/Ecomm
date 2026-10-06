@@ -73,6 +73,11 @@
         padding: 12px 25px;
         font-weight: 600;
     }
+	
+	.btn-wishlist{
+	    padding: 12px 25px;
+	    font-weight: 600;    
+	}
 
     .back-link {
         text-decoration: none;

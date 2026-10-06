@@ -23,6 +23,10 @@
 		  <!-- Navbar CSS -->
 		  <link rel="stylesheet"
 		        th:href="@{/css/navbar.css}">
+				
+				<!-- User Navbar CSS -->
+				<link rel="stylesheet"
+				      th:href="@{/css/user-navbar.css}">
 
 
 		  <!-- Footer CSS -->
@@ -43,7 +47,15 @@
 	     NAVBAR
 	     ========================= -->
 
-	<div th:replace="~{fragments/navbar :: navbar}"></div>
+		 <!-- PUBLIC NAVBAR -->
+		 <th:block th:if="${session.loggedInUser == null}">
+		     <div th:replace="~{fragments/navbar :: navbar}"></div>
+		 </th:block>
+
+		 <!-- LOGGED-IN USER NAVBAR -->
+		 <th:block th:if="${session.loggedInUser != null}">
+		     <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+		 </th:block>
 
 
 <!-- ================= PRODUCT DETAILS ================= -->
@@ -187,6 +199,23 @@
 					        </button>
 
 					    </form>
+						
+						<!-- ADD TO WISHLIST -->
+
+						<form th:action="@{/wishlist/add/{id}(id=${product.id})}"
+						      method="post">
+
+						    <button type="submit"
+						            class="btn btn-danger btn-cart">
+
+						        <i class="fa-regular fa-heart me-2"></i>
+
+						        Add to Wishlist
+
+						    </button>
+
+						</form>
+						
 
 
 					    <!-- BUY NOW -->

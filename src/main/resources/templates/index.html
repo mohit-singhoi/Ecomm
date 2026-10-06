@@ -29,6 +29,10 @@
     <!-- Navbar CSS -->
     <link rel="stylesheet"
           th:href="@{/css/navbar.css}">
+		  
+		  <!-- User Navbar CSS -->
+		  <link rel="stylesheet"
+		        th:href="@{/css/user-navbar.css}">
 
 
     <!-- Home CSS -->
@@ -49,7 +53,15 @@
          NAVBAR
          ========================= -->
 
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+		 <!-- PUBLIC NAVBAR -->
+		 <th:block th:if="${session.loggedInUser == null}">
+		     <div th:replace="~{fragments/navbar :: navbar}"></div>
+		 </th:block>
+
+		 <!-- LOGGED-IN USER NAVBAR -->
+		 <th:block th:if="${session.loggedInUser != null}">
+		     <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+		 </th:block>
 
 
 

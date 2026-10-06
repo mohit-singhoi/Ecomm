@@ -1,5 +1,6 @@
 package com.example.mohit.Ecomm.controller;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.mohit.Ecomm.model.CartItem;
+import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.CartService;
 import com.example.mohit.Ecomm.service.OrderService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/checkout")
@@ -28,33 +32,75 @@ public class CheckoutController {
     private OrderService orderService;
 
 
-    // Temporary logged-in user
-    // Later we will get this from Login/Session
-    private final Long USER_ID = 1L;
-
-
     // =====================================================
     // SHOW CHECKOUT
+    // URL: GET /checkout
     // =====================================================
 
     @GetMapping
-    public String showCheckout(Model model) {
+    public String showCheckout(
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        // Get logged-in user
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+
+        // =================================================
+        // USER NOT LOGGED IN
+        // =================================================
+
+        if (loggedInUser == null) {
+
+            // Remember that user wanted checkout
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/checkout"
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to continue to checkout."
+            );
+
+            return "redirect:/userlogin";
+        }
+
+
+        Long userId = loggedInUser.getId();
+
+
+        // =================================================
+        // GET USER CART
+        // =================================================
 
         List<CartItem> cartItems =
-                cartService.getCartItems(USER_ID);
+                cartService.getCartItems(userId);
 
-        // If cart is empty
+
+        // Cart empty
         if (cartItems == null || cartItems.isEmpty()) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Your cart is empty."
+            );
+
             return "redirect:/cart";
         }
 
 
         double total = 0.0;
 
-        // Convert database CartItems into
-        // the format used by checkout.html
+
+        // =================================================
+        // PREPARE CHECKOUT ITEMS
+        // =================================================
+
         List<Map<String, Object>> checkoutItems =
-                new java.util.ArrayList<>();
+                new ArrayList<>();
 
 
         for (CartItem cartItem : cartItems) {
@@ -69,17 +115,34 @@ public class CheckoutController {
             Map<String, Object> item =
                     new LinkedHashMap<>();
 
-            item.put("product", cartItem.getProduct());
-            item.put("quantity", cartItem.getQuantity());
-            item.put("itemTotal", itemTotal);
+            item.put(
+                    "product",
+                    cartItem.getProduct()
+            );
+
+            item.put(
+                    "quantity",
+                    cartItem.getQuantity()
+            );
+
+            item.put(
+                    "itemTotal",
+                    itemTotal
+            );
 
             checkoutItems.add(item);
         }
 
 
-        model.addAttribute("checkoutItems", checkoutItems);
+        model.addAttribute(
+                "checkoutItems",
+                checkoutItems
+        );
 
-        model.addAttribute("total", total);
+        model.addAttribute(
+                "total",
+                total
+        );
 
 
         return "checkout";
@@ -88,6 +151,7 @@ public class CheckoutController {
 
     // =====================================================
     // PLACE ORDER
+    // URL: POST /checkout/place-order
     // =====================================================
 
     @PostMapping("/place-order")
@@ -107,10 +171,42 @@ public class CheckoutController {
 
             @RequestParam String payment,
 
+            HttpSession session,
+
             RedirectAttributes redirectAttributes) {
 
 
-        // Basic validation
+        // =================================================
+        // CHECK LOGIN
+        // =================================================
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/checkout"
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to place your order."
+            );
+
+            return "redirect:/userlogin";
+        }
+
+
+        Long userId = loggedInUser.getId();
+
+
+        // =================================================
+        // BASIC VALIDATION
+        // =================================================
+
         if (fullName == null || fullName.trim().isEmpty()
                 || email == null || email.trim().isEmpty()
                 || phone == null || phone.trim().isEmpty()
@@ -128,9 +224,12 @@ public class CheckoutController {
         }
 
 
-        // Get user's database cart
+        // =================================================
+        // GET USER CART
+        // =================================================
+
         List<CartItem> cartItems =
-                cartService.getCartItems(USER_ID);
+                cartService.getCartItems(userId);
 
 
         if (cartItems == null || cartItems.isEmpty()) {
@@ -144,7 +243,10 @@ public class CheckoutController {
         }
 
 
-        // Convert CartItems to Map<ProductId, Quantity>
+        // =================================================
+        // CREATE PRODUCT QUANTITIES MAP
+        // =================================================
+
         Map<Long, Integer> productQuantities =
                 new LinkedHashMap<>();
 
@@ -160,6 +262,7 @@ public class CheckoutController {
             Integer quantity =
                     cartItem.getQuantity();
 
+
             productQuantities.put(
                     productId,
                     quantity
@@ -172,19 +275,28 @@ public class CheckoutController {
         }
 
 
-        // Save order
+        // =================================================
+        // SAVE ORDER
+        // =================================================
+
         orderService.placeOrder(
-                USER_ID,
+                userId,
                 productQuantities,
                 totalAmount
         );
 
 
-        // Clear database cart after successful order
-        cartService.clearCart(USER_ID);
+        // =================================================
+        // CLEAR USER CART
+        // =================================================
+
+        cartService.clearCart(userId);
 
 
-        // Success message
+        // =================================================
+        // SUCCESS MESSAGE
+        // =================================================
+
         redirectAttributes.addFlashAttribute(
                 "successMessage",
                 "Your order has been placed successfully!"
@@ -197,10 +309,29 @@ public class CheckoutController {
 
     // =====================================================
     // ORDER SUCCESS PAGE
+    // URL: GET /checkout/success
     // =====================================================
 
     @GetMapping("/success")
-    public String orderSuccess() {
+    public String orderSuccess(
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+
+        // Protect success page
+        if (loggedInUser == null) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to continue."
+            );
+
+            return "redirect:/userlogin";
+        }
+
 
         return "order-success";
     }

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.mohit.Ecomm.model.CartItem;
+import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.CartService;
 import com.example.mohit.Ecomm.service.SavedItemService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/cart")
@@ -26,14 +29,6 @@ public class CartController {
     @Autowired
     private SavedItemService savedItemService;
 
-    /*
-     * Temporary user ID.
-     *
-     * Later, when login/authentication is implemented,
-     * this will be replaced with the logged-in user's ID.
-     */
-    private final Long USER_ID = 1L;
-
 
     // =========================================================
     // SHOW CART
@@ -41,10 +36,34 @@ public class CartController {
     // =========================================================
 
     @GetMapping
-    public String showCart(Model model) {
+    public String showCart(
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        // USER NOT LOGGED IN
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/cart"
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to view your cart."
+            );
+
+            return "redirect:/userlogin";
+        }
+
+        Long userId = loggedInUser.getId();
 
         List<CartItem> cartItems =
-                cartService.getCartItems(USER_ID);
+                cartService.getCartItems(userId);
 
         double total = 0.0;
 
@@ -71,7 +90,26 @@ public class CartController {
     public String addToCart(
             @PathVariable Long id,
             @RequestParam(defaultValue = "1") int quantity,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/products/" + id
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to add products to your cart."
+            );
+
+            return "redirect:/userlogin";
+        }
 
         try {
 
@@ -80,7 +118,7 @@ public class CartController {
             }
 
             cartService.addToCart(
-                    USER_ID,
+                    loggedInUser.getId(),
                     id,
                     quantity
             );
@@ -111,7 +149,26 @@ public class CartController {
     public String buyNow(
             @PathVariable Long id,
             @RequestParam(defaultValue = "1") int quantity,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/products/" + id
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to continue."
+            );
+
+            return "redirect:/userlogin";
+        }
 
         try {
 
@@ -119,18 +176,12 @@ public class CartController {
                 quantity = 1;
             }
 
-            /*
-             * Add product to cart first.
-             */
             cartService.addToCart(
-                    USER_ID,
+                    loggedInUser.getId(),
                     id,
                     quantity
             );
 
-            /*
-             * Then directly open checkout page.
-             */
             return "redirect:/checkout";
 
         } catch (Exception e) {
@@ -140,10 +191,6 @@ public class CartController {
                     e.getMessage()
             );
 
-            /*
-             * If something goes wrong,
-             * return to the product details page.
-             */
             return "redirect:/products/" + id;
         }
     }
@@ -158,12 +205,26 @@ public class CartController {
     public String updateCart(
             @PathVariable Long id,
             @RequestParam(defaultValue = "1") int quantity,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/cart"
+            );
+
+            return "redirect:/userlogin";
+        }
 
         try {
 
             cartService.updateQuantity(
-                    USER_ID,
+                    loggedInUser.getId(),
                     id,
                     quantity
             );
@@ -193,12 +254,26 @@ public class CartController {
     @PostMapping("/save-for-later/{id}")
     public String saveForLater(
             @PathVariable Long id,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/cart"
+            );
+
+            return "redirect:/userlogin";
+        }
 
         try {
 
             savedItemService.saveForLater(
-                    USER_ID,
+                    loggedInUser.getId(),
                     id
             );
 
@@ -227,12 +302,26 @@ public class CartController {
     @PostMapping("/remove/{id}")
     public String removeFromCart(
             @PathVariable Long id,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/cart"
+            );
+
+            return "redirect:/userlogin";
+        }
 
         try {
 
             cartService.removeItem(
-                    USER_ID,
+                    loggedInUser.getId(),
                     id
             );
 
@@ -260,11 +349,27 @@ public class CartController {
 
     @PostMapping("/clear")
     public String clearCart(
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/cart"
+            );
+
+            return "redirect:/userlogin";
+        }
 
         try {
 
-            cartService.clearCart(USER_ID);
+            cartService.clearCart(
+                    loggedInUser.getId()
+            );
 
             redirectAttributes.addFlashAttribute(
                     "successMessage",

@@ -1,0 +1,382 @@
+/* =====================================================
+   SHOPSPHERE LOGGED-IN USER NAVBAR
+   ===================================================== */
+
+
+/* =====================================================
+   USER PROFILE CONTAINER
+   ===================================================== */
+
+.user-profile-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+/* =====================================================
+   USER PROFILE BUTTON
+   ===================================================== */
+
+.user-profile-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #ffffff !important;
+    background: transparent !important;
+
+    border: 1px solid #ffffff !important;
+    border-radius: 25px !important;
+
+    padding: 7px 14px !important;
+
+    font-family: inherit !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+
+    cursor: pointer !important;
+    white-space: nowrap;
+
+    transition: all 0.25s ease;
+}
+
+
+/* BUTTON HOVER */
+
+.user-profile-btn:hover {
+    background: #ffffff !important;
+    color: #212529 !important;
+}
+
+
+/* BUTTON FOCUS */
+
+.user-profile-btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+
+/* =====================================================
+   DROPDOWN ARROW
+   ===================================================== */
+
+.user-dropdown-arrow {
+    font-size: 10px;
+    transition: transform 0.2s ease;
+}
+
+
+/* =====================================================
+   USER DROPDOWN MENU
+   ===================================================== */
+
+.user-profile-menu {
+    position: absolute !important;
+
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    left: auto !important;
+
+    width: 250px !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #e9ecef !important;
+    border-radius: 10px !important;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;
+
+    padding: 8px !important;
+
+    /*
+       IMPORTANT:
+       Hidden by default.
+       JavaScript will add .show
+       when user clicks the button.
+    */
+    display: none !important;
+
+    z-index: 99999 !important;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   SHOW MENU AFTER CLICK
+   ===================================================== */
+
+.user-profile-menu.show {
+    display: block !important;
+}
+
+
+/* =====================================================
+   USER PROFILE HEADER
+   ===================================================== */
+
+.user-profile-header {
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    padding: 12px !important;
+}
+
+
+/* USER ICON */
+
+.user-profile-icon {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+
+    border-radius: 50% !important;
+
+    background: #212529 !important;
+    color: #ffffff !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+
+/* USER NAME */
+
+.user-profile-header strong {
+    display: block !important;
+
+    color: #212529 !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+
+/* USER EMAIL */
+
+.user-profile-header small {
+    display: block !important;
+
+    color: #6c757d !important;
+
+    font-size: 11px !important;
+
+    margin-top: 3px !important;
+
+    max-width: 150px !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+
+/* =====================================================
+   DROPDOWN LINKS
+   ===================================================== */
+
+.user-profile-menu a {
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 11px !important;
+
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    padding: 10px 12px !important;
+
+    border-radius: 7px !important;
+
+    color: #343a40 !important;
+    background: transparent !important;
+
+    text-decoration: none !important;
+
+    font-size: 14px !important;
+    font-weight: 400 !important;
+
+    transition: all 0.2s ease;
+}
+
+
+/* LINK HOVER */
+
+.user-profile-menu a:hover {
+    background: #f1f3f5 !important;
+    color: #212529 !important;
+
+    text-decoration: none !important;
+}
+
+
+/* LINK ICON */
+
+.user-profile-menu a i {
+    width: 18px !important;
+    min-width: 18px !important;
+
+    text-align: center !important;
+}
+
+
+/* =====================================================
+   DIVIDER
+   ===================================================== */
+
+.user-menu-divider {
+    height: 1px !important;
+
+    background: #e9ecef !important;
+
+    margin: 7px 5px !important;
+}
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+.user-profile-menu .user-logout {
+    color: #dc3545 !important;
+}
+
+.user-profile-menu .user-logout:hover {
+    background: #fff1f2 !important;
+    color: #b02a37 !important;
+}
+
+
+/* =====================================================
+   NOTIFICATION
+   ===================================================== */
+
+.notification-badge {
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   MOBILE / TABLET NAVBAR
+   ===================================================== */
+
+@media (max-width: 991px) {
+
+    /* RIGHT SIDE */
+
+    .navbar .navbar-collapse > .d-flex.align-items-center.gap-3 {
+        width: 100%;
+
+        display: flex !important;
+
+        flex-wrap: wrap;
+
+        align-items: center !important;
+
+        justify-content: flex-start;
+
+        gap: 12px !important;
+
+        margin-top: 15px;
+    }
+
+
+    /* SEARCH / WISHLIST / NOTIFICATION / CART */
+
+    .navbar .navbar-collapse > .d-flex.align-items-center.gap-3 > .nav-action {
+        flex: 0 0 auto;
+
+        width: 35px;
+        height: 35px;
+    }
+
+
+    /* USER PROFILE */
+
+    .user-profile-dropdown {
+        position: relative;
+
+        width: auto;
+
+        margin-top: 0;
+    }
+
+
+    .user-profile-btn {
+        width: auto;
+
+        justify-content: center;
+    }
+
+
+    /* =================================================
+       MOBILE DROPDOWN
+       ================================================= */
+
+    .user-profile-menu {
+        position: absolute !important;
+
+        top: calc(100% + 8px) !important;
+
+        left: 0 !important;
+        right: auto !important;
+
+        width: 250px !important;
+
+        margin: 0 !important;
+
+        background: #ffffff !important;
+
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;
+
+        border: 1px solid #e9ecef !important;
+
+        z-index: 99999 !important;
+    }
+
+
+    /*
+       IMPORTANT:
+       Do NOT use :hover here.
+    */
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 576px) {
+
+    .navbar .navbar-collapse > .d-flex.align-items-center.gap-3 {
+        gap: 10px !important;
+    }
+
+
+    .user-profile-btn {
+        font-size: 14px !important;
+
+        padding: 6px 12px !important;
+    }
+
+
+    .user-profile-menu {
+        width: 240px !important;
+
+        /*
+           Keep left side aligned.
+           Do NOT use right: 0 here.
+        */
+
+        left: 0 !important;
+        right: auto !important;
+    }
+
+}
