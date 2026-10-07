@@ -353,20 +353,30 @@
                                 <div class="user-menu-divider"></div>
 
 
-                                <!-- =================================================
-                                     LOGOUT
-                                     ================================================= -->
+								<!-- =================================================
+								     LOGOUT
+								     ================================================= -->
 
-                                <a th:href="@{/logout}"
-                                   class="user-logout">
+								<form th:action="@{/logout}"
+								      method="post"
+								      class="user-logout-form">
 
-                                    <i class="fa-solid fa-right-from-bracket"></i>
+								    <input type="hidden"
+								           th:name="${_csrf.parameterName}"
+								           th:value="${_csrf.token}">
 
-                                    <span>
-                                        Logout
-                                    </span>
+								    <button type="submit"
+								            class="user-logout">
 
-                                </a>
+								        <i class="fa-solid fa-right-from-bracket"></i>
+
+								        <span>
+								            Logout
+								        </span>
+
+								    </button>
+
+								</form>
 
                             </div>
 

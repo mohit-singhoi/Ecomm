@@ -48,6 +48,48 @@
 
 </head>
 
+<!-- =================================================
+     SUCCESS MESSAGE
+     ================================================= -->
+
+<div th:if="${successMessage}"
+     class="alert alert-success alert-dismissible fade show"
+     role="alert">
+
+    <i class="fa-solid fa-circle-check me-2"></i>
+
+    <span th:text="${successMessage}">
+        Password changed successfully.
+    </span>
+
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert">
+    </button>
+
+</div>
+
+
+<!-- =================================================
+     ERROR MESSAGE
+     ================================================= -->
+
+<div th:if="${errorMessage}"
+     class="alert alert-danger alert-dismissible fade show"
+     role="alert">
+
+    <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+    <span th:text="${errorMessage}">
+        Something went wrong.
+    </span>
+
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert">
+    </button>
+
+</div>
 
 <body>
 
@@ -278,13 +320,13 @@
                         </div>
 
 
-                        <button type="button"
-                                class="btn btn-outline-dark btn-sm"
-                                disabled>
+						<a th:href="@{/account-settings/change-password}"
+						   class="btn btn-outline-dark btn-sm">
 
-                            Change Password
+						    <i class="fa-solid fa-key me-1"></i>
+						    Change Password
 
-                        </button>
+						</a>
 
                     </div>
 
@@ -448,14 +490,20 @@
                     </div>
 
 
-                    <a th:href="@{/logout}"
-                       class="btn btn-outline-danger">
+					<form th:action="@{/logout}"
+					      method="post"
+					      class="logout-form">
 
-                        <i class="fa-solid fa-right-from-bracket me-2"></i>
+					    <input type="hidden"
+					           th:name="${_csrf.parameterName}"
+					           th:value="${_csrf.token}">
 
-                        Logout
+					    <button type="submit" class="logout-button">
+					        <i class="fa-solid fa-right-from-bracket"></i>
+					        <span>Logout</span>
+					    </button>
 
-                    </a>
+					</form>
 
                 </div>
 

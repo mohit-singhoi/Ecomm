@@ -315,3 +315,20 @@
         padding: 20px;
     }
 }
+
+.logout-form {
+    margin: 0;
+    padding: 0;
+}
+
+.logout-button {
+    border: none;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+    height:35px;
+    text-align: left;
+    color:white;
+    background-color:black;
+}

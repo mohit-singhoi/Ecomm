@@ -149,100 +149,106 @@
             </div>
 
 
-            <form th:action="@{/userlogin}"
-                  method="post">
+			<form th:action="@{/userlogin}"
+			      method="post">
 
-                <!-- Email -->
-                <div class="form-group">
+			    <!-- CSRF TOKEN -->
+			    <input type="hidden"
+			           th:name="${_csrf.parameterName}"
+			           th:value="${_csrf.token}">
 
-                    <label for="email">
-                        Email Address
-                    </label>
+			    <!-- Email -->
+			    <div class="form-group">
 
-                    <div class="input-wrapper">
+			        <label for="email">
+			            Email Address
+			        </label>
 
-                        <i class="fa-regular fa-envelope"></i>
+			        <div class="input-wrapper">
 
-                        <input type="email"
-                               id="email"
-                               name="email"
-                               placeholder="Enter your email"
-                               autocomplete="email"
-                               required>
+			            <i class="fa-regular fa-envelope"></i>
 
-                    </div>
+			            <input type="email"
+			                   id="email"
+			                   name="username"
+			                   placeholder="Enter your email"
+			                   autocomplete="email"
+			                   required>
 
-                </div>
+			        </div>
 
-
-                <!-- Password -->
-                <div class="form-group">
-
-                    <div class="password-label">
-
-                        <label for="password">
-                            Password
-                        </label>
-
-                        <a href="#" class="forgot-password">
-                            Forgot Password?
-                        </a>
-
-                    </div>
-
-                    <div class="input-wrapper">
-
-                        <i class="fa-solid fa-lock"></i>
-
-                        <input type="password"
-                               id="password"
-                               name="password"
-                               placeholder="Enter your password"
-                               autocomplete="current-password"
-                               required>
-
-                        <button type="button"
-                                class="password-toggle"
-                                onclick="togglePassword()">
-
-                            <i class="fa-regular fa-eye"
-                               id="passwordIcon"></i>
-
-                        </button>
-
-                    </div>
-
-                </div>
+			    </div>
 
 
-                <!-- Remember Me -->
-                <div class="remember-row">
+			    <!-- Password -->
+			    <div class="form-group">
 
-                    <label class="remember-label">
+			        <div class="password-label">
 
-                        <input type="checkbox"
-                               name="remember">
+			            <label for="password">
+			                Password
+			            </label>
 
-                        <span>
-                            Remember me
-                        </span>
+			            <a href="#"
+			               class="forgot-password">
+			                Forgot Password?
+			            </a>
 
-                    </label>
+			        </div>
 
-                </div>
+			        <div class="input-wrapper">
+
+			            <i class="fa-solid fa-lock"></i>
+
+			            <input type="password"
+			                   id="password"
+			                   name="password"
+			                   placeholder="Enter your password"
+			                   autocomplete="current-password"
+			                   required>
+
+			            <button type="button"
+			                    class="password-toggle"
+			                    onclick="togglePassword()">
+
+			                <i class="fa-regular fa-eye"
+			                   id="passwordIcon"></i>
+
+			            </button>
+
+			        </div>
+
+			    </div>
 
 
-                <!-- Login Button -->
-                <button type="submit"
-                        class="auth-button">
+			    <!-- Remember Me -->
+			    <div class="remember-row">
 
-                    <span>Sign In</span>
+			        <label class="remember-label">
 
-                    <i class="fa-solid fa-arrow-right"></i>
+			            <input type="checkbox"
+			                   name="remember">
 
-                </button>
+			            <span>
+			                Remember me
+			            </span>
 
-            </form>
+			        </label>
+
+			    </div>
+
+
+			    <!-- Login Button -->
+			    <button type="submit"
+			            class="auth-button">
+
+			        <span>Sign In</span>
+
+			        <i class="fa-solid fa-arrow-right"></i>
+
+			    </button>
+
+			</form>
 
 
             <!-- Divider -->

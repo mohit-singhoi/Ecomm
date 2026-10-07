@@ -380,3 +380,20 @@
     }
 
 }
+
+.user-logout-form {
+    margin-left: 70px;
+    padding: 10;
+}
+
+.user-logout-btn {
+    border: none;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+}
+
+

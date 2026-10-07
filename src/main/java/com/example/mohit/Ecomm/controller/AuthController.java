@@ -1,6 +1,7 @@
 package com.example.mohit.Ecomm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,109 +19,43 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    // =====================================================
+
+    // =========================================================
     // USER LOGIN PAGE
-    // =====================================================
+    // =========================================================
 
     @GetMapping("/userlogin")
     public String userLogin() {
-
         return "userlogin";
     }
 
 
-    // =====================================================
-    // PROCESS USER LOGIN
-    // =====================================================
-
-    @PostMapping("/userlogin")
-    public String processLogin(
-            @RequestParam String email,
-            @RequestParam String password,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-
-        // Find user by email
-        User user =
-                userRepository.findByEmail(email).orElse(null);
+//    // =========================================================
+//    // ADMIN LOGIN PAGE
+//    // =========================================================
+//
+//    @GetMapping("/adminlogin")
+//    public String adminLogin() {
+//        return "adminlogin";
+//    }
 
 
-        // =================================================
-        // CHECK EMAIL AND PASSWORD
-        // =================================================
-
-        if (user != null && user.getPassword().equals(password)) {
-
-            // Store logged-in user in session
-            session.setAttribute(
-                    "loggedInUser",
-                    user
-            );
-
-
-            // =================================================
-            // CHECK ORIGINAL PAGE
-            // =================================================
-
-            String redirectAfterLogin =
-                    (String) session.getAttribute(
-                            "redirectAfterLogin"
-                    );
-
-
-            /*
-             * If the user was redirected to login from
-             * another protected page, send them back there.
-             */
-            if (redirectAfterLogin != null
-                    && !redirectAfterLogin.isBlank()) {
-
-                // Remove it after using it
-                session.removeAttribute(
-                        "redirectAfterLogin"
-                );
-
-                // Redirect to original requested page
-                return "redirect:" + redirectAfterLogin;
-            }
-
-
-            // =================================================
-            // NORMAL LOGIN
-            // =================================================
-
-            return "redirect:/dashboard";
-        }
-
-
-        // =====================================================
-        // INVALID LOGIN
-        // =====================================================
-
-        redirectAttributes.addFlashAttribute(
-                "errorMessage",
-                "Invalid email or password."
-        );
-
-        return "redirect:/userlogin";
-    }
-
-
-    // =====================================================
+    // =========================================================
     // SIGNUP PAGE
-    // =====================================================
+    // =========================================================
 
     @GetMapping("/signup")
     public String signup() {
-
         return "signup";
     }
 
 
-    // =====================================================
-    // PROCESS SIGNUP
-    // =====================================================
+    // =========================================================
+    // SIGNUP PROCESS
+    // =========================================================
 
     @PostMapping("/signup")
     public String processSignup(
@@ -130,11 +65,7 @@ public class AuthController {
             @RequestParam String confirmPassword,
             RedirectAttributes redirectAttributes) {
 
-
-        // =================================================
-        // CHECK PASSWORD
-        // =================================================
-
+        // Check password confirmation
         if (!password.equals(confirmPassword)) {
 
             redirectAttributes.addFlashAttribute(
@@ -146,10 +77,7 @@ public class AuthController {
         }
 
 
-        // =================================================
-        // CHECK DUPLICATE EMAIL
-        // =================================================
-
+        // Check whether email already exists
         if (userRepository.findByEmail(email).isPresent()) {
 
             redirectAttributes.addFlashAttribute(
@@ -161,27 +89,25 @@ public class AuthController {
         }
 
 
-        // =================================================
-        // CREATE NEW USER
-        // =================================================
-
+        // Create new user
         User user = new User();
 
         user.setName(name);
         user.setEmail(email);
-        user.setPassword(password);
 
-        // Normal signup user
+        /*
+         * IMPORTANT:
+         *
+         * Password is now encrypted using BCrypt.
+         */
+        user.setPassword(
+                passwordEncoder.encode(password)
+        );
+
         user.setRole("ROLE_USER");
 
-
-        // Save user
         userRepository.save(user);
 
-
-        // =================================================
-        // SUCCESS MESSAGE
-        // =================================================
 
         redirectAttributes.addFlashAttribute(
                 "successMessage",
@@ -192,49 +118,17 @@ public class AuthController {
     }
 
 
-    // =====================================================
-    // LOGOUT
-    // =====================================================
-
-    @GetMapping("/logout")
-    public String logout(
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-
-        // Destroy login session
-        session.invalidate();
-
-
-        // Success message
-        redirectAttributes.addFlashAttribute(
-                "successMessage",
-                "You have been logged out successfully."
-        );
-
-        return "redirect:/userlogin";
-    }
-
-
-    // =====================================================
-    // DASHBOARD
-    // =====================================================
+    // =========================================================
+    // USER DASHBOARD
+    // =========================================================
 
     @GetMapping("/dashboard")
     public String dashboard(
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-
-        // Get logged-in user
         User loggedInUser =
-                (User) session.getAttribute(
-                        "loggedInUser"
-                );
-
-
-        // =================================================
-        // NOT LOGGED IN
-        // =================================================
+                (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
 
@@ -245,11 +139,6 @@ public class AuthController {
 
             return "redirect:/userlogin";
         }
-
-
-        // =================================================
-        // LOGGED IN
-        // =================================================
 
         return "dashboard";
     }
