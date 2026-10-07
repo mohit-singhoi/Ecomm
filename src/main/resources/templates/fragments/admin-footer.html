@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+<footer th:fragment="adminFooter"
+        class="admin-footer">
+
+    <div class="container-fluid">
+
+        <div class="admin-footer-content">
+
+
+            <!-- =================================================
+                 LEFT SIDE
+            ================================================== -->
+
+            <div class="admin-footer-left">
+
+                <a th:href="@{/admin/dashboard}"
+                   class="admin-footer-brand">
+
+                    <i class="fa-solid fa-store me-2"></i>
+
+                    ShopSphere Admin
+
+                </a>
+
+                <p class="admin-footer-description">
+
+                    Store administration and management panel.
+
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 CENTER
+            ================================================== -->
+
+            <div class="admin-footer-links">
+
+                <a th:href="@{/admin/dashboard}">
+                    Dashboard
+                </a>
+
+                <a th:href="@{/admin/products}">
+                    Products
+                </a>
+
+                <a th:href="@{/admin/users}">
+                    Users
+                </a>
+
+                <a th:href="@{/admin/orders}">
+                    Orders
+                </a>
+
+                <a th:href="@{/admin/feedback}">
+                    Feedback / Queries
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SIDE
+            ================================================== -->
+
+            <div class="admin-footer-right">
+
+                <div class="admin-footer-copyright">
+
+                    ©
+                    <span th:text="${#dates.year(#dates.createNow())}">
+                        2026
+                    </span>
+
+                    ShopSphere
+
+                </div>
+
+                <div class="admin-footer-role">
+
+                    <i class="fa-solid fa-shield-halved me-1"></i>
+
+                    Admin Panel
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BOTTOM LINE
+        ================================================== -->
+
+        <div class="admin-footer-bottom">
+
+            <span>
+                ShopSphere Administration System
+            </span>
+
+            <span>
+                All rights reserved.
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

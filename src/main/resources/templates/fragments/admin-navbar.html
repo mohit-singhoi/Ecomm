@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ShopSphere Admin</title>
+</head>
+
+<body>
+
+<nav th:fragment="adminNavbar" class="admin-navbar">
+
+    <div class="container-fluid">
+
+        <div class="admin-navbar-content">
+
+            <!-- Admin Brand -->
+            <a th:href="@{/admin/dashboard}" class="admin-brand">
+
+                <i class="fa-solid fa-store me-2"></i>
+
+                <span>ShopSphere Admin</span>
+
+            </a>
+
+
+            <!-- Mobile Menu Button -->
+            <button type="button"
+                    class="admin-menu-toggle"
+                    id="adminMenuToggle"
+                    aria-label="Toggle admin navigation"
+                    aria-expanded="false">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+
+            <!-- Admin Navigation -->
+            <div class="admin-navigation" id="adminNavigation">
+
+
+                <!-- Dashboard -->
+                <a th:href="@{/admin/dashboard}"
+                   class="admin-nav-link">
+
+                    <i class="fa-solid fa-gauge-high"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <!-- Products -->
+                <a th:href="@{/admin/products}"
+                   class="admin-nav-link">
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                    <span>Products</span>
+
+                </a>
+
+
+                <!-- Users -->
+                <a th:href="@{/admin/users}"
+                   class="admin-nav-link">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>Users</span>
+
+                </a>
+
+
+                <!-- Orders -->
+                <a th:href="@{/admin/orders}"
+                   class="admin-nav-link">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    <span>Orders</span>
+
+                </a>
+
+
+                <!-- Feedback / Queries -->
+                <a th:href="@{/admin/feedback}"
+                   class="admin-nav-link">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                    <span>Feedback / Queries</span>
+
+                </a>
+
+
+                <!-- View Store -->
+                <a th:href="@{/}"
+                   class="admin-view-store">
+
+                    <i class="fa-solid fa-store"></i>
+
+                    <span>View Store</span>
+
+                </a>
+
+
+                <!-- Logout -->
+                <a th:href="@{/logout}"
+                   class="admin-logout">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>Logout</span>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,616 @@
+/* =========================================================
+   SHOPSPHERE ADMIN NAVBAR
+   Professional Admin Panel Design
+   ========================================================= */
+
+.admin-navbar {
+    width: 100%;
+    background: #212529;
+
+    padding: 0 28px;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+
+    position: relative;
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   NAVBAR CONTENT
+   ========================================================= */
+
+.admin-navbar-content {
+    width: 100%;
+    min-height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    /* Everything starts from left */
+    justify-content: space-evenly;
+
+    gap: 0;
+}
+
+
+/* =========================================================
+   ADMIN BRAND
+   ========================================================= */
+
+.admin-brand {
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    padding-right: 32px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 1.35rem;
+    font-weight: 700;
+
+    letter-spacing: 0.1px;
+
+    white-space: nowrap;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+    transition: color 0.2s ease;
+}
+
+.admin-brand:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+/* Store icon */
+
+.admin-brand i {
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   ADMIN NAVIGATION
+   ========================================================= */
+
+.admin-navigation {
+    display: flex;
+    align-items: center;
+
+    margin-left: 22px;
+
+    gap: 4px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   NORMAL NAVIGATION LINK
+   ========================================================= */
+
+.admin-nav-link {
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 13px;
+
+    color: #adb5bd;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    border-radius: 7px;
+
+    white-space: nowrap;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* Icon */
+
+.admin-nav-link i {
+    font-size: 14px;
+}
+
+
+/* Hover */
+
+.admin-nav-link:hover {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    text-decoration: none;
+}
+
+
+/* Active / Dashboard */
+
+.admin-nav-link[href$="/admin/dashboard"] {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.10);
+}
+
+
+/* =========================================================
+   VIEW STORE BUTTON
+   ========================================================= */
+
+.admin-view-store {
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-left: 12px;
+
+    padding: 0 17px;
+
+    color: #ffffff;
+
+    background: #0d6efd;
+
+    border: 1px solid #0d6efd;
+
+    border-radius: 22px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.admin-view-store:hover {
+    color: #ffffff;
+
+    background: #0b5ed7;
+
+    border-color: #0b5ed7;
+
+    text-decoration: none;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
+}
+
+
+/* =========================================================
+   LOGOUT BUTTON
+   ========================================================= */
+
+.admin-logout {
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-left: 7px;
+
+    padding: 0 17px;
+
+    color: #ffffff;
+
+    background: transparent;
+
+    border: 1px solid rgba(255, 255, 255, 0.65);
+
+    border-radius: 22px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.admin-logout:hover {
+    color: #212529;
+
+    background: #ffffff;
+
+    border-color: #ffffff;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+   ========================================================= */
+
+.admin-menu-toggle {
+    display: none;
+
+    width: 42px;
+    height: 40px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-left: auto;
+
+    padding: 0;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    border: 1px solid #6c757d;
+
+    border-radius: 7px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.admin-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    border-color: #ffffff;
+}
+
+
+/* =========================================================
+   1400px - 1500px
+   ========================================================= */
+
+@media (max-width: 1500px) {
+
+    .admin-navbar {
+        padding: 0 20px;
+    }
+
+    .admin-brand {
+        padding-right: 25px;
+
+        font-size: 1.25rem;
+    }
+
+    .admin-navigation {
+        margin-left: 18px;
+
+        gap: 2px;
+    }
+
+    .admin-nav-link {
+        padding: 0 10px;
+
+        font-size: 13px;
+    }
+
+    .admin-view-store {
+        margin-left: 8px;
+
+        padding: 0 14px;
+
+        font-size: 13px;
+    }
+
+    .admin-logout {
+        padding: 0 14px;
+
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   1200px - 1350px
+   ========================================================= */
+
+@media (max-width: 1350px) {
+
+    .admin-navbar {
+        padding: 0 15px;
+    }
+
+    .admin-brand {
+        padding-right: 20px;
+
+        font-size: 1.18rem;
+    }
+
+    .admin-brand i {
+        font-size: 18px;
+    }
+
+    .admin-navigation {
+        margin-left: 15px;
+    }
+
+    .admin-nav-link {
+        padding: 0 8px;
+
+        font-size: 12.5px;
+
+        gap: 5px;
+    }
+
+    .admin-view-store {
+        padding: 0 11px;
+
+        font-size: 12.5px;
+    }
+
+    .admin-logout {
+        padding: 0 11px;
+
+        font-size: 12.5px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .admin-navbar {
+        padding: 0 15px;
+    }
+
+
+    /* -----------------------------------------------------
+       NAVBAR HEADER
+       ----------------------------------------------------- */
+
+    .admin-navbar-content {
+        min-height: 62px;
+
+        position: relative;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        flex-wrap: wrap;
+    }
+
+
+    /* -----------------------------------------------------
+       BRAND
+       ----------------------------------------------------- */
+
+    .admin-brand {
+        height: 62px;
+
+        padding-right: 0;
+
+        border-right: none;
+
+        font-size: 1.2rem;
+    }
+
+
+    /* -----------------------------------------------------
+       HAMBURGER
+       ----------------------------------------------------- */
+
+    .admin-menu-toggle {
+        display: flex !important;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE NAVIGATION CLOSED
+       ----------------------------------------------------- */
+
+    .admin-navigation {
+        display: none !important;
+
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 4px;
+
+        margin: 12px 0 12px !important;
+
+        padding: 10px;
+
+        background: #2b3035;
+
+        border: 1px solid #343a40;
+
+        border-radius: 10px;
+
+        box-sizing: border-box;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE NAVIGATION OPEN
+       ----------------------------------------------------- */
+
+    .admin-navigation.show {
+        display: flex !important;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE NORMAL LINKS
+       ----------------------------------------------------- */
+
+    .admin-nav-link {
+        width: 100%;
+
+        height: auto;
+
+        min-height: 44px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: flex-start;
+
+        gap: 10px;
+
+        padding: 11px 13px;
+
+        color: #adb5bd;
+
+        font-size: 14px;
+
+        border-radius: 7px;
+
+        box-sizing: border-box;
+    }
+
+
+    .admin-nav-link:hover {
+        color: #ffffff;
+
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+
+    /* Dashboard active */
+
+    .admin-nav-link[href$="/admin/dashboard"] {
+        color: #ffffff;
+
+        background: rgba(255, 255, 255, 0.10);
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE VIEW STORE
+       ----------------------------------------------------- */
+
+    .admin-view-store {
+        width: 100%;
+
+        height: auto;
+
+        min-height: 44px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: flex-start;
+
+        gap: 10px;
+
+        margin: 5px 0 0 !important;
+
+        padding: 11px 13px;
+
+        border-radius: 7px;
+
+        box-sizing: border-box;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE LOGOUT
+       ----------------------------------------------------- */
+
+    .admin-logout {
+        width: 100%;
+
+        height: auto;
+
+        min-height: 44px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: flex-start;
+
+        gap: 10px;
+
+        margin: 5px 0 0 !important;
+
+        padding: 11px 13px;
+
+        border-radius: 7px;
+
+        box-sizing: border-box;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .admin-navbar {
+        padding: 0 12px;
+    }
+
+    .admin-brand {
+        font-size: 1.05rem;
+    }
+
+    .admin-brand i {
+        font-size: 17px;
+        margin-right: 4px !important;
+    }
+
+    .admin-menu-toggle {
+        width: 40px;
+        height: 37px;
+    }
+
+}

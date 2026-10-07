@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | ShopSphere</title>
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- =====================================================
+         ADMIN NAVBAR CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin-navbar.css}">
+
+
+    <!-- =====================================================
+         ADMIN FOOTER CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin-footer.css}">
+
+
+    <!-- =====================================================
+         ADMIN DASHBOARD CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin-dashboard.css}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ADMIN NAVBAR
+========================================================= -->
+
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}">
+</div>
+
+
+
+<!-- =========================================================
+     MAIN DASHBOARD
+========================================================= -->
+
+<main class="admin-dashboard">
+
+
+    <div class="container-fluid">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================= -->
+
+        <section class="dashboard-header">
+
+            <div>
+
+                <h1 class="dashboard-title">
+                    Admin Dashboard
+                </h1>
+
+                <p class="dashboard-subtitle">
+
+                    Welcome back,
+
+                    <strong th:text="${admin.name}">
+                        Admin
+                    </strong>.
+
+                    Here's what's happening with your store.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTICS CARDS
+        ================================================= -->
+
+        <section class="statistics-section">
+
+            <div class="row g-4">
+
+
+                <!-- =================================================
+                     TOTAL PRODUCTS
+                ================================================= -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+
+                                <i class="fa-solid fa-box-open"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-label">
+                            Total Products
+                        </div>
+
+
+                        <div class="stat-value"
+                             th:text="${totalProducts}">
+                            0
+                        </div>
+
+
+                        <div class="stat-description">
+
+                            <i class="fa-solid fa-box me-1"></i>
+
+                            Products available in store
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TOTAL USERS
+                ================================================= -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+
+                                <i class="fa-solid fa-users"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-label">
+                            Total Users
+                        </div>
+
+
+                        <div class="stat-value"
+                             th:text="${totalUsers}">
+                            0
+                        </div>
+
+
+                        <div class="stat-description">
+
+                            <i class="fa-solid fa-user-check me-1"></i>
+
+                            Registered customers
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TOTAL ORDERS
+                ================================================= -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+
+                                <i class="fa-solid fa-cart-shopping"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-label">
+                            Total Orders
+                        </div>
+
+
+                        <div class="stat-value"
+                             th:text="${totalOrders}">
+                            0
+                        </div>
+
+
+                        <div class="stat-description">
+
+                            <i class="fa-solid fa-receipt me-1"></i>
+
+                            Orders received
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TOTAL SALES
+                ================================================= -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-label">
+                            Total Sales
+                        </div>
+
+
+                        <div class="stat-value">
+
+                            ₹<span
+                                th:text="${#numbers.formatDecimal(totalSales, 1, 2)}">
+                                0.00
+                            </span>
+
+                        </div>
+
+
+                        <div class="stat-description">
+
+                            <i class="fa-solid fa-chart-line me-1"></i>
+
+                            Total order revenue
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             MANAGEMENT SECTION
+        ================================================= -->
+
+        <section class="management-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2 class="section-title">
+                        Management
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Manage your ShopSphere store from one place.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row g-4">
+
+
+                <!-- =================================================
+                     PRODUCT MANAGEMENT
+                ================================================= -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <a th:href="@{/admin/products}"
+                       class="management-link">
+
+                        <div class="management-card">
+
+
+                            <div class="management-icon">
+
+                                <i class="fa-solid fa-box-open"></i>
+
+                            </div>
+
+
+                            <h3 class="management-title">
+                                Products
+                            </h3>
+
+
+                            <p class="management-description">
+
+                                Add, edit, delete and manage
+                                your store products.
+
+                            </p>
+
+
+                            <div class="management-action">
+
+                                Manage Products
+
+                                <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     USER MANAGEMENT
+                ================================================= -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <a th:href="@{/admin/users}"
+                       class="management-link">
+
+                        <div class="management-card">
+
+
+                            <div class="management-icon">
+
+                                <i class="fa-solid fa-users"></i>
+
+                            </div>
+
+
+                            <h3 class="management-title">
+                                Users
+                            </h3>
+
+
+                            <p class="management-description">
+
+                                View registered users and
+                                manage their accounts.
+
+                            </p>
+
+
+                            <div class="management-action">
+
+                                Manage Users
+
+                                <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ORDER MANAGEMENT
+                ================================================= -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <a th:href="@{/admin/orders}"
+                       class="management-link">
+
+                        <div class="management-card">
+
+
+                            <div class="management-icon">
+
+                                <i class="fa-solid fa-receipt"></i>
+
+                            </div>
+
+
+                            <h3 class="management-title">
+                                Orders
+                            </h3>
+
+
+                            <p class="management-description">
+
+                                View customer orders and
+                                update order status.
+
+                            </p>
+
+
+                            <div class="management-action">
+
+                                Manage Orders
+
+                                <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FEEDBACK / QUERY MANAGEMENT
+                ================================================= -->
+
+                <div class="col-md-6 col-xl-3">
+
+                    <a th:href="@{/admin/feedback}"
+                       class="management-link">
+
+                        <div class="management-card">
+
+
+                            <div class="management-icon">
+
+                                <i class="fa-solid fa-comments"></i>
+
+                            </div>
+
+
+                            <h3 class="management-title">
+                                Feedback / Queries
+                            </h3>
+
+
+                            <p class="management-description">
+
+                                View customer feedback,
+                                questions and requests.
+
+                            </p>
+
+
+                            <div class="management-action">
+
+                                View Feedback
+
+                                <i class="fa-solid fa-arrow-right ms-2"></i>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STORE OVERVIEW
+        ================================================= -->
+
+        <section class="overview-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2 class="section-title">
+                        Store Overview
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Current ShopSphere statistics.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="overview-list">
+
+
+                <!-- PRODUCTS -->
+
+                <div class="overview-row">
+
+                    <div class="overview-left">
+
+                        <div class="overview-icon">
+
+                            <i class="fa-solid fa-box"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="overview-title">
+                                Products in Store
+                            </div>
+
+                            <div class="overview-description">
+                                Total products currently available
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-value"
+                         th:text="${totalProducts}">
+                        0
+                    </div>
+
+                </div>
+
+
+
+                <!-- USERS -->
+
+                <div class="overview-row">
+
+                    <div class="overview-left">
+
+                        <div class="overview-icon">
+
+                            <i class="fa-solid fa-user-group"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="overview-title">
+                                Registered Users
+                            </div>
+
+                            <div class="overview-description">
+                                Total customer accounts
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-value"
+                         th:text="${totalUsers}">
+                        0
+                    </div>
+
+                </div>
+
+
+
+                <!-- ORDERS -->
+
+                <div class="overview-row">
+
+                    <div class="overview-left">
+
+                        <div class="overview-icon">
+
+                            <i class="fa-solid fa-bag-shopping"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="overview-title">
+                                Orders Received
+                            </div>
+
+                            <div class="overview-description">
+                                Total orders placed by customers
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-value"
+                         th:text="${totalOrders}">
+                        0
+                    </div>
+
+                </div>
+
+
+
+                <!-- SALES -->
+
+                <div class="overview-row">
+
+                    <div class="overview-left">
+
+                        <div class="overview-icon">
+
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="overview-title">
+                                Total Sales
+                            </div>
+
+                            <div class="overview-description">
+                                Revenue generated from orders
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-value">
+
+                        ₹<span
+                            th:text="${#numbers.formatDecimal(totalSales, 1, 2)}">
+                            0.00
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ADMIN INFORMATION
+        ================================================= -->
+
+        <section class="admin-info-section">
+
+            <div class="admin-info-card">
+
+
+                <div class="admin-info-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+                <div class="admin-info-content">
+
+                    <h3>
+                        Administrator Account
+                    </h3>
+
+                    <p>
+
+                        You are logged in as
+
+                        <strong th:text="${admin.name}">
+                            Administrator
+                        </strong>.
+
+                    </p>
+
+                    <span class="admin-role">
+
+                        <i class="fa-solid fa-shield-halved me-1"></i>
+
+                        <span th:text="${admin.role}">
+                            ROLE_ADMIN
+                        </span>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     ADMIN FOOTER
+========================================================= -->
+
+<div th:replace="~{fragments/admin-footer :: adminFooter}">
+</div>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP JS
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script th:src="@{/js/admin-navbar.js}"></script>
+
+
+</body>
+
+</html>

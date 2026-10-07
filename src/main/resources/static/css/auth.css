@@ -459,6 +459,32 @@ body {
     font-weight: 600;
 }
 
+/* =====================================================
+   ADMIN LOGIN OPTION
+===================================================== */
+
+.admin-login-option {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.admin-login-option a {
+    margin-left: 5px;
+    color: #1264e8;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.admin-login-option a:hover {
+    color: #084298;
+    text-decoration: underline;
+}
+
 
 /* =========================================
    SIGNUP / LOGIN TEXT
@@ -587,3 +613,4 @@ body {
     }
 
 }
+

@@ -13,6 +13,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query("SELECT o FROM Orders o JOIN FETCH o.user")
     List<Orders> findAllOrderWithUsers();
 
-	List<Orders> findByUser(User user);
+    List<Orders> findByUser(User user);
 
+    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Orders o")
+    Double getTotalSales();
 }
