@@ -52,6 +52,15 @@
 
 	</div>
 	
+	<!-- Login Error Popup -->
+	<div th:if="${param.error}" id="loginErrorPopup" class="login-error-popup">
+
+	    <i class="fa-solid fa-circle-exclamation"></i>
+
+	    <span>Invalid username or password.</span>
+
+	</div>
+	
 <div class="auth-container">
 
     <!-- Left Side -->
@@ -189,10 +198,10 @@
 			                Password
 			            </label>
 
-			            <a href="#"
-			               class="forgot-password">
-			                Forgot Password?
-			            </a>
+						<a th:href="@{/forgot-password}"
+						   class="forgot-password">
+						    Forgot Password?
+						</a>
 
 			        </div>
 
@@ -300,22 +309,19 @@
 </div>
 
 
-<script>
 
+<!-- Password Toggle -->
+<script>
 function togglePassword() {
 
-    const password =
-        document.getElementById("password");
-
-    const icon =
-        document.getElementById("passwordIcon");
+    const password = document.getElementById("password");
+    const icon = document.getElementById("passwordIcon");
 
     if (password.type === "password") {
 
         password.type = "text";
 
         icon.classList.remove("fa-eye");
-
         icon.classList.add("fa-eye-slash");
 
     } else {
@@ -323,14 +329,37 @@ function togglePassword() {
         password.type = "password";
 
         icon.classList.remove("fa-eye-slash");
-
         icon.classList.add("fa-eye");
 
     }
 }
-
 </script>
 
+
+<!-- Login Error Popup -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const popup = document.getElementById("loginErrorPopup");
+
+    if (popup) {
+
+        setTimeout(function () {
+
+            popup.classList.add("hide");
+
+            setTimeout(function () {
+                popup.remove();
+            }, 300);
+
+        }, 2500);
+    }
+
+});
+</script>
+
+
+<!-- Auth JavaScript -->
 <script th:src="@{/js/auth.js}"></script>
 
 

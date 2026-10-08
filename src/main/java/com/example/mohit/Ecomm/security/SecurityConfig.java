@@ -156,10 +156,12 @@ public class SecurityConfig {
                 // -------------------------------------------------
 
                 .requestMatchers(
-                    "/userlogin",
-                    "/signup"
-                )
-                .permitAll()
+                	    "/userlogin",
+                	    "/signup",
+                	    "/forgot-password",
+                	    "/reset-password"
+                	)
+                	.permitAll()
 
 
                 // -------------------------------------------------

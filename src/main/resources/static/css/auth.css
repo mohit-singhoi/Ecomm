@@ -459,6 +459,70 @@ body {
     font-weight: 600;
 }
 
+/* =========================================================
+   LOGIN ERROR POPUP
+   ========================================================= */
+
+.login-error-popup {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #dc3545;
+    color: #ffffff;
+
+    padding: 14px 20px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.20);
+
+    z-index: 9999;
+
+    animation: popupSlideIn 0.3s ease;
+}
+
+.login-error-popup i {
+    font-size: 17px;
+}
+
+@keyframes popupSlideIn {
+
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.login-error-popup.hide {
+    animation: popupSlideOut 0.3s ease forwards;
+}
+
+@keyframes popupSlideOut {
+
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
 /* =====================================================
    ADMIN LOGIN OPTION
 ===================================================== */
@@ -613,4 +677,5 @@ body {
     }
 
 }
+
 
