@@ -164,20 +164,22 @@ public class SecurityConfig {
                 	.permitAll()
 
 
-                // -------------------------------------------------
-                // Public store pages
-                // -------------------------------------------------
+                	// -------------------------------------------------
+                	// Public store pages
+                	// -------------------------------------------------
 
-                .requestMatchers(
-                    "/",
-                    "/products",
-                    "/products/**",
-                    "/search",
-                    "/category/**",
-                    "/privacy-policy",
-                    "/terms-and-conditions"
-                )
-                .permitAll()
+                	.requestMatchers(
+                	    "/",
+                	    "/products",
+                	    "/products/**",
+                	    "/search",
+                	    "/category/**",
+                	    "/privacy-policy",
+                	    "/terms-and-conditions",
+                	    "/contact",
+                	    "/contact/send"
+                	)
+                	.permitAll()
 
 
                 // -------------------------------------------------

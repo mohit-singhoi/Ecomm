@@ -325,7 +325,7 @@
                     <a href="mailto:support@shopsphere.com"
                        class="option-link">
 
-                        support.shopsphere@gmail.com
+                        supportecomm.shopsphere@gmail.com
 
                         <i class="fa-solid fa-arrow-right"></i>
 
@@ -519,119 +519,121 @@
                     </div>
 
 
-                    <!-- CONTACT FORM -->
+					<!-- CONTACT FORM -->
 
-                    <form th:action="@{/contact/send}"
-                          method="post">
+					<form th:action="@{/contact/send}"
+					      method="post">
 
+					    <!-- CSRF TOKEN: Added to fix CSRF-related 403 errors -->
+					    <input type="hidden"
+					           th:name="${_csrf.parameterName}"
+					           th:value="${_csrf.token}">
 
-                        <!-- NAME + EMAIL -->
+					    <!-- NAME + EMAIL -->
 
-                        <div class="row g-3">
+					    <div class="row g-3">
 
-                            <div class="col-md-6">
+					        <div class="col-md-6">
 
-                                <label for="name">
-                                    Full Name
-                                </label>
+					            <label for="name">
+					                Full Name
+					            </label>
 
-                                <div class="input-wrapper">
+					            <div class="input-wrapper">
 
-                                    <i class="fa-regular fa-user"></i>
+					                <i class="fa-regular fa-user"></i>
 
-                                    <input type="text"
-                                           id="name"
-                                           name="name"
-                                           placeholder="Your name"
-                                           required>
+					                <input type="text"
+					                       id="name"
+					                       name="name"
+					                       placeholder="Your name"
+					                       required>
 
-                                </div>
+					            </div>
 
-                            </div>
+					        </div>
 
+					        <div class="col-md-6">
 
-                            <div class="col-md-6">
+					            <label for="email">
+					                Email Address
+					            </label>
 
-                                <label for="email">
-                                    Email Address
-                                </label>
+					            <div class="input-wrapper">
 
-                                <div class="input-wrapper">
+					                <i class="fa-regular fa-envelope"></i>
 
-                                    <i class="fa-regular fa-envelope"></i>
+					                <input type="email"
+					                       id="email"
+					                       name="email"
+					                       placeholder="Your email"
+					                       required>
 
-                                    <input type="email"
-                                           id="email"
-                                           name="email"
-                                           placeholder="Your email"
-                                           required>
+					            </div>
 
-                                </div>
+					        </div>
 
-                            </div>
-
-                        </div>
-
-
-                        <!-- SUBJECT -->
-
-                        <div class="form-group">
-
-                            <label for="subject">
-                                Subject
-                            </label>
-
-                            <div class="input-wrapper">
-
-                                <i class="fa-solid fa-tag"></i>
-
-                                <input type="text"
-                                       id="subject"
-                                       name="subject"
-                                       placeholder="What can we help you with?"
-                                       required>
-
-                            </div>
-
-                        </div>
+					    </div>
 
 
-                        <!-- MESSAGE -->
+					    <!-- SUBJECT -->
 
-                        <div class="form-group">
+					    <div class="form-group">
 
-                            <label for="message">
-                                Your Message
-                            </label>
+					        <label for="subject">
+					            Subject
+					        </label>
 
-                            <div class="textarea-wrapper">
+					        <div class="input-wrapper">
 
-                                <i class="fa-regular fa-message"></i>
+					            <i class="fa-solid fa-tag"></i>
 
-                                <textarea id="message"
-                                          name="message"
-                                          rows="5"
-                                          placeholder="Write your message here..."
-                                          required></textarea>
+					            <input type="text"
+					                   id="subject"
+					                   name="subject"
+					                   placeholder="What can we help you with?"
+					                   required>
 
-                            </div>
+					        </div>
 
-                        </div>
-
-
-                        <!-- SUBMIT -->
-
-                        <button type="submit"
-                                class="send-button">
-
-                            Send Message
-
-                            <i class="fa-solid fa-paper-plane"></i>
-
-                        </button>
+					    </div>
 
 
-                    </form>
+					    <!-- MESSAGE -->
+
+					    <div class="form-group">
+
+					        <label for="message">
+					            Your Message
+					        </label>
+
+					        <div class="textarea-wrapper">
+
+					            <i class="fa-regular fa-message"></i>
+
+					            <textarea id="message"
+					                      name="message"
+					                      rows="5"
+					                      placeholder="Write your message here..."
+					                      required></textarea>
+
+					        </div>
+
+					    </div>
+
+
+					    <!-- SUBMIT -->
+
+					    <button type="submit"
+					            class="send-button">
+
+					        Send Message
+
+					        <i class="fa-solid fa-paper-plane"></i>
+
+					    </button>
+
+					</form>
 
                 </div>
 
@@ -705,7 +707,7 @@
 
                                 <span>
 
-                                    SUPPORT HOURS
+                                    OFFICE HOURS
 
                                 </span>
 
