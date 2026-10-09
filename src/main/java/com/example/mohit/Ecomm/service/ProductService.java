@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 
 import com.example.mohit.Ecomm.model.Product;
 import com.example.mohit.Ecomm.repo.ProductRepository;
+import com.example.mohit.Ecomm.repo.OrderItemRepository;
 
 @Service
 public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     // Get all products
     public List<Product> getAllProducts() {
@@ -34,7 +38,7 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(name);
     }
 
- // Add product — retained for existing REST API
+    // Add product — retained for existing REST API
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
@@ -43,8 +47,11 @@ public class ProductService {
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
-    
-    
+
+    // Check whether a product is associated with an order
+    public boolean isProductUsedInOrders(Long productId) {
+        return orderItemRepository.existsByProduct_Id(productId);
+    }
 
     // Delete product
     public void deleteProduct(Long id) {

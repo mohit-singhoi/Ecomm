@@ -133,29 +133,17 @@
 }
 
 
+/* Active Navigation Link */
 .admin-nav-link.active {
     background: #343a40;
     color: #ffffff;
 }
 
-
 /* Hover */
-
 .admin-nav-link:hover {
     color: #ffffff;
-
     background: rgba(255, 255, 255, 0.08);
-
     text-decoration: none;
-}
-
-
-/* Active / Dashboard */
-
-.admin-nav-link[href$="/admin/dashboard"] {
-    color: #ffffff;
-
-    background: rgba(255, 255, 255, 0.10);
 }
 
 

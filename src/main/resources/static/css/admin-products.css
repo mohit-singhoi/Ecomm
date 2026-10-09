@@ -620,6 +620,70 @@
     margin: 0;
 }
 
+/* Product Actions */
+.product-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+/* Common Button Styling */
+.product-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* View Button */
+.btn-view {
+    color: #0d6efd;
+    background: #eef5ff;
+    border: 1px solid #d5e5ff;
+}
+
+.btn-view:hover {
+    color: #ffffff;
+    background: #0d6efd;
+}
+
+/* Edit Button */
+.btn-edit {
+    color: #0d6efd;
+    background: #eef5ff;
+    border: 1px solid #d5e5ff;
+}
+
+.btn-edit:hover {
+    color: #ffffff;
+    background: #0d6efd;
+}
+
+/* Delete Button */
+.btn-delete {
+    color: #dc2626;
+    background: #fff1f1;
+    border: 1px solid #ffdada;
+}
+
+.btn-delete:hover {
+    color: #ffffff;
+    background: #dc2626;
+}
+
+.delete-product-form {
+    display: inline-flex;
+    margin: 0;
+}
+
 .products-container .action-btn {
     display: inline-flex;
     justify-content: center;
@@ -910,3 +974,4 @@
     }
 
 }
+

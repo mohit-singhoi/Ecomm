@@ -61,6 +61,7 @@ public class AdminProductController {
         // Preserve search and category selections
         model.addAttribute("search", search);
         model.addAttribute("category", category);
+        model.addAttribute("activePage", "products");
 
         // Total number of products in the database
         model.addAttribute(
@@ -145,6 +146,31 @@ public class AdminProductController {
         return "admin/edit-product";
     }
 
+ // View product details
+    @GetMapping("/view/{id}")
+    public String viewProduct(
+            @PathVariable Long id,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Product product = productService.getProductById(id);
+
+        if (product == null) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Product not found!"
+            );
+
+            return "redirect:/admin/products";
+        }
+
+        model.addAttribute("product", product);
+        model.addAttribute("activePage", "products");
+
+        return "admin/product-details";
+    }
+    
+    
     // Update existing product
     @PostMapping("/update/{id}")
     public String updateProduct(
@@ -190,7 +216,6 @@ public class AdminProductController {
         return "redirect:/admin/products";
     }
 
-    // Delete product
     @PostMapping("/delete/{id}")
     public String deleteProduct(
             @PathVariable Long id,
@@ -199,7 +224,6 @@ public class AdminProductController {
         Product product = productService.getProductById(id);
 
         if (product == null) {
-
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Product not found!"
@@ -209,7 +233,18 @@ public class AdminProductController {
         }
 
         try {
+            // Check whether the product is used in an existing order
+            if (productService.isProductUsedInOrders(id)) {
 
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "This product cannot be deleted because it is associated with existing orders."
+                );
+
+                return "redirect:/admin/products";
+            }
+
+            // Delete the product if it is not used in any order
             productService.deleteProduct(id);
 
             redirectAttributes.addFlashAttribute(
@@ -219,9 +254,11 @@ public class AdminProductController {
 
         } catch (Exception exception) {
 
+            exception.printStackTrace();
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Unable to delete this product. It may be associated with existing orders."
+                    "Unable to delete this product. Please check the application console."
             );
         }
 

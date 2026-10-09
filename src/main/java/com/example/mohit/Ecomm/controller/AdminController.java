@@ -74,6 +74,7 @@ public class AdminController {
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalOrders", totalOrders);
         model.addAttribute("totalSales", totalSales);
+        model.addAttribute("activePage", "dashboard");
 
         return "admin/dashboard";
     }

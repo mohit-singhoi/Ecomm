@@ -55,59 +55,43 @@
 				<!-- Dashboard -->
 				<a th:href="@{/admin/dashboard}"
 				   class="admin-nav-link"
-				   th:classappend="${#strings.equals(#httpServletRequest.requestURI, '/admin/dashboard')} ? ' active' : ''">
-
-				    <i class="fa-solid fa-gauge-high"></i>
+				   th:classappend="${activePage == 'dashboard'} ? ' active' : ''">
+				    <i class="fa-solid fa-gauge"></i>
 				    <span>Dashboard</span>
 				</a>
 
 				<!-- Products -->
 				<a th:href="@{/admin/products}"
 				   class="admin-nav-link"
-				   th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/admin/products')} ? ' active' : ''">
-
-				    <i class="fa-solid fa-box-open"></i>
+				   th:classappend="${activePage == 'products'} ? ' active' : ''">
+				    <i class="fa-solid fa-box"></i>
 				    <span>Products</span>
 				</a>
 
 
-                <!-- Users -->
+				<!-- Users -->
+				<a th:href="@{/admin/users}"
+				   class="admin-nav-link"
+				   th:classappend="${activePage == 'users'} ? ' active' : ''">
+				    <i class="fa-solid fa-users"></i>
+				    <span>Users</span>
+				</a>
 
-                <a
-                    th:href="@{/admin/users}"
-                    class="admin-nav-link">
+				<!-- Orders -->
+				<a th:href="@{/admin/orders}"
+				   class="admin-nav-link"
+				   th:classappend="${activePage == 'orders'} ? ' active' : ''">
+				    <i class="fa-solid fa-receipt"></i>
+				    <span>Orders</span>
+				</a>
 
-                    <i class="fa-solid fa-users"></i>
-
-                    <span>Users</span>
-
-                </a>
-
-
-                <!-- Orders -->
-
-                <a
-                    th:href="@{/admin/orders}"
-                    class="admin-nav-link">
-
-                    <i class="fa-solid fa-receipt"></i>
-
-                    <span>Orders</span>
-
-                </a>
-
-
-                <!-- Feedback / Queries -->
-
-                <a
-                    th:href="@{/admin/feedback}"
-                    class="admin-nav-link">
-
-                    <i class="fa-solid fa-comments"></i>
-
-                    <span>Feedback / Queries</span>
-
-                </a>
+				<!-- Feedback / Queries -->
+				<a th:href="@{/admin/feedback}"
+				   class="admin-nav-link"
+				   th:classappend="${activePage == 'feedback'} ? ' active' : ''">
+				    <i class="fa-solid fa-comments"></i>
+				    <span>Feedback / Queries</span>
+				</a>
 
 
                 <!-- View Store -->

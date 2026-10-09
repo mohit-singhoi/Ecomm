@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Product | ShopSphere Admin</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Existing Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+
+    <style>
+        body {
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        .edit-container {
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: #101828;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+        }
+
+        .edit-card {
+            background: #ffffff;
+            border: 1px solid #e5eaf2;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .edit-card-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid #e5eaf2;
+        }
+
+        .edit-card-body {
+            padding: 28px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #344054;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            padding: 12px 14px;
+            border-radius: 8px;
+            border-color: #d8e0ec;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-text {
+            color: #64748b;
+        }
+
+        .current-image {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            padding: 8px;
+            border: 1px solid #e5eaf2;
+            border-radius: 10px;
+            background: #ffffff;
+        }
+
+        .btn-save {
+            background: #2563eb;
+            color: #ffffff;
+            border: 1px solid #2563eb;
+            padding: 11px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            background: #1d4ed8;
+            color: #ffffff;
+        }
+
+        .btn-cancel {
+            padding: 11px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 576px) {
+            .edit-card-body,
+            .edit-card-header {
+                padding: 20px;
+            }
+
+            .edit-container {
+                margin: 24px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Admin Navbar -->
+    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+    <main class="container edit-container">
+
+        <!-- Page Heading -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+            <div>
+                <h2 class="page-title mb-2">
+                    <i class="fa-solid fa-pen-to-square text-primary me-2"></i>
+                    Edit Product
+                </h2>
+
+                <p class="page-subtitle mb-0">
+                    Update your ShopSphere product information.
+                </p>
+            </div>
+
+            <a th:href="@{/admin/products}"
+               class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-2"></i>
+                Back to Products
+            </a>
+
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage}"
+             class="alert alert-danger"
+             role="alert"
+             th:text="${errorMessage}">
+        </div>
+
+        <!-- Edit Product Card -->
+        <section class="edit-card">
+
+            <div class="edit-card-header">
+
+                <h5 class="fw-bold mb-2">Product Information</h5>
+
+                <p class="text-muted mb-0">
+                    Product ID:
+                    <strong th:text="${product.id}"></strong>
+                </p>
+
+            </div>
+
+            <div class="edit-card-body">
+
+                <!-- Update Product Form -->
+                <form th:action="@{/admin/products/update/{id}(id=${product.id})}"
+                      th:object="${product}"
+                      method="post">
+
+                    <!-- CSRF Protection -->
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+                    <div class="row g-4">
+
+                        <!-- Product Name -->
+                        <div class="col-md-6">
+
+                            <label for="name" class="form-label">
+                                Product Name <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   id="name"
+                                   th:field="*{name}"
+                                   class="form-control"
+                                   placeholder="Enter product name"
+                                   maxlength="150"
+                                   required>
+
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-md-6">
+
+                            <label for="category" class="form-label">
+                                Category <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   id="category"
+                                   th:field="*{category}"
+                                   class="form-control"
+                                   placeholder="e.g. Electronics"
+                                   maxlength="100"
+                                   required>
+
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-md-6">
+
+                            <label for="price" class="form-label">
+                                Price (₹) <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="number"
+                                   id="price"
+                                   th:field="*{price}"
+                                   class="form-control"
+                                   placeholder="Enter product price"
+                                   min="0.01"
+                                   step="0.01"
+                                   required>
+
+                            <div class="form-text">
+                                Enter the updated selling price.
+                            </div>
+
+                        </div>
+
+                        <!-- Image URL -->
+                        <div class="col-md-6">
+
+                            <label for="imageUrl" class="form-label">
+                                Product Image URL
+                            </label>
+
+                            <input type="url"
+                                   id="imageUrl"
+                                   th:field="*{imageUrl}"
+                                   class="form-control"
+                                   placeholder="https://example.com/image.jpg">
+
+                            <div class="form-text">
+                                Leave the existing URL unchanged to keep the current image.
+                            </div>
+
+                        </div>
+
+                        <!-- Current Image Preview -->
+                        <div class="col-12"
+                             th:if="${product.imageUrl != null
+                                     and !product.imageUrl.isBlank()}">
+
+                            <label class="form-label d-block">
+                                Current Product Image
+                            </label>
+
+                            <img th:src="${product.imageUrl}"
+                                 th:alt="${product.name}"
+                                 class="current-image">
+
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-12">
+
+                            <label for="description" class="form-label">
+                                Product Description
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <textarea id="description"
+                                      th:field="*{description}"
+                                      class="form-control"
+                                      rows="5"
+                                      maxlength="2000"
+                                      placeholder="Enter product description"
+                                      required></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="d-flex flex-wrap gap-3 mt-5">
+
+                        <button type="submit" class="btn btn-save">
+                            <i class="fa-solid fa-floppy-disk me-2"></i>
+                            Save Changes
+                        </button>
+
+                        <a th:href="@{/admin/products}"
+                           class="btn btn-outline-secondary btn-cancel">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Admin Footer -->
+    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+</body>
+</html>
