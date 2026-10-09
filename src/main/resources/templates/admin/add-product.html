@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Product | ShopSphere Admin</title>
+
+	<!-- =====================================================
+	     ADMIN NAVBAR CSS
+	====================================================== -->
+
+	<link rel="stylesheet"
+	      th:href="@{/css/admin-navbar.css}">
+
+
+	<!-- =====================================================
+	     ADMIN FOOTER CSS
+	====================================================== -->
+
+	<link rel="stylesheet"
+	      th:href="@{/css/admin-footer.css}">
+
+    <!-- Add Product CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-add-product.css}">
+</head>
+
+<body>
+
+    <!-- Existing Admin Navbar -->
+    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+
+    <main class="add-product-container">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span>/</span>
+            <a th:href="@{/admin/products}">Products</a>
+            <span>/</span>
+            <span class="current-page">Add Product</span>
+        </div>
+
+
+        <!-- Page Header -->
+        <div class="page-header">
+
+            <div>
+                <span class="page-label">INVENTORY MANAGEMENT</span>
+
+                <h1>Add New Product</h1>
+
+                <p>Add a new product to your ShopSphere store.</p>
+            </div>
+
+            <a th:href="@{/admin/products}" class="back-button">
+                &larr; Back to Products
+            </a>
+
+        </div>
+
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage}"
+             class="alert alert-error"
+             role="alert"
+             th:text="${errorMessage}">
+        </div>
+
+
+        <!-- Product Form Card -->
+        <section class="form-card">
+
+            <div class="form-card-header">
+
+                <div class="form-icon">+</div>
+
+                <div>
+                    <h2>Product Information</h2>
+
+                    <p>
+                        Enter the details below to add a product
+                        to your inventory.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- Add Product Form -->
+            <form th:action="@{/admin/products/save}"
+                  th:object="${product}"
+                  method="post"
+                  class="product-form">
+
+                <!-- CSRF Token -->
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+
+                <!-- Product Name -->
+                <div class="form-group full-width">
+
+                    <label for="name">
+                        Product Name <span class="required">*</span>
+                    </label>
+
+                    <input type="text"
+                           id="name"
+                           th:field="*{name}"
+                           placeholder="Enter product name"
+                           maxlength="150"
+                           required>
+
+                    <small class="field-hint">
+                        Enter a clear and descriptive product name.
+                    </small>
+
+                </div>
+
+
+                <!-- Category -->
+                <div class="form-group">
+
+                    <label for="category">
+                        Product Category <span class="required">*</span>
+                    </label>
+
+                    <select id="category"
+                            th:field="*{category}"
+                            required>
+
+                        <option value="">Select a category</option>
+
+                        <option value="Electronics">Electronics</option>
+
+                        <option value="Clothes">Clothes</option>
+
+                        <option value="Stationery">Stationery</option>
+
+                        <option value="Jewelry">Jewelry</option>
+
+                        <option value="Home Items">Home Items</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Price -->
+                <div class="form-group">
+
+                    <label for="price">
+                        Product Price (₹) <span class="required">*</span>
+                    </label>
+
+                    <div class="price-input-wrapper">
+                        <span class="currency-symbol">₹</span>
+
+                        <input type="number"
+                               id="price"
+                               th:field="*{price}"
+                               placeholder="0.00"
+                               min="0.01"
+                               step="0.01"
+                               required>
+                    </div>
+
+                    <small class="field-hint">
+                        Enter the selling price in Indian rupees.
+                    </small>
+
+                </div>
+
+
+                <!-- Image URL -->
+                <div class="form-group full-width">
+
+                    <label for="imageUrl">
+                        Product Image URL
+                    </label>
+
+                    <input type="url"
+                           id="imageUrl"
+                           th:field="*{imageUrl}"
+                           placeholder="https://example.com/product-image.jpg"
+                           maxlength="2048">
+
+                    <small class="field-hint">
+                        Enter a publicly accessible image URL.
+                    </small>
+
+                    <!-- Image Preview -->
+                    <div class="image-preview-container">
+
+                        <span class="preview-label">Image Preview</span>
+
+                        <div class="image-preview">
+
+                            <img id="imagePreview"
+                                 src=""
+                                 alt="Product preview"
+                                 hidden>
+
+                            <div id="imagePlaceholder"
+                                 class="image-placeholder">
+
+                                <span class="placeholder-icon">&#128247;</span>
+
+                                <span>Image preview will appear here</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group full-width">
+
+                    <label for="description">
+                        Product Description
+                    </label>
+
+                    <textarea id="description"
+                              th:field="*{description}"
+                              rows="5"
+                              maxlength="2000"
+                              placeholder="Describe the product, its features, and benefits..."></textarea>
+
+                    <small class="field-hint">
+                        Provide useful information to help customers
+                        understand the product.
+                    </small>
+
+                </div>
+
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+
+                    <a th:href="@{/admin/products}"
+                       class="cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="save-button">
+
+                        <span>+</span>
+                        Save Product
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- Information Notice -->
+        <div class="info-notice">
+
+            <span class="info-icon">i</span>
+
+            <p>
+                Please verify the product name, category, price,
+                and image URL before saving. Products added here
+                will become part of your ShopSphere inventory.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- Existing Admin Footer -->
+    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+
+    <!-- Product Image Preview Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const imageUrlInput = document.getElementById("imageUrl");
+            const imagePreview = document.getElementById("imagePreview");
+            const imagePlaceholder =
+                document.getElementById("imagePlaceholder");
+
+            function updateImagePreview() {
+
+                const url = imageUrlInput.value.trim();
+
+                imagePreview.hidden = true;
+                imagePlaceholder.hidden = false;
+                imagePreview.removeAttribute("src");
+
+                if (!url) {
+                    return;
+                }
+
+                try {
+                    const parsedUrl = new URL(url);
+
+                    if (parsedUrl.protocol !== "https:" &&
+                        parsedUrl.protocol !== "http:") {
+                        return;
+                    }
+                } catch (error) {
+                    return;
+                }
+
+                imagePreview.onload = function () {
+                    imagePreview.hidden = false;
+                    imagePlaceholder.hidden = true;
+                };
+
+                imagePreview.onerror = function () {
+                    imagePreview.hidden = true;
+                    imagePlaceholder.hidden = false;
+                };
+
+                imagePreview.src = url;
+            }
+
+            imageUrlInput.addEventListener("input", updateImagePreview);
+
+            updateImagePreview();
+
+        });
+    </script>
+	
+	<script th:src="@{/js/admin-navbar.js}"></script>
+
+</body>
+</html>

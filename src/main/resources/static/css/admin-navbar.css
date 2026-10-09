@@ -133,6 +133,12 @@
 }
 
 
+.admin-nav-link.active {
+    background: #343a40;
+    color: #ffffff;
+}
+
+
 /* Hover */
 
 .admin-nav-link:hover {

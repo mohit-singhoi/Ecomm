@@ -52,30 +52,23 @@
                 id="adminNavigation">
 
 
-                <!-- Dashboard -->
+				<!-- Dashboard -->
+				<a th:href="@{/admin/dashboard}"
+				   class="admin-nav-link"
+				   th:classappend="${#strings.equals(#httpServletRequest.requestURI, '/admin/dashboard')} ? ' active' : ''">
 
-                <a
-                    th:href="@{/admin/dashboard}"
-                    class="admin-nav-link">
+				    <i class="fa-solid fa-gauge-high"></i>
+				    <span>Dashboard</span>
+				</a>
 
-                    <i class="fa-solid fa-gauge-high"></i>
+				<!-- Products -->
+				<a th:href="@{/admin/products}"
+				   class="admin-nav-link"
+				   th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/admin/products')} ? ' active' : ''">
 
-                    <span>Dashboard</span>
-
-                </a>
-
-
-                <!-- Products -->
-
-                <a
-                    th:href="@{/admin/products}"
-                    class="admin-nav-link">
-
-                    <i class="fa-solid fa-box-open"></i>
-
-                    <span>Products</span>
-
-                </a>
+				    <i class="fa-solid fa-box-open"></i>
+				    <span>Products</span>
+				</a>
 
 
                 <!-- Users -->

@@ -29,10 +29,22 @@ public class ProductService {
         return productRepository.findByCategoryIgnoreCase(category);
     }
 
-    // Add product
+    // Search products by name
+    public List<Product> searchProducts(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+ // Add product — retained for existing REST API
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
+
+    // Add or update product — used by admin panel
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
+    }
+    
+    
 
     // Delete product
     public void deleteProduct(Long id) {
