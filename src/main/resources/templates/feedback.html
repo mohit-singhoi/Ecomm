@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Share Feedback | ShopSphere</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+		  
+		  <!-- EXISTING NAVBAR CSS -->
+		  <link rel="stylesheet"
+		        th:href="@{/css/navbar.css}">
+		  	  
+		  	  <!-- User Navbar CSS -->
+		  	  <link rel="stylesheet"
+		  	        th:href="@{/css/user-navbar.css}">
+
+
+		  <!-- EXISTING FOOTER CSS -->
+		  <link rel="stylesheet"
+		        th:href="@{/css/footer.css}">
+						  
+
+    <!-- Feedback CSS -->
+    <link rel="stylesheet" th:href="@{/css/feedback.css}">
+</head>
+
+<body>
+
+<!-- ================= USER NAVBAR FRAGMENT ================= -->
+    <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+
+
+<!-- ================= HERO SECTION ================= -->
+<section class="feedback-hero">
+
+    <div class="hero-content">
+
+        <div class="hero-icon">
+            <i class="fa-solid fa-comments"></i>
+        </div>
+
+        <span class="hero-label">YOUR VOICE MATTERS</span>
+
+        <h1>We'd Love to Hear From You</h1>
+
+        <p>
+            Your feedback helps us create a better shopping experience.
+            Share your ideas, suggestions, and experiences with ShopSphere.
+        </p>
+
+    </div>
+
+    <div class="hero-decoration hero-decoration-one"></div>
+    <div class="hero-decoration hero-decoration-two"></div>
+
+</section>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="feedback-container">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="feedback-breadcrumb">
+
+        <ol class="breadcrumb">
+
+            <li class="breadcrumb-item">
+                <a th:href="@{/}">
+                    <i class="fa-solid fa-house me-1"></i>
+                    Home
+                </a>
+            </li>
+
+            <li class="breadcrumb-item active" aria-current="page">
+                Share Feedback
+            </li>
+
+        </ol>
+
+    </nav>
+
+
+    <!-- ================= SUCCESS MESSAGE ================= -->
+    <div th:if="${successMessage != null}"
+         class="alert alert-success feedback-alert"
+         role="alert">
+
+        <i class="fa-solid fa-circle-check alert-icon"></i>
+
+        <div>
+            <strong>Feedback Submitted Successfully!</strong>
+
+            <p class="mb-0" th:text="${successMessage}">
+                Thank you for helping us improve ShopSphere.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ================= ERROR MESSAGE ================= -->
+    <div th:if="${errorMessage != null}"
+         class="alert alert-danger feedback-alert"
+         role="alert">
+
+        <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+
+        <div>
+            <strong>Something Went Wrong</strong>
+
+            <p class="mb-0" th:text="${errorMessage}">
+                Please try again.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ================= FEEDBACK LAYOUT ================= -->
+    <div class="feedback-layout">
+
+        <!-- LEFT INFORMATION PANEL -->
+        <aside class="feedback-sidebar">
+
+            <div class="sidebar-content">
+
+                <span class="sidebar-label">LET'S CONNECT</span>
+
+                <h2>Your Opinion Makes a Difference.</h2>
+
+                <p>
+                    We continuously work to make ShopSphere better.
+                    Tell us what you love and what we can improve.
+                </p>
+
+
+                <!-- Benefit 1 -->
+                <div class="sidebar-feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <div>
+                        <h3>Share Your Ideas</h3>
+
+                        <p>
+                            Suggest new features and improvements.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- Benefit 2 -->
+                <div class="sidebar-feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bug"></i>
+                    </div>
+
+                    <div>
+                        <h3>Report a Problem</h3>
+
+                        <p>
+                            Let us know about issues you encounter.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- Benefit 3 -->
+                <div class="sidebar-feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <div>
+                        <h3>Help Us Improve</h3>
+
+                        <p>
+                            Your experience helps us serve you better.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="sidebar-bottom">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Your feedback is important to us.
+                </span>
+
+            </div>
+
+        </aside>
+
+
+        <!-- RIGHT FEEDBACK FORM -->
+        <section class="feedback-form-section">
+
+            <div class="form-heading">
+
+                <div>
+                    <span class="section-label">CUSTOMER FEEDBACK</span>
+
+                    <h2>Share Your Experience</h2>
+
+                    <p>
+                        Fill in the details below. Fields marked
+                        <span class="required-mark">*</span>
+                        are required.
+                    </p>
+                </div>
+
+                <div class="form-heading-icon">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+
+            </div>
+
+
+            <!-- FEEDBACK FORM -->
+            <form th:action="@{/feedback/submit}"
+                  th:object="${feedbackRequest}"
+                  method="post"
+                  id="feedbackForm">
+
+
+                <!-- CSRF TOKEN -->
+                <input type="hidden"
+                       th:if="${_csrf != null}"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+
+					   <!-- CATEGORY -->
+					   <div class="form-group">
+
+					       <label for="category" class="form-label">
+					           Feedback Category
+					           <span class="required-mark">*</span>
+					       </label>
+
+					       <div class="input-wrapper">
+
+					           <select id="category"
+					                   class="form-select custom-input"
+					                   th:field="*{category}"
+					                   required>
+
+					               <option value="">Choose a category</option>
+					               <option value="Website Experience">Website Experience</option>
+					               <option value="Products">Products</option>
+					               <option value="Orders and Delivery">Orders and Delivery</option>
+					               <option value="Payments">Payments</option>
+					               <option value="Customer Support">Customer Support</option>
+					               <option value="Bug Report">Report a Problem</option>
+					               <option value="Feature Suggestion">Feature Suggestion</option>
+					               <option value="Other">Other</option>
+
+					           </select>
+
+					       </div>
+
+					       <div class="field-error"
+					            th:if="${#fields.hasErrors('category')}"
+					            th:errors="*{category}">
+					       </div>
+
+					       <small class="field-help">
+					           Select the area related to your feedback.
+					       </small>
+
+					   </div>
+
+
+                <!-- STAR RATING -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Rate Your Experience
+                        <span class="required-mark">*</span>
+                    </label>
+
+                    <div class="rating-container">
+
+                        <div class="star-rating">
+
+                            <input type="radio"
+                                   id="star5"
+                                   th:field="*{rating}"
+                                   value="5"
+                                   required>
+
+                            <label for="star5" title="Excellent"
+                                   aria-label="5 stars">
+                                <i class="fa-solid fa-star"></i>
+                            </label>
+
+
+                            <input type="radio"
+                                   id="star4"
+                                   th:field="*{rating}"
+                                   value="4">
+
+                            <label for="star4" title="Very Good"
+                                   aria-label="4 stars">
+                                <i class="fa-solid fa-star"></i>
+                            </label>
+
+
+                            <input type="radio"
+                                   id="star3"
+                                   th:field="*{rating}"
+                                   value="3">
+
+                            <label for="star3" title="Good"
+                                   aria-label="3 stars">
+                                <i class="fa-solid fa-star"></i>
+                            </label>
+
+
+                            <input type="radio"
+                                   id="star2"
+                                   th:field="*{rating}"
+                                   value="2">
+
+                            <label for="star2" title="Fair"
+                                   aria-label="2 stars">
+                                <i class="fa-solid fa-star"></i>
+                            </label>
+
+
+                            <input type="radio"
+                                   id="star1"
+                                   th:field="*{rating}"
+                                   value="1">
+
+                            <label for="star1" title="Poor"
+                                   aria-label="1 star">
+                                <i class="fa-solid fa-star"></i>
+                            </label>
+
+                        </div>
+
+                        <span class="rating-caption" id="ratingCaption">
+                            Select your rating
+                        </span>
+
+                    </div>
+
+                    <div class="field-error"
+                         th:if="${#fields.hasErrors('rating')}"
+                         th:errors="*{rating}">
+                    </div>
+
+                    <small class="field-help">
+                        1 star means poor; 5 stars means excellent.
+                    </small>
+
+                </div>
+
+
+				<!-- SUBJECT -->
+				<div class="form-group">
+
+				    <label for="subject" class="form-label">
+				        Subject
+				        <span class="required-mark">*</span>
+				    </label>
+
+				    <div class="input-wrapper">
+
+				        <input type="text"
+				               id="subject"
+				               class="form-control custom-input"
+				               th:field="*{subject}"
+				               placeholder="Give your feedback a title"
+				               minlength="3"
+				               maxlength="150"
+				               required>
+
+				    </div>
+
+				    <div class="field-error"
+				         th:if="${#fields.hasErrors('subject')}"
+				         th:errors="*{subject}">
+				    </div>
+
+				    <small class="field-help">
+				        Use a short and descriptive title.
+				    </small>
+
+				</div>
+
+
+                <!-- MESSAGE -->
+                <div class="form-group">
+
+                    <label for="message" class="form-label">
+                        Your Feedback
+                        <span class="required-mark">*</span>
+                    </label>
+
+                    <textarea id="message"
+                              class="form-control custom-input message-input"
+                              th:field="*{message}"
+                              placeholder="Tell us about your experience, suggestions, or any problems you encountered..."
+                              minlength="10"
+                              maxlength="2000"
+                              required></textarea>
+
+                    <div class="message-footer">
+
+                        <div class="field-error"
+                             th:if="${#fields.hasErrors('message')}"
+                             th:errors="*{message}">
+                        </div>
+
+                        <small class="field-help">
+                            Please provide at least 10 characters.
+                        </small>
+
+                        <span class="character-counter" id="characterCounter">
+                            0 / 2000
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRIVACY INFORMATION -->
+                <div class="privacy-notice">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <p>
+                        Your feedback will be associated with your account
+                        so our team can review it and improve ShopSphere.
+                    </p>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="btn submit-feedback-btn"
+                            id="submitButton">
+
+                        <i class="fa-solid fa-paper-plane me-2"></i>
+
+                        Submit Feedback
+
+                    </button>
+
+                    <button type="reset"
+                            class="btn reset-feedback-btn">
+
+                        <i class="fa-solid fa-rotate-left me-2"></i>
+
+                        Reset Form
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </div>
+
+
+    <!-- BOTTOM NOTE -->
+    <div class="feedback-bottom-note">
+
+        <i class="fa-solid fa-heart"></i>
+
+        <span>
+            Thank you for being a part of the ShopSphere community!
+        </span>
+
+    </div>
+
+</main>
+
+
+<!-- ================= FOOTER FRAGMENT ================= -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- Feedback Page JavaScript -->
+<script th:src="@{/js/feedback.js}"></script>
+
+</body>
+</html>
