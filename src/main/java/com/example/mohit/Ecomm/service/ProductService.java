@@ -101,4 +101,5 @@ public class ProductService {
     public List<Product> searchActiveProducts(String name) {
         return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(name);
     }
+    
 }

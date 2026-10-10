@@ -172,8 +172,8 @@
 
                 <div class="col-lg-3 col-md-6">
 
-                    <a href="/products?category=Electronics"
-                       class="text-decoration-none">
+					<a th:href="@{/products(category='Electronics')}"
+					   class="text-decoration-none">
 
                         <div class="card category-card border-0 shadow-sm h-100">
 
@@ -207,8 +207,8 @@
 
                 <div class="col-lg-3 col-md-6">
 
-                    <a href="/products?category=Clothing"
-                       class="text-decoration-none">
+					<a th:href="@{/products(category='Clothes')}"
+					   class="text-decoration-none">
 
                         <div class="card category-card border-0 shadow-sm h-100">
 
@@ -242,8 +242,8 @@
 
                 <div class="col-lg-3 col-md-6">
 
-                    <a href="/products?category=Jewelry"
-                       class="text-decoration-none">
+					<a th:href="@{/products(category='Jewellery')}"
+					   class="text-decoration-none">
 
                         <div class="card category-card border-0 shadow-sm h-100">
 
@@ -277,8 +277,8 @@
 
                 <div class="col-lg-3 col-md-6">
 
-                    <a href="/products?category=Home"
-                       class="text-decoration-none">
+					<a th:href="@{/products(category='Home Decor Items')}"
+					   class="text-decoration-none">
 
                         <div class="card category-card border-0 shadow-sm h-100">
 
@@ -348,7 +348,7 @@
 
                     <div class="card product-card border-0 shadow-sm h-100">
 
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+                        <img src="https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/1.webp"
                              class="card-img-top"
                              alt="Wireless Headphones">
 
@@ -373,7 +373,7 @@
                             </div>
 
                             <h5 class="text-primary fw-bold">
-                                ₹2,499
+                                ₹2599.0
                             </h5>
 
                         </div>
@@ -401,7 +401,7 @@
 
                     <div class="card product-card border-0 shadow-sm h-100">
 
-                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
+                        <img src="https://assetscdn1.paytm.com/images/catalog/product/A/AP/APPLOUIS-PHILIPADIT5099617DB46A/1563052060768_0..jpg"
                              class="card-img-top"
                              alt="Premium T-Shirt">
 
@@ -412,7 +412,7 @@
                             </small>
 
                             <h5 class="fw-bold mt-2">
-                                Premium T-Shirt
+                                Formal Shirt for Man
                             </h5>
 
                             <div class="mb-2">
@@ -426,7 +426,60 @@
                             </div>
 
                             <h5 class="text-primary fw-bold">
-                                ₹799
+                                ₹999.0
+                            </h5>
+
+                        </div>
+
+
+                        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/10}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PRODUCT 3 -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card product-card border-0 shadow-sm h-100">
+
+                        <img src="https://static.vecteezy.com/system/resources/previews/050/177/034/non_2x/smart-watch-isolated-on-transparent-background-png.png"
+                             class="card-img-top"
+                             alt="Classic Watch">
+
+                        <div class="card-body">
+
+                            <small class="text-muted">
+                                Electronics
+                            </small>
+
+                            <h5 class="fw-bold mt-2">
+                                Smart Watch
+                            </h5>
+
+                            <div class="mb-2">
+
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-regular fa-star text-warning"></i>
+
+                            </div>
+
+                            <h5 class="text-primary fw-bold">
+                                ₹2999.0
                             </h5>
 
                         </div>
@@ -448,77 +501,24 @@
 
 
 
-                <!-- PRODUCT 3 -->
-
-                <div class="col-lg-3 col-md-6">
-
-                    <div class="card product-card border-0 shadow-sm h-100">
-
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"
-                             class="card-img-top"
-                             alt="Classic Watch">
-
-                        <div class="card-body">
-
-                            <small class="text-muted">
-                                Jewelry
-                            </small>
-
-                            <h5 class="fw-bold mt-2">
-                                Classic Watch
-                            </h5>
-
-                            <div class="mb-2">
-
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <i class="fa-regular fa-star text-warning"></i>
-
-                            </div>
-
-                            <h5 class="text-primary fw-bold">
-                                ₹1,999
-                            </h5>
-
-                        </div>
-
-
-                        <div class="card-footer bg-white border-0 pb-3">
-
-							<a th:href="@{/products/3}"
-							   class="btn btn-primary w-100">
-							    <i class="fa-solid fa-eye me-2"></i>
-							    View Product
-							</a>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
                 <!-- PRODUCT 4 -->
 
                 <div class="col-lg-3 col-md-6">
 
                     <div class="card product-card border-0 shadow-sm h-100">
 
-                        <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=600&q=80"
+                        <img src="https://girlsfashionideas.com/wp-content/uploads/2023/07/Jhumki-Earrings-Design.jpg"
                              class="card-img-top"
                              alt="Home Decor">
 
                         <div class="card-body">
 
                             <small class="text-muted">
-                                Home Items
+                                Jwellery
                             </small>
 
                             <h5 class="fw-bold mt-2">
-                                Modern Home Decor
+                                Earings Set
                             </h5>
 
                             <div class="mb-2">
@@ -532,7 +532,7 @@
                             </div>
 
                             <h5 class="text-primary fw-bold">
-                                ₹1,499
+                                ₹399.0
                             </h5>
 
                         </div>
@@ -540,7 +540,7 @@
 
                         <div class="card-footer bg-white border-0 pb-3">
 
-							<a th:href="@{/products/4}"
+							<a th:href="@{/products/18}"
 							   class="btn btn-primary w-100">
 							    <i class="fa-solid fa-eye me-2"></i>
 							    View Product
@@ -551,6 +551,213 @@
                     </div>
 
                 </div>
+				
+				
+				<!-- PRODUCT 5 -->
+
+				<div class="col-lg-3 col-md-6">
+
+				    <div class="card product-card border-0 shadow-sm h-100">
+
+				        <img src="https://i.pinimg.com/originals/b2/59/0d/b2590d338a37fefcc4b143338c96ed14.jpg"
+				             class="card-img-top"
+				             alt="Classic Watch">
+
+				        <div class="card-body">
+
+				            <small class="text-muted">
+				                Cloths
+				            </small>
+
+				            <h5 class="fw-bold mt-2">
+				                Men Denim Jeans
+				            </h5>
+
+				            <div class="mb-2">
+
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-regular fa-star text-warning"></i>
+
+				            </div>
+
+				            <h5 class="text-primary fw-bold">
+				                ₹1299.0
+				            </h5>
+
+				        </div>
+
+
+				        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/7}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+				        </div>
+
+				    </div>
+
+				</div>
+				
+				
+				<!-- PRODUCT 6 -->
+
+				<div class="col-lg-3 col-md-6">
+
+				    <div class="card product-card border-0 shadow-sm h-100">
+
+				        <img src="https://m.media-amazon.com/images/I/61ARuiu0kIL._SL1392_.jpg"
+				             class="card-img-top"
+				             alt="Classic Watch">
+
+				        <div class="card-body">
+
+				            <small class="text-muted">
+				                Stationery
+				            </small>
+
+				            <h5 class="fw-bold mt-2">
+				                Pencil Box
+				            </h5>
+
+				            <div class="mb-2">
+
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-regular fa-star text-warning"></i>
+
+				            </div>
+
+				            <h5 class="text-primary fw-bold">
+				                ₹199.0
+				            </h5>
+
+				        </div>
+
+
+				        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/13}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+				        </div>
+
+				    </div>
+
+				</div>
+				
+				<!-- PRODUCT 7 -->
+
+				<div class="col-lg-3 col-md-6">
+
+				    <div class="card product-card border-0 shadow-sm h-100">
+
+				        <img src="https://ts1.explicit.bing.net/th?id=OIP.43J5WEaa6TYCTKNtTRhKzwHaHa&pid=15.1"
+				             class="card-img-top"
+				             alt="Classic Watch">
+
+				        <div class="card-body">
+
+				            <small class="text-muted">
+				                Home Decor Items
+				            </small>
+
+				            <h5 class="fw-bold mt-2">
+				                Table lamp
+				            </h5>
+
+				            <div class="mb-2">
+
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-regular fa-star text-warning"></i>
+
+				            </div>
+
+				            <h5 class="text-primary fw-bold">
+				                ₹999.0
+				            </h5>
+
+				        </div>
+
+
+				        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/21}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+				        </div>
+
+				    </div>
+
+				</div>
+				
+				
+				<!-- PRODUCT 8 -->
+
+				<div class="col-lg-3 col-md-6">
+
+				    <div class="card product-card border-0 shadow-sm h-100">
+
+				        <img src="https://www.lamoredesign.com/cdn/shop/products/largediamondringinrosegold7stonediamondcurvedweddingbandbylamoredesignjewelry-9.jpg?v=1711050110&width=2000"
+				             class="card-img-top"
+				             alt="Classic Watch">
+
+				        <div class="card-body">
+
+				            <small class="text-muted">
+				                Jwellery
+				            </small>
+
+				            <h5 class="fw-bold mt-2">
+				                Ring
+				            </h5>
+
+				            <div class="mb-2">
+
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-solid fa-star text-warning"></i>
+				                <i class="fa-regular fa-star text-warning"></i>
+
+				            </div>
+
+				            <h5 class="text-primary fw-bold">
+				                ₹2199.0
+				            </h5>
+
+				        </div>
+
+
+				        <div class="card-footer bg-white border-0 pb-3">
+
+							<a th:href="@{/products/19}"
+							   class="btn btn-primary w-100">
+							    <i class="fa-solid fa-eye me-2"></i>
+							    View Product
+							</a>
+
+				        </div>
+
+				    </div>
+
+				</div>
 
             </div>
 

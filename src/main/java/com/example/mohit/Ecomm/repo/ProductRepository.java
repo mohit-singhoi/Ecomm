@@ -22,4 +22,6 @@ public interface ProductRepository
     List<Product> findByCategoryIgnoreCase(String category);
 
     List<Product> findByNameContainingIgnoreCase(String name);
+    
+    
 }
