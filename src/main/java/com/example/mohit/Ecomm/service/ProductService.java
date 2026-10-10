@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.mohit.Ecomm.model.Product;
 import com.example.mohit.Ecomm.repo.ProductRepository;
@@ -53,8 +54,51 @@ public class ProductService {
         return orderItemRepository.existsByProduct_Id(productId);
     }
 
-    // Delete product
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    /*
+     * Delete a product safely.
+     *
+     * If an order references the product, deactivate it.
+     * Otherwise, permanently delete it.
+     */
+    @Transactional
+    public String deleteProduct(Long id) {
+
+        Product product = productRepository.findById(id)
+                .orElse(null);
+
+        if (product == null) {
+            return "NOT_FOUND";
+        }
+
+        boolean usedInOrders =
+                orderItemRepository.existsByProduct_Id(id);
+
+        if (usedInOrders) {
+
+            product.setActive(false);
+
+            productRepository.save(product);
+
+            return "DEACTIVATED";
+        }
+
+        productRepository.delete(product);
+
+        return "DELETED";
+    }
+    
+ // Get active products
+    public List<Product> getActiveProducts() {
+        return productRepository.findByActiveTrue();
+    }
+
+    // Get active products by category
+    public List<Product> getActiveProductsByCategory(String category) {
+        return productRepository.findByCategoryIgnoreCaseAndActiveTrue(category);
+    }
+
+    // Search active products by name
+    public List<Product> searchActiveProducts(String name) {
+        return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(name);
     }
 }

@@ -216,41 +216,47 @@ public class AdminProductController {
         return "redirect:/admin/products";
     }
 
+    // Delete product
+    
     @PostMapping("/delete/{id}")
     public String deleteProduct(
             @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
 
-        Product product = productService.getProductById(id);
-
-        if (product == null) {
-            redirectAttributes.addFlashAttribute(
-                    "errorMessage",
-                    "Product not found!"
-            );
-
-            return "redirect:/admin/products";
-        }
-
         try {
-            // Check whether the product is used in an existing order
-            if (productService.isProductUsedInOrders(id)) {
 
-                redirectAttributes.addFlashAttribute(
-                        "errorMessage",
-                        "This product cannot be deleted because it is associated with existing orders."
-                );
+            String result = productService.deleteProduct(id);
 
-                return "redirect:/admin/products";
+            switch (result) {
+
+                case "DELETED":
+                    redirectAttributes.addFlashAttribute(
+                            "successMessage",
+                            "Product permanently deleted successfully!"
+                    );
+                    break;
+
+                case "DEACTIVATED":
+                    redirectAttributes.addFlashAttribute(
+                            "successMessage",
+                            "Product removed from the store. Existing order history has been preserved."
+                    );
+                    break;
+
+                case "NOT_FOUND":
+                    redirectAttributes.addFlashAttribute(
+                            "errorMessage",
+                            "Product not found!"
+                    );
+                    break;
+
+                default:
+                    redirectAttributes.addFlashAttribute(
+                            "errorMessage",
+                            "Unable to process the product deletion."
+                    );
+                    break;
             }
-
-            // Delete the product if it is not used in any order
-            productService.deleteProduct(id);
-
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Product deleted successfully!"
-            );
 
         } catch (Exception exception) {
 
@@ -258,7 +264,7 @@ public class AdminProductController {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Unable to delete this product. Please check the application console."
+                    "Product removal failed. Please check the application console."
             );
         }
 

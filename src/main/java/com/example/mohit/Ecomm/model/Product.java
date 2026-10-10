@@ -24,6 +24,9 @@ public class Product {
 
     private String category;
 
+    // Indicates whether the product is available in the store
+    private boolean active = true;
+
     public Long getId() {
         return id;
     }
@@ -70,5 +73,13 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
