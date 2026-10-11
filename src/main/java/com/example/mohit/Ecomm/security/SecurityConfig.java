@@ -126,7 +126,8 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain userSecurityFilterChain(
             HttpSecurity http,
-            CustomAuthenticationSuccessHandler successHandler)
+            CustomAuthenticationSuccessHandler successHandler,
+            CustomAuthenticationFailureHandler failureHandler)
             throws Exception {
 
         http
@@ -219,28 +220,16 @@ public class SecurityConfig {
 
             .formLogin(form -> form
 
-                /*
-                 * User login page.
-                 */
-                .loginPage("/userlogin")
+            	    .loginPage("/userlogin")
 
-                /*
-                 * User login form POSTs here.
-                 */
-                .loginProcessingUrl("/userlogin")
+            	    .loginProcessingUrl("/userlogin")
 
-                /*
-                 * Successful authentication.
-                 */
-                .successHandler(successHandler)
+            	    .successHandler(successHandler)
 
-                /*
-                 * Failed authentication.
-                 */
-                .failureUrl("/userlogin?error=true")
+            	    .failureHandler(failureHandler)
 
-                .permitAll()
-            )
+            	    .permitAll()
+            	)
 
 
             // =================================================

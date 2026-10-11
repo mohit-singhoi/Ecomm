@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Users | ShopSphere Admin</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          rel="stylesheet">
+
+    <!-- Admin Navbar CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+
+    <!-- Admin Footer CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+
+    <!-- User Management CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-users.css}">
+</head>
+
+<body>
+	
+<!-- ==========================================
+     ADMIN NAVBAR
+========================================== -->
+
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+
+<!-- ==========================================
+     MAIN CONTENT
+========================================== -->
+
+<main class="users-container">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+            <span class="page-label">ADMINISTRATION</span>
+
+            <h1>
+                <i class="fas fa-users me-2"></i>
+                Manage Users
+            </h1>
+
+            <p>
+                View and manage registered ShopSphere accounts.
+            </p>
+        </div>
+
+        <a th:href="@{/admin/dashboard}"
+           class="back-dashboard-btn">
+
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- ==========================================
+         SUCCESS MESSAGE
+    ========================================== -->
+
+    <div th:if="${successMessage != null}"
+         class="alert alert-success alert-dismissible fade show"
+         role="alert">
+
+        <i class="fas fa-check-circle"></i>
+
+        <span th:text="${successMessage}">
+            Operation completed successfully.
+        </span>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         ERROR MESSAGE
+    ========================================== -->
+
+    <div th:if="${errorMessage != null}"
+         class="alert alert-danger alert-dismissible fade show"
+         role="alert">
+
+        <i class="fas fa-exclamation-circle"></i>
+
+        <span th:text="${errorMessage}">
+            Something went wrong.
+        </span>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         STATISTICS CARDS
+    ========================================== -->
+
+    <section class="stats-grid">
+
+        <!-- TOTAL USERS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon total-icon">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <p>Total Registered Users</p>
+
+                <h2 th:text="${totalUsers}">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon customer-icon">
+                <i class="fas fa-user"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <p>Customers</p>
+
+                <h2 th:text="${customerCount}">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMINISTRATORS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon admin-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <p>Administrators</p>
+
+                <h2 th:text="${adminCount}">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         SEARCH AND FILTER CARD
+    ========================================== -->
+
+    <section class="filter-card">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>
+                    <i class="fas fa-filter me-2"></i>
+                    Search & Filter Users
+                </h2>
+
+                <p>
+                    Find accounts by name, email, or role.
+                </p>
+            </div>
+
+            <i class="fas fa-sliders-h heading-icon"></i>
+
+        </div>
+
+
+        <!-- SEARCH FORM -->
+
+        <form th:action="@{/admin/users}"
+              method="get"
+              class="filter-form">
+
+            <!-- SEARCH BY NAME OR EMAIL -->
+
+            <div class="form-group search-group">
+
+                <label for="search">
+                    Search by Name or Email
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-search"></i>
+
+                    <input type="text"
+                           id="search"
+                           name="search"
+                           placeholder="Enter name or email..."
+                           th:value="${search}">
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTER BY ROLE -->
+
+            <div class="form-group role-group">
+
+                <label for="role">
+                    Filter by Role
+                </label>
+
+                <select id="role"
+                        name="role">
+
+                    <option value=""
+                            th:selected="${role == null or role == ''}">
+                        All Roles
+                    </option>
+
+                    <option value="ROLE_USER"
+                            th:selected="${role == 'ROLE_USER'}">
+                        Customer
+                    </option>
+
+                    <option value="ROLE_ADMIN"
+                            th:selected="${role == 'ROLE_ADMIN'}">
+                        Administrator
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FORM BUTTONS -->
+
+            <div class="filter-buttons">
+
+                <button type="submit"
+                        class="search-btn">
+
+                    <i class="fas fa-search"></i>
+                    Search
+
+                </button>
+
+                <a th:href="@{/admin/users}"
+                   class="reset-btn">
+
+                    <i class="fas fa-undo"></i>
+                    Reset
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- ==========================================
+         REGISTERED USERS TABLE
+    ========================================== -->
+
+    <section class="users-card">
+
+        <!-- TABLE HEADING -->
+
+        <div class="section-heading users-heading">
+
+            <div>
+                <h2>
+                    Registered Users
+                </h2>
+
+                <p>
+                    View account details stored in your database.
+                </p>
+            </div>
+
+            <div class="results-badge">
+
+                <i class="fas fa-users"></i>
+
+                <span th:text="${#lists.size(users)}">
+                    0
+                </span>
+
+                <span>users</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESPONSIVE TABLE -->
+
+        <div class="table-responsive">
+
+            <table class="table users-table">
+
+                <!-- TABLE HEADER -->
+
+                <thead>
+
+                    <tr>
+
+                        <th scope="col">
+                            User ID
+                        </th>
+
+                        <th scope="col">
+                            User Information
+                        </th>
+
+                        <th scope="col">
+                            Email Address
+                        </th>
+
+                        <th scope="col">
+                            Account Role
+                        </th>
+
+                        <th scope="col">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- TABLE BODY -->
+
+                <tbody>
+
+                    <tr th:each="user : ${users}">
+
+                        <!-- USER ID -->
+
+                        <td>
+
+                            <span class="user-id"
+                                  th:text="'#' + ${user.id}">
+                                #1
+                            </span>
+
+                        </td>
+
+
+                        <!-- USER INFORMATION -->
+
+                        <td>
+
+                            <div class="user-information">
+
+                                <!-- USER AVATAR -->
+
+                                <div class="user-avatar"
+                                     th:text="${user.name != null and !user.name.isEmpty()
+                                         ? #strings.substring(user.name, 0, 1)
+                                         : 'U'}">
+                                    U
+                                </div>
+
+
+                                <!-- USER NAME -->
+
+                                <div class="user-details">
+
+                                    <span class="user-name"
+                                          th:text="${user.name != null
+                                              ? user.name
+                                              : 'Unnamed User'}">
+                                        User Name
+                                    </span>
+
+                                    <span class="user-subtitle">
+                                        ShopSphere Account
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- EMAIL ADDRESS -->
+
+                        <td>
+
+                            <span class="user-email"
+                                  th:text="${user.email}">
+                                user@example.com
+                            </span>
+
+                        </td>
+
+
+                        <!-- ACCOUNT ROLE -->
+
+                        <td>
+
+                            <span class="role-badge"
+                                  th:classappend="${user.role == 'ROLE_ADMIN'
+                                      ? ' role-admin'
+                                      : (user.role == 'ROLE_USER'
+                                          ? ' role-customer'
+                                          : ' role-other')}"
+                                  th:text="${user.role == 'ROLE_ADMIN'
+                                      ? 'Administrator'
+                                      : (user.role == 'ROLE_USER'
+                                          ? 'Customer'
+                                          : user.role)}">
+                                Customer
+                            </span>
+
+                        </td>
+
+
+                        <!-- ==================================
+                             VIEW, EDIT, DELETE ACTIONS
+                        =================================== -->
+
+                        <td class="actions-cell">
+
+                            <div class="user-actions">
+
+                                <!-- VIEW USER -->
+
+                                <a th:href="@{/admin/users/view/{id}(id=${user.id})}"
+                                   class="user-action-btn view-user-btn"
+                                   title="View user details"
+                                   aria-label="View user details">
+
+                                    <i class="fas fa-eye"></i>
+
+                                    <span>View</span>
+
+                                </a>
+
+
+                                <!-- EDIT USER -->
+
+                                <a th:href="@{/admin/users/edit/{id}(id=${user.id})}"
+                                   class="user-action-btn edit-user-btn"
+                                   title="Edit user"
+                                   aria-label="Edit user">
+
+                                    <i class="fas fa-pen"></i>
+
+                                    <span>Edit</span>
+
+                                </a>
+
+
+								<!-- Activate / Deactivate User -->
+								<form th:action="@{/admin/users/toggle-status/{id}(id=${user.id})}"
+								      method="post"
+								      class="d-inline"
+								      onsubmit="return confirm(
+								          this.querySelector('button').dataset.active === 'true'
+								          ? 'Are you sure you want to deactivate this user?'
+								          : 'Are you sure you want to activate this user?'
+								      );">
+
+								    <button type="submit"
+								            class="btn btn-sm"
+								            th:classappend="${user.active} ? ' btn-warning' : ' btn-success'"
+								            th:attr="data-active=${user.active}">
+
+								        <i class="fas"
+								           th:classappend="${user.active} ? ' fa-user-slash' : ' fa-user-check'">
+								        </i>
+
+								        <span th:text="${user.active} ? 'Deactivate' : 'Activate'">
+								            Deactivate
+								        </span>
+
+								    </button>
+
+								</form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ==================================
+                         EMPTY STATE
+                    =================================== -->
+
+                    <tr th:if="${#lists.isEmpty(users)}">
+
+                        <td colspan="5">
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    <i class="fas fa-user-slash"></i>
+                                </div>
+
+                                <h3>
+                                    No Users Found
+                                </h3>
+
+                                <p>
+                                    No registered users match your search criteria.
+                                    Try changing your search or role filter.
+                                </p>
+
+                                <a th:href="@{/admin/users}"
+                                   class="reset-btn">
+
+                                    <i class="fas fa-undo"></i>
+                                    Clear Filters
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ==========================================
+             TABLE FOOTER
+        ========================================== -->
+
+        <div class="table-footer">
+
+            <div>
+
+                Showing
+
+                <strong th:text="${#lists.size(users)}">
+                    0
+                </strong>
+
+                users
+
+            </div>
+
+            <a th:href="@{/admin/dashboard}"
+               class="footer-dashboard-link">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ==========================================
+     ADMIN FOOTER
+========================================== -->
+
+<div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script th:src="@{/js/admin-navbar.js}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Select the existing success alert
+        const popup = document.querySelector(".alert-success");
+
+        if (popup) {
+            setTimeout(function () {
+                popup.style.transition = "opacity 0.3s ease";
+                popup.style.opacity = "0";
+
+                setTimeout(function () {
+                    popup.remove();
+                }, 300);
+
+            }, 3000);
+        }
+
+    });
+</script>
+
+</body>
+
+</html>

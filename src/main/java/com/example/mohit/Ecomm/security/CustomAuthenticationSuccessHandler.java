@@ -50,10 +50,17 @@ public class CustomAuthenticationSuccessHandler
                 .orElse(null);
 
 
-        if (user == null) {
+        if (user == null || !user.isActive()) {
 
-            response.sendRedirect("/userlogin?error=true");
+            // Invalidate the session if one exists.
+            HttpSession existingSession = request.getSession(false);
 
+            if (existingSession != null) {
+                existingSession.invalidate();
+            }
+
+            // Reject access for missing or deactivated accounts.
+            response.sendRedirect("/userlogin?error=account");
             return;
         }
 

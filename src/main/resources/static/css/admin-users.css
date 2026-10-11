@@ -148,7 +148,7 @@
 }
 
 /* ==========================================
-   FILTER CARD
+   FILTER CARD AND USERS CARD
 ========================================== */
 
 .filter-card,
@@ -187,6 +187,10 @@
     color: #64748b;
     font-size: 20px;
 }
+
+/* ==========================================
+   SEARCH AND FILTER FORM
+========================================== */
 
 .filter-form {
     display: flex;
@@ -282,6 +286,7 @@
 }
 
 .search-btn:hover {
+    color: #ffffff;
     background: #1d4ed8;
     border-color: #1d4ed8;
 }
@@ -299,7 +304,7 @@
 }
 
 /* ==========================================
-   USERS TABLE
+   USERS TABLE HEADING
 ========================================== */
 
 .users-heading {
@@ -318,8 +323,13 @@
     white-space: nowrap;
 }
 
+/* ==========================================
+   USERS TABLE
+========================================== */
+
 .users-table {
     width: 100%;
+    min-width: 1050px;
     margin: 0;
     border-collapse: separate;
     border-spacing: 0;
@@ -347,6 +357,10 @@
 
 .users-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+.users-table tbody tr {
+    transition: background-color 0.2s ease;
 }
 
 .users-table tbody tr:hover {
@@ -434,6 +448,124 @@
 }
 
 /* ==========================================
+   USER ACTION BUTTONS
+========================================== */
+
+.users-table .actions-cell {
+    min-width: 255px;
+    white-space: nowrap;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.user-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 35px;
+    padding: 7px 10px;
+
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-action-btn i {
+    font-size: 12px;
+}
+
+/* View */
+
+.view-user-btn {
+    color: #1d4ed8;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.view-user-btn:hover {
+    color: #ffffff;
+    background: #2563eb;
+    border-color: #2563eb;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.16);
+}
+
+/* Edit */
+
+.edit-user-btn {
+    color: #92400e;
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.edit-user-btn:hover {
+    color: #ffffff;
+    background: #d97706;
+    border-color: #d97706;
+    box-shadow: 0 3px 8px rgba(217, 119, 6, 0.16);
+}
+
+/* Delete */
+
+.delete-user-btn {
+    color: #b91c1c;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.delete-user-btn:hover {
+    color: #ffffff;
+    background: #dc2626;
+    border-color: #dc2626;
+    box-shadow: 0 3px 8px rgba(220, 38, 38, 0.16);
+}
+
+/* Keyboard focus */
+
+.user-action-btn:focus-visible {
+    outline: 3px solid rgba(59, 130, 246, 0.35);
+    outline-offset: 2px;
+}
+
+/* Action forms */
+
+.user-actions form {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.user-actions button {
+    font-family: inherit;
+}
+
+.user-action-btn:active {
+    transform: translateY(1px);
+}
+
+/* ==========================================
    EMPTY STATE
 ========================================== */
 
@@ -487,6 +619,33 @@
 
 .footer-dashboard-link:hover {
     color: #1d4ed8;
+}
+
+/* ==========================================
+   TABLE RESPONSIVENESS
+========================================== */
+
+.users-card .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.users-card .table-responsive::-webkit-scrollbar {
+    height: 7px;
+}
+
+.users-card .table-responsive::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.users-card .table-responsive::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.users-card .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 /* ==========================================
@@ -552,5 +711,64 @@
         align-items: flex-start;
         flex-direction: column;
         padding: 18px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .users-container {
+        padding: 20px 12px 30px;
+    }
+
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .section-heading {
+        padding: 18px 16px;
+    }
+
+    .filter-form {
+        padding: 18px 16px;
+    }
+
+    .users-table {
+        min-width: 1050px;
+    }
+
+    .user-actions {
+        gap: 6px;
+    }
+
+    .user-action-btn {
+        min-height: 34px;
+        padding: 7px 9px;
+        font-size: 12px;
+    }
+
+    .table-footer {
+        padding: 16px;
+    }
+}
+
+/* ==========================================
+   REDUCED MOTION ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .stat-card:hover {
+        transform: none;
+    }
+
+    .user-action-btn:active {
+        transform: none;
     }
 }

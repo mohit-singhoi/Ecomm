@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit User | ShopSphere Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          rel="stylesheet">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-edit-user.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+</head>
+
+<body>
+
+    <!-- Admin Navbar -->
+    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+    <main class="edit-user-page">
+
+        <div class="edit-user-container">
+
+            <!-- Breadcrumb -->
+            <div class="breadcrumb-wrapper">
+
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fas fa-house"></i>
+                    Dashboard
+                </a>
+
+                <i class="fas fa-chevron-right"></i>
+
+                <a th:href="@{/admin/users}">
+                    Users
+                </a>
+
+                <i class="fas fa-chevron-right"></i>
+
+                <span>Edit User</span>
+
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+
+                <div>
+                    <h1>
+                        <i class="fas fa-user-pen"></i>
+                        Edit User
+                    </h1>
+
+                    <p>
+                        Update the name and email address of this account.
+                    </p>
+                </div>
+
+                <a th:href="@{/admin/users/view/{id}(id=${user.id})}"
+                   class="back-button">
+
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Details
+
+                </a>
+
+            </div>
+
+            <!-- Error Message -->
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger"
+                 role="alert">
+
+                <i class="fas fa-circle-exclamation"></i>
+
+                <span th:text="${errorMessage}">
+                    An error occurred.
+                </span>
+
+            </div>
+
+            <!-- Edit Form Card -->
+            <section class="edit-user-card">
+
+                <!-- Card Header -->
+                <div class="form-card-header">
+
+                    <div class="header-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+
+                    <div>
+                        <h2>Account Information</h2>
+
+                        <p>
+                            Update the registered user's details below.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Form -->
+                <form th:action="@{/admin/users/update/{id}(id=${user.id})}"
+                      method="post">
+
+                    <!-- User ID -->
+                    <div class="form-group">
+
+                        <label for="userId">
+                            User ID
+                        </label>
+
+                        <input type="text"
+                               id="userId"
+                               class="form-control"
+                               th:value="${user.id}"
+                               readonly>
+
+                        <small>
+                            The user ID cannot be changed.
+                        </small>
+
+                    </div>
+
+                    <!-- Full Name -->
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               class="form-control"
+                               th:value="${user.name}"
+                               placeholder="Enter full name"
+                               maxlength="100"
+                               autocomplete="name"
+                               required>
+
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               class="form-control"
+                               th:value="${user.email}"
+                               placeholder="Enter email address"
+                               maxlength="150"
+                               autocomplete="email"
+                               required>
+
+                    </div>
+
+                    <!-- Role: Read-only -->
+                    <div class="form-group">
+
+                        <label for="role">
+                            Account Role
+                        </label>
+
+                        <input type="text"
+                               id="role"
+                               class="form-control"
+                               th:value="${user.role == 'ROLE_ADMIN' ? 'Administrator' : (user.role == 'ROLE_USER' ? 'Customer' : user.role)}"
+                               readonly>
+
+                        <small>
+                            Account permissions cannot be changed from this form.
+                        </small>
+
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="security-notice">
+
+                        <i class="fas fa-shield-halved"></i>
+
+                        <div>
+                            <strong>Account Security</strong>
+
+                            <p>
+                                Your changes will not modify the user's password
+                                or account permissions.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="form-actions">
+
+                        <a th:href="@{/admin/users}"
+                           class="cancel-button">
+
+                            <i class="fas fa-xmark"></i>
+                            Cancel
+
+                        </a>
+
+                        <button type="submit"
+                                class="save-button">
+
+                            <i class="fas fa-floppy-disk"></i>
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Admin Footer -->
+    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Admin Navbar JS -->
+    <script th:src="@{/js/admin-navbar.js}"></script>
+
+</body>
+</html>

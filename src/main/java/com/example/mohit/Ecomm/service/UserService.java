@@ -15,10 +15,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
     public User registerUser(User user) {
 
         try {
+            // New accounts should be active by default
+            user.setActive(true);
 
             User newUser = userRepository.save(user);
 
@@ -27,14 +28,11 @@ public class UserService {
             return newUser;
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
 
         return null;
     }
-
 
     public User loginUser(String email, String password) {
 
@@ -45,7 +43,14 @@ public class UserService {
 
             User user = userOptional.get();
 
-            if (user.getPassword().equals(password)) {
+            // Reject deactivated accounts
+            if (!user.isActive()) {
+                return null;
+            }
+
+            // Validate password
+            if (user.getPassword() != null
+                    && user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -53,10 +58,8 @@ public class UserService {
         return null;
     }
 
-
     public List<User> getAllUsers() {
 
         return userRepository.findAll();
     }
-
 }

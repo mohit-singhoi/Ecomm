@@ -26,11 +26,14 @@ public class User {
 
     private String role;
 
+    // Account status: true = active, false = deactivated
+    private boolean active = true;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Orders> orders;
 
-
+    // ID
     public Long getId() {
         return id;
     }
@@ -39,7 +42,7 @@ public class User {
         this.id = id;
     }
 
-
+    // Name
     public String getName() {
         return name;
     }
@@ -48,7 +51,7 @@ public class User {
         this.name = name;
     }
 
-
+    // Email
     public String getEmail() {
         return email;
     }
@@ -57,7 +60,7 @@ public class User {
         this.email = email;
     }
 
-
+    // Password
     public String getPassword() {
         return password;
     }
@@ -66,7 +69,7 @@ public class User {
         this.password = password;
     }
 
-
+    // Role
     public String getRole() {
         return role;
     }
@@ -75,7 +78,16 @@ public class User {
         this.role = role;
     }
 
+    // Account status
+    public boolean isActive() {
+        return active;
+    }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    // Orders
     public List<Orders> getOrders() {
         return orders;
     }

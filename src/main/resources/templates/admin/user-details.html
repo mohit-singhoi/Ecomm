@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Details | ShopSphere Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          rel="stylesheet">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-user-details.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+</head>
+
+<body>
+	
+	<!-- Success Popup -->
+	<div th:if="${successMessage}"
+	     id="successPopup"
+	     class="success-popup"
+	     role="alert"
+	     aria-live="polite">
+
+	    <i class="fas fa-circle-check"></i>
+
+	    <span th:text="${successMessage}">
+	        User successfully updated!
+	    </span>
+
+	</div>
+
+    <!-- Admin Navbar -->
+    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+    <main class="user-details-page">
+
+        <div class="user-details-container">
+
+            <!-- Breadcrumb -->
+            <div class="breadcrumb-wrapper">
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fas fa-house"></i>
+                    Dashboard
+                </a>
+
+                <i class="fas fa-chevron-right breadcrumb-separator"></i>
+
+                <a th:href="@{/admin/users}">
+                    Users
+                </a>
+
+                <i class="fas fa-chevron-right breadcrumb-separator"></i>
+
+                <span>User Details</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+
+                <div>
+                    <h1>
+                        <i class="fas fa-user-circle"></i>
+                        User Details
+                    </h1>
+
+                    <p>
+                        View the account information of a registered ShopSphere user.
+                    </p>
+                </div>
+
+                <a th:href="@{/admin/users}"
+                   class="back-button">
+
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Users
+
+                </a>
+
+            </div>
+
+            <!-- Error Message -->
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger alert-dismissible fade show"
+                 role="alert">
+
+                <i class="fas fa-circle-exclamation"></i>
+
+                <span th:text="${errorMessage}">
+                    An error occurred.
+                </span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+            <!-- User Profile Card -->
+            <section class="user-profile-card">
+
+                <!-- Profile Header -->
+                <div class="profile-header">
+
+					<div class="profile-avatar"
+					     th:text="${user.name != null and !#strings.isEmpty(user.name)
+					              ? #strings.substring(user.name, 0, 1).toUpperCase()
+					              : 'U'}">
+					    U
+					</div>
+
+                    <div class="profile-heading">
+
+                        <span class="profile-label">
+                            REGISTERED ACCOUNT
+                        </span>
+
+                        <h2 th:text="${user.name}">
+                            User Name
+                        </h2>
+
+                        <p th:text="${user.email}">
+                            user@example.com
+                        </p>
+
+                    </div>
+
+                    <div class="account-status">
+
+                        <span class="status-indicator"></span>
+
+                        Account Details
+
+                    </div>
+
+                </div>
+
+                <!-- Account Information -->
+                <div class="details-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+
+                        <div>
+                            <h3>Account Information</h3>
+
+                            <p>
+                                Basic information associated with this account.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="details-grid">
+
+                        <!-- User ID -->
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                User ID
+                            </span>
+
+                            <span class="detail-value"
+                                  th:text="${user.id}">
+                                1
+                            </span>
+
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Full Name
+                            </span>
+
+                            <span class="detail-value"
+                                  th:text="${user.name}">
+                                User Name
+                            </span>
+
+                        </div>
+
+                        <!-- Email -->
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Email Address
+                            </span>
+
+                            <span class="detail-value email-value"
+                                  th:text="${user.email}">
+                                user@example.com
+                            </span>
+
+                        </div>
+
+						<!-- Account Role -->
+						<div class="detail-item">
+
+						    <span class="detail-label">
+						        Account Role
+						    </span>
+
+						    <span class="role-badge"
+						          th:classappend="${user.role == 'ROLE_ADMIN' ? ' role-admin' : (user.role == 'ROLE_USER' ? ' role-user' : ' role-other')}"
+						          th:text="${user.role == 'ROLE_ADMIN' ? 'Administrator' : (user.role == 'ROLE_USER' ? 'Customer' : user.role)}">
+						        Customer
+						    </span>
+
+						</div>
+
+                    </div>
+
+                </div>
+
+                <!-- Security Information -->
+                <div class="security-notice">
+
+                    <div class="security-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+
+                    <div class="security-content">
+
+                        <h4>Account Security</h4>
+
+                        <p>
+                            Password information is intentionally hidden to protect
+                            the user's credentials. Never display stored passwords
+                            on the admin dashboard.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="profile-actions">
+
+                    <a th:href="@{/admin/users}"
+                       class="secondary-button">
+
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Users
+
+                    </a>
+
+                    <a th:href="@{/admin/users/edit/{id}(id=${user.id})}"
+                       class="primary-button">
+
+                        <i class="fas fa-user-pen"></i>
+                        Edit User
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Admin Footer -->
+    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Admin Navbar JS -->
+    <script th:src="@{/js/admin-navbar.js}"></script>
+	
+	<script>
+	    document.addEventListener("DOMContentLoaded", function () {
+	        const popup = document.getElementById("successPopup");
+
+	        if (popup) {
+	            setTimeout(function () {
+	                popup.classList.add("hide");
+
+	                setTimeout(function () {
+	                    popup.remove();
+	                }, 300);
+
+	            }, 3000);
+	        }
+	    });
+	</script>
+
+</body>
+</html>

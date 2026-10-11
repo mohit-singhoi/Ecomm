@@ -157,7 +157,29 @@
 
             </div>
 
+			<!-- Deactivated Account Message -->
+			<div th:if="${param.error != null
+			             and param.error[0] == 'deactivated'}"
+			     class="alert alert-warning"
+			     role="alert">
+			    <strong>Account Deactivated</strong>
+			    <p class="mb-0">
+			        Your profile has been deactivated by the administrator.
+			        Please contact the administration team for assistance.
+			    </p>
+			</div>
 
+			<!-- Invalid Credentials Message -->
+			<div th:if="${param.error != null
+			             and param.error[0] == 'invalid'}"
+			     class="alert alert-danger"
+			     role="alert">
+			    <strong>Login Failed</strong>
+			    Invalid email or password. Please check your credentials and try again.
+			</div>
+			
+			
+			
 			<form th:action="@{/userlogin}"
 			      method="post">
 
