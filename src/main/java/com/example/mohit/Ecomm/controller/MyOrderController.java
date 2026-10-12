@@ -3,6 +3,8 @@ package com.example.mohit.Ecomm.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.mohit.Ecomm.dto.OrderDTO;
 import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.OrderService;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -22,38 +27,18 @@ public class MyOrderController {
     @Autowired
     private OrderService orderService;
 
-
-    // =====================================================
-    // MY ORDERS
-    // URL: GET /my-orders
-    // =====================================================
-
+    // Display the My Orders page
     @GetMapping
     public String myOrders(
             HttpSession session,
             Model model,
             RedirectAttributes redirectAttributes) {
 
-
-        // =================================================
-        // GET LOGGED-IN USER
-        // =================================================
-
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
 
-
-        // =================================================
-        // USER NOT LOGGED IN
-        // =================================================
-
         if (loggedInUser == null) {
-
-            // Remember requested page
-            session.setAttribute(
-                    "redirectAfterLogin",
-                    "/my-orders"
-            );
+            session.setAttribute("redirectAfterLogin", "/my-orders");
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
@@ -63,33 +48,65 @@ public class MyOrderController {
             return "redirect:/userlogin";
         }
 
-
-        // =================================================
-        // GET USER ID
-        // =================================================
-
-        Long userId =
-                loggedInUser.getId();
-
-
-        // =================================================
-        // GET USER ORDERS
-        // =================================================
-
         List<OrderDTO> orders =
-                orderService.getOrderByUser(userId);
+                orderService.getOrderByUser(loggedInUser.getId());
 
-
-        // =================================================
-        // SEND ORDERS TO PAGE
-        // =================================================
-
-        model.addAttribute(
-                "orders",
-                orders
-        );
-
+        model.addAttribute("orders", orders);
 
         return "my-orders";
     }
+
+    // Return the logged-in user's latest orders as JSON
+    @GetMapping("/status")
+    public ResponseEntity<?> getLatestOrderStatuses(
+            HttpSession session) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Please log in to view your orders.");
+        }
+
+        List<OrderDTO> orders =
+                orderService.getOrderByUser(loggedInUser.getId());
+
+        return ResponseEntity.ok(orders);
+    }
+    
+    
+    @PostMapping("/cancel/{orderId}")
+    public String cancelOrder(
+            @PathVariable Long orderId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        // Check whether the user is logged in
+        if (loggedInUser == null) {
+            return "redirect:/userlogin";
+        }
+
+        try {
+            // Cancel only the logged-in user's own order
+            orderService.cancelOrder(orderId, loggedInUser.getId());
+
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Order #" + orderId + " cancelled successfully."
+            );
+
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
+        }
+
+        return "redirect:/my-orders";
+    }
+    
 }

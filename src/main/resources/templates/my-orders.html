@@ -80,6 +80,28 @@
             font-weight: 700;
         }
 
+		.order-progress {
+		    max-width: 430px;
+		}
+
+		.order-progress .progress {
+		    border-radius: 20px;
+		    background-color: #e9ecef;
+		    overflow: hidden;
+		}
+
+		.order-progress .progress-bar {
+		    border-radius: 20px;
+		    transition: width 0.4s ease;
+		}
+
+		.status-badge {
+		    display: inline-block;
+		    min-width: 85px;
+		    text-align: center;
+		}
+		
+		
     </style>
 
 </head>
@@ -185,8 +207,10 @@
 
             <!-- EACH ORDER -->
 
-            <div th:each="order : ${orders}"
-                 class="card order-card shadow-sm border-0 mb-4">
+			<div th:each="order : ${orders}"
+			     class="card order-card shadow-sm border-0 mb-4"
+			     th:id="'order-' + ${order.id}"
+			     th:attr="data-order-id=${order.id}">
 
 
                 <!-- ================= ORDER HEADER ================= -->
@@ -230,11 +254,9 @@
 
                             </small>
 
-                            <span th:text="${order.orderDate}">
-
-                                Order Date
-
-                            </span>
+							<span th:text="${#dates.format(order.orderDate, 'dd MMM yyyy, hh:mm a')}">
+							    07 Oct 2026, 02:10 AM
+							</span>
 
                         </div>
 
@@ -249,15 +271,48 @@
                                 Status
 
                             </small>
-
-                            <span class="badge status-badge bg-warning text-dark"
-                                  th:text="${order.status}">
-
-                                Pending
-
-                            </span>
+							<span class="badge status-badge"
+							      th:classappend="${order.status == 'Delivered' ? 'bg-success' :
+							                      order.status == 'Shipped' ? 'bg-info text-dark' :
+							                      order.status == 'Processing' ? 'bg-primary' :
+							                      order.status == 'Cancelled' ? 'bg-danger' :
+							                      'bg-warning text-dark'}"
+							      th:attr="data-status-order-id=${order.id}"
+							      th:text="${order.status}">
+							    Pending
+							</span>
 
                         </div>
+						
+						
+						<!---Delivery Progress Indicator 
+							--->
+						
+						<div class="order-progress mt-3"
+						     th:unless="${order.status == 'Cancelled'}"
+						     th:attr="data-progress-order-id=${order.id}">
+
+						    <div class="d-flex justify-content-between small text-muted mb-2">
+						        <span>Pending</span>
+						        <span>Processing</span>
+						        <span>Shipped</span>
+						        <span>Delivered</span>
+						    </div>
+
+						    <div class="progress" style="height: 7px;">
+						        <div class="progress-bar"
+						             role="progressbar"
+						             th:attr="data-progress-bar-id=${order.id}"
+						             style="width: 0%">
+						        </div>
+						    </div>
+						</div>
+
+						<div th:if="${order.status == 'Cancelled'}"
+						     class="small text-danger mt-2">
+						    <i class="fa-solid fa-circle-xmark me-1"></i>
+						    This order has been cancelled.
+						</div>
 
 
 
@@ -271,16 +326,75 @@
 
                             </small>
 
-                            <h5 class="fw-bold mb-0">
-
-                                ₹<span th:text="${order.totalAmount}">
-                                    0
-                                </span>
-
-                            </h5>
+							<h5 class="fw-bold mb-0">
+							    ₹<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">
+							        2,499.00
+							    </span>
+							</h5>
 
                         </div>
+						
+						<!-- ================= DELIVERY PROGRESS INDICATOR ================= -->
 
+						<div class="col-12 mt-3">
+
+						    <!-- Progress bar: hide when order is cancelled -->
+						    <div class="order-progress"
+						         th:unless="${order.status == 'Cancelled'}"
+						         th:attr="data-progress-order-id=${order.id}">
+
+						        <div class="d-flex justify-content-between small text-muted mb-2">
+						            <span>Pending</span>
+						            <span>Processing</span>
+						            <span>Shipped</span>
+						            <span>Delivered</span>
+						        </div>
+
+						        <div class="progress" style="height: 7px;">
+						            <div class="progress-bar"
+						                 role="progressbar"
+						                 th:attr="data-progress-bar-id=${order.id}"
+						                 style="width: 0%">
+						            </div>
+						        </div>
+
+						    </div>
+
+						    <!-- Cancelled order message -->
+						    <div th:if="${order.status == 'Cancelled'}"
+						         class="small text-danger mt-2">
+
+						        <i class="fa-solid fa-circle-xmark me-1"></i>
+						        This order has been cancelled.
+
+						    </div>
+
+						</div>
+						
+						<!-- ================= CANCEL ORDER BUTTON ================= -->
+
+						<div class="col-12 mt-3"
+						     th:if="${order.status == 'Pending' or order.status == 'Processing'}">
+
+						    <form th:action="@{/my-orders/cancel/{orderId}(orderId=${order.id})}"
+						          method="post"
+						          onsubmit="return confirm('Are you sure you want to cancel this order?');">
+
+						        <!-- CSRF Protection -->
+						        <input type="hidden"
+						               th:if="${_csrf != null}"
+						               th:name="${_csrf.parameterName}"
+						               th:value="${_csrf.token}">
+
+						        <button type="submit" class="btn btn-outline-danger btn-sm">
+						            <i class="fa-solid fa-xmark me-1"></i>
+						            Cancel Order
+						        </button>
+
+						    </form>
+
+						</div>
+						
 
                     </div>
 
@@ -321,9 +435,9 @@
 
                             <div class="text-muted small mt-1">
 
-                                ₹<span th:text="${item.productPrice}">
-                                    0
-                                </span>
+								₹<span th:text="${#numbers.formatDecimal(item.productPrice, 1, 'COMMA', 2, 'POINT')}">
+								    0.00
+								</span>
 
                                 ×
 
@@ -341,9 +455,9 @@
 
                         <div class="price">
 
-                            ₹<span th:text="${item.productPrice * item.quantity}">
-                                0
-                            </span>
+							₹<span th:text="${#numbers.formatDecimal(item.productPrice * item.quantity, 1, 'COMMA', 2, 'POINT')}">
+							    0.00
+							</span>
 
                         </div>
 
@@ -375,6 +489,166 @@
 <!-- Bootstrap JS -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const statusUrl = /*[[@{/my-orders/status}]]*/ "/my-orders/status";
+
+    function updateOrderStatusBadge(orderId, status) {
+        const badge = document.querySelector(
+            '[data-status-order-id="' + orderId + '"]'
+        );
+
+        if (!badge) return;
+
+        badge.textContent = status;
+
+        badge.classList.remove(
+            "bg-warning",
+            "bg-primary",
+            "bg-info",
+            "bg-success",
+            "bg-danger",
+            "text-dark"
+        );
+
+        switch (status) {
+            case "Processing":
+                badge.classList.add("bg-primary");
+                break;
+
+            case "Shipped":
+                badge.classList.add("bg-info", "text-dark");
+                break;
+
+            case "Delivered":
+                badge.classList.add("bg-success");
+                break;
+
+            case "Cancelled":
+                badge.classList.add("bg-danger");
+                break;
+
+            default:
+                badge.classList.add("bg-warning", "text-dark");
+        }
+    }
+
+    function updateProgress(orderId, status) {
+        const progressBar = document.querySelector(
+            '[data-progress-bar-id="' + orderId + '"]'
+        );
+
+        const progressContainer = document.querySelector(
+            '[data-progress-order-id="' + orderId + '"]'
+        );
+
+        const card = document.querySelector(
+            '[data-order-id="' + orderId + '"]'
+        );
+
+        if (status === "Cancelled") {
+            if (progressContainer) {
+                progressContainer.remove();
+            }
+
+            if (card && !card.querySelector(".cancelled-order-message")) {
+                const message = document.createElement("div");
+                message.className = "small text-danger mt-2 cancelled-order-message";
+                message.textContent = "This order has been cancelled.";
+
+                const body = card.querySelector(".card-body");
+
+                if (body) {
+                    body.prepend(message);
+                }
+            }
+
+            return;
+        }
+
+        if (!progressBar) return;
+
+        const progressValues = {
+            "Pending": 25,
+            "Processing": 50,
+            "Shipped": 75,
+            "Delivered": 100
+        };
+
+        progressBar.style.width =
+            (progressValues[status] || 0) + "%";
+
+        progressBar.setAttribute(
+            "aria-valuenow",
+            progressValues[status] || 0
+        );
+
+        progressBar.classList.remove("bg-success", "bg-primary");
+
+        progressBar.classList.add(
+            status === "Delivered" ? "bg-success" : "bg-primary"
+        );
+    }
+
+    async function refreshOrderStatuses() {
+        try {
+            const response = await fetch(statusUrl, {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
+            });
+
+            if (response.status === 401) {
+                return;
+            }
+
+            if (!response.ok) {
+                console.error("Unable to refresh order statuses.");
+                return;
+            }
+
+            const orders = await response.json();
+
+            orders.forEach(function (order) {
+                updateOrderStatusBadge(order.id, order.status);
+                updateProgress(order.id, order.status);
+            });
+
+        } catch (error) {
+            console.error("Order status refresh failed:", error);
+        }
+    }
+
+    // Refresh every 5 seconds.
+    setInterval(refreshOrderStatuses, 5000);
+
+    // Also refresh when the customer returns to this browser tab.
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) {
+            refreshOrderStatuses();
+        }
+    });
+
+    // Set the initial progress indicators.
+    document.querySelectorAll("[data-progress-order-id]").forEach(function (element) {
+        const orderId = element.getAttribute("data-progress-order-id");
+
+        const badge = document.querySelector(
+            '[data-status-order-id="' + orderId + '"]'
+        );
+
+        if (badge) {
+            updateProgress(orderId, badge.textContent.trim());
+        }
+    });
+
+});
 </script>
 
 

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,98 +20,203 @@ import com.example.mohit.Ecomm.repo.OrderRepository;
 import com.example.mohit.Ecomm.repo.ProductRepository;
 import com.example.mohit.Ecomm.repo.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class OrderService {
 
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Autowired
-	private OrderRepository orderRepository;
-	
-	public OrderDTO placeOrder(Long userId, Map<Long, Integer> productQuantities, double totalAmount) {
-		// TODO Auto-generated method stub
-		User user = userRepository.findById(userId)
-				  .orElseThrow(()-> new RuntimeException("user Not Found"));
-		
-		Orders order = new Orders();
-		order.setUser(user);
-		order.setOrderDate(new Date());
-		order.setStatus("Pending");
-		order.setTotalAmount(totalAmount);
-		
-		List<OrderItem> orderItems = new ArrayList<>();
-		List<OrderItemDTO> orderItemDTOS = new ArrayList<>();
-		
-		for(Map.Entry<Long, Integer> entry:productQuantities.entrySet()) {
-			
-			Product product = productRepository.findById(entry.getKey())
-					.orElseThrow(()->new RuntimeException("Product Not Found"));
-			
-			OrderItem orderItem = new OrderItem();
-			orderItem.setOrder(order);
-			orderItem.setProduct(product);
-			orderItem.setQuantity(entry.getValue());
-			orderItems.add(orderItem);
-			
-			orderItemDTOS.add(new OrderItemDTO(product.getName(),product.getPrice(), entry.getValue()));
-			
-		}
-		order.setOrderItems(orderItems);
-		Orders saveOrder = orderRepository.save(order);
-		return new OrderDTO(saveOrder.getId(), saveOrder.getTotalAmount(), saveOrder.getStatus(), saveOrder.getOrderDate(),orderItemDTOS);
-	}
-	
+    @Autowired
+    private UserRepository userRepository;
 
-     public List<OrderDTO> getAllOrders(){
-     List<Orders> orders =	 orderRepository.findAllOrderWithUsers();
-     return orders.stream().map(this::convertToDTO).collect(Collectors.toList());
-    	 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+ // =====================================================
+ // PLACE ORDER
+ // =====================================================
+
+ @Transactional
+ public OrderDTO placeOrder(
+         Long userId,
+         Map<Long, Integer> productQuantities,
+         double totalAmount) {
+
+     User user = userRepository.findById(userId)
+             .orElseThrow(() ->
+                     new RuntimeException("User not found."));
+
+     Orders order = new Orders();
+     order.setUser(user);
+     order.setOrderDate(new Date());
+     order.setStatus("Pending");
+
+     List<OrderItem> orderItems = new ArrayList<>();
+     List<OrderItemDTO> orderItemDTOs = new ArrayList<>();
+
+     // Calculate the order total using database prices
+     double calculatedTotal = 0.0;
+
+     for (Map.Entry<Long, Integer> entry
+             : productQuantities.entrySet()) {
+
+         Long productId = entry.getKey();
+         Integer quantity = entry.getValue();
+
+         // Validate quantity
+         if (quantity == null || quantity <= 0) {
+             throw new RuntimeException(
+                     "Product quantity must be greater than zero.");
+         }
+
+         // Fetch the current product from the database
+         Product product = productRepository.findById(productId)
+                 .orElseThrow(() ->
+                         new RuntimeException("Product not found."));
+
+         // Calculate the actual item total
+         double itemTotal = product.getPrice() * quantity;
+         calculatedTotal += itemTotal;
+
+         // Create order item
+         OrderItem orderItem = new OrderItem();
+         orderItem.setOrder(order);
+         orderItem.setProduct(product);
+         orderItem.setQuantity(quantity);
+
+         orderItems.add(orderItem);
+
+         // Prepare item details for the response
+         orderItemDTOs.add(
+                 new OrderItemDTO(
+                         product.getName(),
+                         product.getPrice(),
+                         quantity
+                 )
+         );
      }
-     
-     private OrderDTO convertToDTO(Orders orders) {
 
-    	    List<OrderItemDTO> orderItems = orders.getOrderItems()
-    	            .stream()
-    	            .map(item -> new OrderItemDTO(
-    	                    item.getProduct().getName(),
-    	                    item.getProduct().getPrice(),
-    	                    item.getQuantity()
-    	            ))
-    	            .collect(Collectors.toList());
+     // Save the calculated total, not the frontend-provided amount
+     order.setTotalAmount(calculatedTotal);
+     order.setOrderItems(orderItems);
 
-    	    return new OrderDTO(
-    	            orders.getId(),
-    	            orders.getTotalAmount(),
-    	            orders.getStatus(),
-    	            orders.getOrderDate(),
-    	            orders.getUser() != null ? orders.getUser().getName() : "Unknown",
-    	            orders.getUser() != null ? orders.getUser().getEmail() : "Unknown",
-    	            orderItems
-    	    );
-    	}
+     // Save order and items
+     Orders savedOrder = orderRepository.save(order);
 
+     return new OrderDTO(
+             savedOrder.getId(),
+             savedOrder.getTotalAmount(),
+             savedOrder.getStatus(),
+             savedOrder.getOrderDate(),
+             orderItemDTOs
+     );
+ }
+    // =====================================================
+    // GET ALL ORDERS
+    // =====================================================
 
-     public List<OrderDTO> getOrderByUser(Long userId) {
+    public List<OrderDTO> getAllOrders() {
 
-    	    Optional<User> userOp = userRepository.findById(userId);
+        List<Orders> orders =
+                orderRepository.findAllOrderWithUsers();
 
-    	    if (userOp.isEmpty()) {
-    	        throw new RuntimeException("User not found");
-    	    }
+        return orders.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
-    	    User user = userOp.get();
+    // =====================================================
+    // CONVERT ORDER ENTITY TO DTO
+    // =====================================================
 
-    	    List<Orders> ordersList = orderRepository.findByUser(user);
+    private OrderDTO convertToDTO(Orders order) {
 
-    	    return ordersList.stream()
-    	            .map(this::convertToDTO)
-    	            .collect(Collectors.toList());
-    	}
+        List<OrderItemDTO> orderItems =
+                order.getOrderItems()
+                        .stream()
+                        .map(item -> new OrderItemDTO(
+                                item.getProduct().getName(),
+                                item.getProduct().getPrice(),
+                                item.getQuantity()
+                        ))
+                        .collect(Collectors.toList());
+
+        return new OrderDTO(
+                order.getId(),
+                order.getTotalAmount(),
+                order.getStatus(),
+                order.getOrderDate(),
+                order.getUser() != null
+                        ? order.getUser().getName()
+                        : "Unknown",
+                order.getUser() != null
+                        ? order.getUser().getEmail()
+                        : "Unknown",
+                orderItems
+        );
+    }
+
+    // =====================================================
+    // GET ORDERS BY USER
+    // =====================================================
+
+    public List<OrderDTO> getOrderByUser(Long userId) {
+
+        Optional<User> userOptional =
+                userRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("User not found.");
+        }
+
+        User user = userOptional.get();
+
+        List<Orders> orders =
+                orderRepository.findByUser(user);
+
+        return orders.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // =====================================================
+    // CANCEL ORDER
+    // Only the owner can cancel their Pending/Processing order
+    // =====================================================
+
+    @Transactional
+    public void cancelOrder(Long orderId, Long userId) {
+
+        // Find the order
+        Orders order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found."));
+
+        // Verify order ownership
+        if (order.getUser() == null
+                || !userId.equals(order.getUser().getId())) {
+
+            throw new RuntimeException(
+                    "You are not authorized to cancel this order.");
+        }
+
+        // Check whether cancellation is allowed
+        String status = order.getStatus();
+
+        if (!"Pending".equals(status)
+                && !"Processing".equals(status)) {
+
+            throw new RuntimeException(
+                    "This order cannot be cancelled because its current status is "
+                            + status + ".");
+        }
+
+        // Update order status
+        order.setStatus("Cancelled");
+
+        // Save the updated order
+        orderRepository.save(order);
+    }
 }
-	
-
-

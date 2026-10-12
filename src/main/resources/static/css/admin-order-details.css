@@ -1,0 +1,246 @@
+/* =========================================
+   ORDER DETAILS PAGE
+========================================= */
+
+.order-details-page {
+    min-height: 80vh;
+    padding: 35px 0 60px;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.order-details-page .page-heading {
+    font-size: 30px;
+    font-weight: 750;
+    color: #172033;
+    margin-bottom: 8px;
+    letter-spacing: -0.6px;
+}
+
+.order-details-page .page-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.order-details-page .btn {
+    border-radius: 9px;
+    font-weight: 600;
+    padding: 10px 16px;
+    transition: all 0.2s ease;
+}
+
+.order-details-page .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   DETAIL CARDS
+========================================= */
+
+.order-details-page .details-card {
+    background: #ffffff;
+    border: 1px solid #e8ecf3;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.045);
+    margin-bottom: 24px;
+}
+
+.order-details-page .details-card-header {
+    padding: 21px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.order-details-page .details-card-header h5 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 750;
+    color: #172033;
+}
+
+.order-details-page .details-card-body {
+    padding: 24px;
+}
+
+/* =========================================
+   CUSTOMER INFORMATION
+========================================= */
+
+.order-details-page .customer-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.order-details-page .info-item {
+    min-width: 0;
+}
+
+.order-details-page .info-label {
+    display: block;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.order-details-page .info-value {
+    display: block;
+    color: #263247;
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   ORDER ITEMS TABLE
+========================================= */
+
+.order-details-page .table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.order-details-page .table thead th {
+    padding: 14px 12px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border-bottom: 1px solid #e8edf4;
+}
+
+.order-details-page .table tbody td {
+    padding: 17px 12px;
+    color: #475569;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f2f6;
+}
+
+.order-details-page .table tfoot th {
+    padding: 20px 12px;
+    font-size: 15px;
+    font-weight: 750;
+    border-top: 1px solid #e5eaf1;
+}
+
+.order-details-page .table tfoot th:last-child {
+    color: #4338ca;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.order-details-page .status-badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #fff4d6;
+    color: #956000;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+/* =========================================
+   STATUS UPDATE FORM
+========================================= */
+
+.order-details-page .status-description {
+    color: #7b8798;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.order-details-page .form-label {
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.order-details-page .form-select {
+    min-height: 46px;
+    padding: 10px 13px;
+    border: 1px solid #dce2ec;
+    border-radius: 9px;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.order-details-page .form-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.order-details-page .update-button {
+    min-height: 46px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =========================================
+   TOTAL AMOUNT SUMMARY
+========================================= */
+
+.order-details-page .total-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #edf0f5;
+}
+
+.order-details-page .total-label {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.order-details-page .total-value {
+    color: #4338ca;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+    .order-details-page {
+        padding: 24px 0 40px;
+    }
+
+    .order-details-page .page-heading {
+        font-size: 24px;
+    }
+
+    .order-details-page .details-card-header {
+        padding: 18px;
+    }
+
+    .order-details-page .details-card-body {
+        padding: 18px;
+    }
+
+    .order-details-page .customer-info {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .order-details-page .total-value {
+        font-size: 20px;
+    }
+}

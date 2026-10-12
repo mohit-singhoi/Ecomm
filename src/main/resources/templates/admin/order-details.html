@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Details | ShopSphere</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-order-details.css}">
+</head>
+
+<body>
+
+<!-- Admin Navbar -->
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+<!-- Main Content -->
+<main class="order-details-page">
+
+    <div class="container-fluid px-3 px-md-4">
+
+        <!-- Page Header -->
+        <section class="d-flex flex-wrap justify-content-between
+                        align-items-center gap-3 mb-4">
+
+            <div>
+
+                <h1 class="page-heading">
+
+                    <i class="fa-solid fa-receipt me-2"></i>
+
+                    Order Details
+
+                    <span th:text="'#' + ${order.id}">
+                        #1
+                    </span>
+
+                </h1>
+
+                <p class="page-subtitle">
+                    Review customer information, ordered products, and order status.
+                </p>
+
+            </div>
+
+            <a th:href="@{/admin/orders}"
+               class="btn btn-outline-secondary">
+
+                <i class="fa-solid fa-arrow-left me-2"></i>
+                Back to Orders
+
+            </a>
+
+        </section>
+
+        <!-- Success Message -->
+        <div th:if="${successMessage}"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-check me-2"></i>
+
+            <span th:text="${successMessage}">
+                Order updated successfully.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage}"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+            <span th:text="${errorMessage}">
+                An error occurred.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <!-- Summary Cards -->
+        <section class="row g-3 mb-4">
+
+            <!-- Order ID -->
+            <div class="col-12 col-md-4">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-primary-subtle
+                                    text-primary p-3">
+
+                            <i class="fa-solid fa-hashtag fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Order ID
+                            </div>
+
+                            <h4 class="fw-bold mb-0"
+                                th:text="'#' + ${order.id}">
+                                #1
+                            </h4>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Total Amount -->
+            <div class="col-12 col-md-4">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-success-subtle
+                                    text-success p-3">
+
+                            <i class="fa-solid fa-indian-rupee-sign fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Total Amount
+                            </div>
+
+                            <h4 class="fw-bold mb-0">
+
+                                ₹<span
+                                    th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+                                    0.00
+                                </span>
+
+                            </h4>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Current Status -->
+            <div class="col-12 col-md-4">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-warning-subtle
+                                    text-warning-emphasis p-3">
+
+                            <i class="fa-solid fa-truck-fast fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Current Status
+                            </div>
+
+                            <span class="badge status-badge"
+                                  th:classappend="${order.status == 'Delivered' ? ' bg-success text-white' :
+                                  (order.status == 'Cancelled' ? ' bg-danger text-white' :
+                                  (order.status == 'Shipped' ? ' bg-info text-dark' :
+                                  (order.status == 'Processing' ? ' bg-primary text-white' : ' bg-warning text-dark')))}"
+                                  th:text="${order.status}">
+                                Pending
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Main Details -->
+        <section class="row g-4">
+
+            <!-- Left Column -->
+            <div class="col-12 col-xl-8">
+
+                <!-- Customer Information -->
+                <div class="details-card">
+
+                    <div class="details-card-header">
+
+                        <h5>
+                            <i class="fa-solid fa-user me-2"></i>
+                            Customer Information
+                        </h5>
+
+                    </div>
+
+                    <div class="details-card-body">
+
+                        <div class="customer-info">
+
+                            <!-- Customer Name -->
+                            <div class="info-item">
+
+                                <span class="info-label">
+                                    Customer Name
+                                </span>
+
+                                <span class="info-value"
+                                      th:text="${order.user != null ? order.user.name : 'Unknown'}">
+                                    Customer Name
+                                </span>
+
+                            </div>
+
+                            <!-- Customer Email -->
+                            <div class="info-item">
+
+                                <span class="info-label">
+                                    Email Address
+                                </span>
+
+                                <span class="info-value"
+                                      th:text="${order.user != null ? order.user.email : 'Unknown'}">
+                                    customer@example.com
+                                </span>
+
+                            </div>
+
+                            <!-- Order Date -->
+                            <div class="info-item">
+
+                                <span class="info-label">
+                                    Order Date
+                                </span>
+
+                                <span class="info-value"
+                                      th:text="${order.orderDate != null ?
+                                      #dates.format(order.orderDate, 'dd MMM yyyy, hh:mm a') : 'N/A'}">
+                                    01 Jan 2026
+                                </span>
+
+                            </div>
+
+                            <!-- Order Number -->
+                            <div class="info-item">
+
+                                <span class="info-label">
+                                    Order Reference
+                                </span>
+
+                                <span class="info-value"
+                                      th:text="'ORD-' + ${order.id}">
+                                    ORD-1
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Ordered Products -->
+                <div class="details-card">
+
+                    <div class="details-card-header">
+
+                        <h5>
+                            <i class="fa-solid fa-box-open me-2"></i>
+                            Ordered Products
+
+                            <span class="badge bg-primary ms-2"
+                                  th:text="${#lists.size(order.orderItems)}">
+                                0
+                            </span>
+
+                        </h5>
+
+                    </div>
+
+                    <div class="details-card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover align-middle">
+
+                                <thead>
+
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                <!-- Order Items -->
+                                <tr th:each="item : ${order.orderItems}">
+
+                                    <!-- Product Name -->
+                                    <td>
+
+                                        <div class="fw-semibold text-dark"
+                                             th:text="${item.product != null ?
+                                             item.product.name : 'Product unavailable'}">
+
+                                            Product Name
+
+                                        </div>
+
+                                    </td>
+
+                                    <!-- Unit Price -->
+                                    <td class="text-nowrap">
+
+                                        ₹<span
+                                            th:text="${item.product != null ?
+                                            #numbers.formatDecimal(item.product.price, 1, 2) : '0.00'}">
+                                            0.00
+                                        </span>
+
+                                    </td>
+
+                                    <!-- Quantity -->
+                                    <td>
+
+                                        <span class="badge bg-light text-dark border"
+                                              th:text="${item.quantity}">
+                                            1
+                                        </span>
+
+                                    </td>
+
+                                    <!-- Subtotal -->
+                                    <td class="fw-semibold text-nowrap">
+
+                                        ₹<span
+                                            th:text="${item.product != null ?
+                                            #numbers.formatDecimal(item.product.price * item.quantity, 1, 2) : '0.00'}">
+                                            0.00
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                <!-- Empty Order -->
+                                <tr th:if="${#lists.isEmpty(order.orderItems)}">
+
+                                    <td colspan="4"
+                                        class="text-center py-4 text-muted">
+
+                                        <i class="fa-solid fa-box-open fa-2x mb-2"></i>
+
+                                        <p class="mb-0">
+                                            No products found for this order.
+                                        </p>
+
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+
+                                <!-- Total -->
+                                <tfoot>
+
+                                <tr>
+
+                                    <th colspan="3" class="text-end">
+                                        Order Total
+                                    </th>
+
+                                    <th class="text-nowrap">
+
+                                        ₹<span
+                                            th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+                                            0.00
+                                        </span>
+
+                                    </th>
+
+                                </tr>
+
+                                </tfoot>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-12 col-xl-4">
+
+                <!-- Update Status -->
+                <div class="details-card">
+
+                    <div class="details-card-header">
+
+                        <h5>
+                            <i class="fa-solid fa-truck-fast me-2"></i>
+                            Update Order Status
+                        </h5>
+
+                    </div>
+
+                    <div class="details-card-body">
+
+                        <p class="status-description">
+
+                            Select the appropriate status for this order.
+                            The updated status will be saved to the database.
+
+                        </p>
+
+                        <form
+                            th:action="@{/admin/orders/update-status/{id}(id=${order.id})}"
+                            method="post">
+
+                            <!-- CSRF token for Spring Security -->
+                            <input type="hidden"
+                                   th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
+
+                            <div class="mb-4">
+
+                                <label for="status"
+                                       class="form-label">
+
+                                    Order Status
+
+                                </label>
+
+                                <select id="status"
+                                        name="status"
+                                        class="form-select"
+                                        required>
+
+                                    <option value="Pending"
+                                            th:selected="${order.status == 'Pending'}">
+                                        Pending
+                                    </option>
+
+                                    <option value="Processing"
+                                            th:selected="${order.status == 'Processing'}">
+                                        Processing
+                                    </option>
+
+                                    <option value="Shipped"
+                                            th:selected="${order.status == 'Shipped'}">
+                                        Shipped
+                                    </option>
+
+                                    <option value="Delivered"
+                                            th:selected="${order.status == 'Delivered'}">
+                                        Delivered
+                                    </option>
+
+                                    <option value="Cancelled"
+                                            th:selected="${order.status == 'Cancelled'}">
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100 update-button">
+
+                                <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                                Update Status
+
+                            </button>
+
+                        </form>
+
+                        <hr>
+
+                        <!-- Order Summary -->
+                        <div class="total-summary">
+
+                            <span class="total-label">
+                                Total Order Value
+                            </span>
+
+                            <span class="total-value">
+
+                                ₹<span
+                                    th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+                                    0.00
+                                </span>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Order Management Tips -->
+                <div class="details-card">
+
+                    <div class="details-card-header">
+
+                        <h5>
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            Order Management
+                        </h5>
+
+                    </div>
+
+                    <div class="details-card-body">
+
+                        <p class="text-muted small mb-3">
+                            Available order statuses:
+                        </p>
+
+                        <div class="d-flex flex-column gap-3">
+
+                            <div>
+                                <span class="badge bg-warning text-dark me-2">
+                                    Pending
+                                </span>
+
+                                <small class="text-muted">
+                                    Order received.
+                                </small>
+                            </div>
+
+                            <div>
+                                <span class="badge bg-primary me-2">
+                                    Processing
+                                </span>
+
+                                <small class="text-muted">
+                                    Order is being prepared.
+                                </small>
+                            </div>
+
+                            <div>
+                                <span class="badge bg-info text-dark me-2">
+                                    Shipped
+                                </span>
+
+                                <small class="text-muted">
+                                    Order has been dispatched.
+                                </small>
+                            </div>
+
+                            <div>
+                                <span class="badge bg-success me-2">
+                                    Delivered
+                                </span>
+
+                                <small class="text-muted">
+                                    Order has been delivered.
+                                </small>
+                            </div>
+
+                            <div>
+                                <span class="badge bg-danger me-2">
+                                    Cancelled
+                                </span>
+
+                                <small class="text-muted">
+                                    Order has been cancelled.
+                                </small>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<!-- Admin Footer -->
+<div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<!-- Admin Navbar JS -->
+<script th:src="@{/js/admin-navbar.js}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alerts = document.querySelectorAll(
+            ".alert-success, .alert-danger"
+        );
+
+        alerts.forEach(function (alert) {
+            setTimeout(function () {
+                alert.style.transition = "opacity 0.5s ease";
+                alert.style.opacity = "0";
+
+                setTimeout(function () {
+                    alert.remove();
+                }, 500);
+            }, 3500);
+        });
+    });
+</script>
+
+</body>
+</html>

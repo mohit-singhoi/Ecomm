@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Management | ShopSphere</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-orders.css}">
+</head>
+
+<body>
+
+<!-- Admin Navbar -->
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+<!-- Main Content -->
+<main class="orders-page">
+
+    <div class="container-fluid px-3 px-md-4">
+
+        <!-- Page Header -->
+        <section class="d-flex flex-wrap justify-content-between
+                        align-items-center gap-3 mb-4">
+
+            <div>
+                <h1 class="page-heading">
+                    <i class="fa-solid fa-receipt me-2"></i>
+                    Order Management
+                </h1>
+
+                <p class="page-subtitle">
+                    View customer orders, review purchases, and manage order statuses.
+                </p>
+            </div>
+
+            <a th:href="@{/admin/dashboard}"
+               class="btn btn-outline-secondary">
+
+                <i class="fa-solid fa-arrow-left me-2"></i>
+                Back to Dashboard
+
+            </a>
+
+        </section>
+
+        <!-- Success Message -->
+        <div th:if="${successMessage}"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-check me-2"></i>
+
+            <span th:text="${successMessage}">
+                Operation completed successfully.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage}"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+            <span th:text="${errorMessage}">
+                Something went wrong.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <!-- Summary Cards -->
+        <section class="row g-3 mb-4">
+
+            <!-- Total Orders -->
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-primary-subtle
+                                    text-primary p-3">
+
+                            <i class="fa-solid fa-cart-shopping fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Total Orders
+                            </div>
+
+                            <h3 class="fw-bold mb-0"
+                                th:text="${#lists.size(orders)}">
+                                0
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pending Orders -->
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-warning-subtle
+                                    text-warning-emphasis p-3">
+
+                            <i class="fa-solid fa-clock fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Pending Orders
+                            </div>
+
+                            <h3 class="fw-bold mb-0"
+                                th:text="${#lists.size(orders.?[status == 'Pending'])}">
+                                0
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Processing Orders -->
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-info-subtle
+                                    text-info-emphasis p-3">
+
+                            <i class="fa-solid fa-gears fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Processing Orders
+                            </div>
+
+                            <h3 class="fw-bold mb-0"
+                                th:text="${#lists.size(orders.?[status == 'Processing'])}">
+                                0
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Delivered Orders -->
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center gap-3">
+
+                        <div class="rounded-3 bg-success-subtle
+                                    text-success p-3">
+
+                            <i class="fa-solid fa-circle-check fa-xl"></i>
+
+                        </div>
+
+                        <div>
+                            <div class="text-muted small">
+                                Delivered Orders
+                            </div>
+
+                            <h3 class="fw-bold mb-0"
+                                th:text="${#lists.size(orders.?[status == 'Delivered'])}">
+                                0
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Orders Table Card -->
+        <section class="orders-card">
+
+            <!-- Card Header -->
+            <div class="orders-card-header">
+
+                <div class="d-flex flex-wrap
+                            justify-content-between
+                            align-items-center gap-3">
+
+                    <div>
+                        <h5>
+                            <i class="fa-solid fa-list-check me-2"></i>
+                            All Orders
+
+                            <span class="badge bg-primary ms-2"
+                                  th:text="${#lists.size(orders)}">
+                                0
+                            </span>
+                        </h5>
+
+                        <small class="text-muted">
+                            Review and manage customer purchases.
+                        </small>
+                    </div>
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            id="resetFilters">
+
+                        <i class="fa-solid fa-rotate-left me-2"></i>
+                        Reset Filters
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Card Body -->
+            <div class="orders-card-body">
+
+                <!-- Search and Filter -->
+                <div class="row g-3 mb-4">
+
+                    <div class="col-12 col-lg-7">
+
+                        <label for="orderSearch"
+                               class="form-label fw-semibold">
+
+                            Search Orders
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+
+                            <input type="text"
+                                   id="orderSearch"
+                                   class="form-control"
+                                   placeholder="Search by order ID, customer name or email">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+
+                        <label for="statusFilter"
+                               class="form-label fw-semibold">
+
+                            Filter by Status
+
+                        </label>
+
+                        <select id="statusFilter"
+                                class="form-select">
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Processing">
+                                Processing
+                            </option>
+
+                            <option value="Shipped">
+                                Shipped
+                            </option>
+
+                            <option value="Delivered">
+                                Delivered
+                            </option>
+
+                            <option value="Cancelled">
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- Results Information -->
+                <div class="d-flex justify-content-between
+                            align-items-center mb-3">
+
+                    <span class="text-muted small">
+
+                        Showing
+                        <strong id="visibleOrdersCount">0</strong>
+                        orders
+
+                    </span>
+
+                </div>
+
+                <!-- Responsive Table -->
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle"
+                           id="ordersTable">
+
+                        <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Order Date</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <!-- Individual Orders -->
+                        <tr th:each="order : ${orders}"
+                            th:attr="data-status=${order.status}">
+
+                            <!-- Order ID -->
+                            <td>
+                                <span class="order-id"
+                                      th:text="'#' + ${order.id}">
+                                    #1
+                                </span>
+                            </td>
+
+                            <!-- Customer Name -->
+                            <td>
+
+                                <div class="fw-semibold text-dark"
+                                     th:text="${order.user != null ? order.user.name : 'Unknown'}">
+
+                                    Customer Name
+
+                                </div>
+
+                            </td>
+
+                            <!-- Customer Email -->
+                            <td th:text="${order.user != null ? order.user.email : 'Unknown'}">
+                                customer@example.com
+                            </td>
+
+                            <!-- Order Date -->
+                            <td class="text-nowrap"
+                                th:text="${order.orderDate != null ?
+                                #dates.format(order.orderDate, 'dd MMM yyyy, hh:mm a') : 'N/A'}">
+
+                                01 Jan 2026
+
+                            </td>
+
+                            <!-- Total Amount -->
+                            <td class="fw-bold text-dark text-nowrap">
+
+                                ₹<span
+                                    th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}">
+                                    0.00
+                                </span>
+
+                            </td>
+
+                            <!-- Order Status -->
+                            <td>
+
+                                <span class="badge"
+                                      th:classappend="${order.status == 'Delivered' ? ' bg-success' :
+                                      (order.status == 'Cancelled' ? ' bg-danger' :
+                                      (order.status == 'Shipped' ? ' bg-info text-dark' :
+                                      (order.status == 'Processing' ? ' bg-primary' : ' bg-warning text-dark')))}"
+                                      th:text="${order.status}">
+
+                                    Pending
+
+                                </span>
+
+                            </td>
+
+                            <!-- Action -->
+                            <td class="text-center">
+
+                                <a th:href="@{/admin/orders/view/{id}(id=${order.id})}"
+                                   class="btn btn-sm btn-outline-primary">
+
+                                    <i class="fa-solid fa-eye me-1"></i>
+                                    View Details
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- Empty Database State -->
+                <div th:if="${#lists.isEmpty(orders)}"
+                     class="empty-state">
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                    <h5 class="fw-bold text-dark">
+                        No Orders Yet
+                    </h5>
+
+                    <p>
+                        Customer orders will appear here when they are placed.
+                    </p>
+
+                </div>
+
+                <!-- No Search Results -->
+                <div id="noSearchResults"
+                     class="empty-state d-none">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <h5 class="fw-bold text-dark">
+                        No Matching Orders
+                    </h5>
+
+                    <p>
+                        Try changing your search term or status filter.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<!-- Admin Footer -->
+<div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<!-- Admin Navbar JS -->
+<script th:src="@{/js/admin-navbar.js}"></script>
+
+<!-- Search and Filter -->
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput = document.getElementById("orderSearch");
+        const statusFilter = document.getElementById("statusFilter");
+        const resetButton = document.getElementById("resetFilters");
+
+        const rows = Array.from(
+            document.querySelectorAll("#ordersTable tbody tr[data-status]")
+        );
+
+        const noResults = document.getElementById("noSearchResults");
+        const emptyState = document.querySelector(".orders-page .empty-state");
+        const visibleCount = document.getElementById("visibleOrdersCount");
+
+        function filterOrders() {
+
+            const searchValue = searchInput.value
+                .trim()
+                .toLowerCase();
+
+            const selectedStatus = statusFilter.value;
+
+            let count = 0;
+
+            rows.forEach(function (row) {
+
+                const rowText = row.textContent.toLowerCase();
+                const rowStatus = row.dataset.status;
+
+                const matchesSearch =
+                    rowText.includes(searchValue);
+
+                const matchesStatus =
+                    selectedStatus === "" ||
+                    rowStatus === selectedStatus;
+
+                const shouldShow =
+                    matchesSearch && matchesStatus;
+
+                row.style.display = shouldShow ? "" : "none";
+
+                if (shouldShow) {
+                    count++;
+                }
+
+            });
+
+            visibleCount.textContent = count;
+
+            noResults.classList.toggle(
+                "d-none",
+                count !== 0 || rows.length === 0
+            );
+
+        }
+
+        searchInput.addEventListener("input", filterOrders);
+
+        statusFilter.addEventListener("change", filterOrders);
+
+        resetButton.addEventListener("click", function () {
+
+            searchInput.value = "";
+            statusFilter.value = "";
+
+            filterOrders();
+
+        });
+
+        filterOrders();
+
+    });
+
+</script>
+
+</body>
+</html>

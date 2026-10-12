@@ -1,0 +1,209 @@
+/* =========================================
+   ADMIN ORDERS - GENERAL
+========================================= */
+
+.orders-page {
+    min-height: 80vh;
+    padding: 35px 0 60px;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.orders-page .page-heading {
+    font-size: 30px;
+    font-weight: 750;
+    color: #172033;
+    margin-bottom: 8px;
+    letter-spacing: -0.6px;
+}
+
+.orders-page .page-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.orders-page .btn {
+    border-radius: 9px;
+    font-weight: 600;
+    padding: 10px 16px;
+    transition: all 0.2s ease;
+}
+
+.orders-page .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   ORDERS CARD
+========================================= */
+
+.orders-page .orders-card {
+    background: #ffffff;
+    border: 1px solid #e8ecf3;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.045);
+}
+
+.orders-page .orders-card-header {
+    padding: 22px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.orders-page .orders-card-header h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.orders-page .orders-card-body {
+    padding: 24px;
+}
+
+/* =========================================
+   SEARCH AND FILTER
+========================================= */
+
+.orders-page .form-control,
+.orders-page .form-select {
+    min-height: 44px;
+    border: 1px solid #dce2ec;
+    border-radius: 9px;
+    padding: 10px 13px;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.orders-page .form-control:focus,
+.orders-page .form-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* =========================================
+   ORDERS TABLE
+========================================= */
+
+.orders-page .table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.orders-page .table thead th {
+    padding: 15px 14px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.65px;
+    white-space: nowrap;
+    border-bottom: 1px solid #e8edf4;
+}
+
+.orders-page .table tbody td {
+    padding: 17px 14px;
+    color: #475569;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f2f6;
+}
+
+.orders-page .table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-page .table tbody tr:hover {
+    background: #fafbff;
+}
+
+.orders-page .table .order-id {
+    font-weight: 750;
+    color: #4338ca;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.orders-page .badge {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.orders-page .badge.bg-warning {
+    background: #fff4d6 !important;
+    color: #956000 !important;
+}
+
+.orders-page .badge.bg-primary {
+    background: #e7eaff !important;
+    color: #4338ca !important;
+}
+
+.orders-page .badge.bg-info {
+    background: #dff7ff !important;
+    color: #087b9b !important;
+}
+
+.orders-page .badge.bg-success {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+}
+
+.orders-page .badge.bg-danger {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.orders-page .empty-state {
+    padding: 55px 20px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.orders-page .empty-state i {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 40px;
+}
+
+.orders-page .empty-state p {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+    .orders-page {
+        padding: 24px 0 40px;
+    }
+
+    .orders-page .page-heading {
+        font-size: 24px;
+    }
+
+    .orders-page .orders-card-body {
+        padding: 16px;
+    }
+
+    .orders-page .orders-card-header {
+        padding: 18px 16px;
+    }
+
+    .orders-page .table tbody td {
+        padding: 13px 10px;
+    }
+}
