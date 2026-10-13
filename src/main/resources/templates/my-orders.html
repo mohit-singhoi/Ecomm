@@ -1,14 +1,9 @@
 <!DOCTYPE html>
-
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Orders | ShopSphere</title>
 
@@ -21,18 +16,13 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <!-- Navbar CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/navbar.css}">
-		  
-	
-		  <link rel="stylesheet" th:href="@{/css/user-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/user-navbar.css}">
 
     <!-- Footer CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 
     <style>
-
         body {
             background-color: #f8f9fa;
         }
@@ -64,6 +54,9 @@
             font-size: 0.85rem;
             padding: 7px 12px;
             border-radius: 20px;
+            display: inline-block;
+            min-width: 85px;
+            text-align: center;
         }
 
         .price {
@@ -80,578 +73,590 @@
             font-weight: 700;
         }
 
-		.order-progress {
-		    max-width: 430px;
-		}
+        .order-progress {
+            max-width: 430px;
+        }
 
-		.order-progress .progress {
-		    border-radius: 20px;
-		    background-color: #e9ecef;
-		    overflow: hidden;
-		}
+        .order-progress .progress {
+            border-radius: 20px;
+            background-color: #e9ecef;
+            overflow: hidden;
+        }
 
-		.order-progress .progress-bar {
-		    border-radius: 20px;
-		    transition: width 0.4s ease;
-		}
-
-		.status-badge {
-		    display: inline-block;
-		    min-width: 85px;
-		    text-align: center;
-		}
-		
-		
+        .order-progress .progress-bar {
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
     </style>
-
 </head>
-
 
 <body>
 
+    <!-- ================= USER NAVBAR ================= -->
 
-<!-- ================= USER NAVBAR ================= -->
+    <!-- PUBLIC NAVBAR -->
+    <th:block th:if="${session.loggedInUser == null}">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+    </th:block>
 
-
-<!-- PUBLIC NAVBAR -->
-<th:block th:if="${session.loggedInUser == null}">
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
-</th:block>
-
-<!-- LOGGED-IN USER NAVBAR -->
-<th:block th:if="${session.loggedInUser != null}">
-    <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
-</th:block>
+    <!-- LOGGED-IN USER NAVBAR -->
+    <th:block th:if="${session.loggedInUser != null}">
+        <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+    </th:block>
 
 
+    <!-- ================= MY ORDERS ================= -->
 
-<!-- ================= MY ORDERS ================= -->
+    <section class="orders-section py-5">
 
-<section class="orders-section py-5">
+        <div class="container">
 
-    <div class="container">
+            <!-- ================= HEADER ================= -->
 
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <!-- ================= HEADER ================= -->
+                <div>
+                    <h1 class="fw-bold mb-2">
+                        <i class="fa-solid fa-box me-2"></i>
+                        My Orders
+                    </h1>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+                    <p class="text-muted mb-0">
+                        View your previous orders and order details.
+                    </p>
+                </div>
 
-            <div>
+                <a th:href="@{/products}"
+                   class="btn btn-outline-dark">
 
-                <h1 class="fw-bold mb-2">
+                    <i class="fa-solid fa-shop me-2"></i>
+                    Continue Shopping
 
-                    <i class="fa-solid fa-box me-2"></i>
-
-                    My Orders
-
-                </h1>
-
-                <p class="text-muted mb-0">
-
-                    View your previous orders and order details.
-
-                </p>
+                </a>
 
             </div>
 
 
-            <a th:href="@{/products}"
-               class="btn btn-outline-dark">
+            <!-- ================= SUCCESS / ERROR MESSAGES ================= -->
 
-                <i class="fa-solid fa-shop me-2"></i>
+            <div th:if="${successMessage}"
+                 class="alert alert-success alert-dismissible fade show"
+                 role="alert">
 
-                Continue Shopping
+                <i class="fa-solid fa-circle-check me-2"></i>
 
-            </a>
+                <span th:text="${successMessage}"></span>
 
-        </div>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                </button>
 
+            </div>
 
+            <div th:if="${errorMessage}"
+                 class="alert alert-danger alert-dismissible fade show"
+                 role="alert">
 
-        <!-- ================= EMPTY ORDERS ================= -->
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
 
-        <div th:if="${#lists.isEmpty(orders)}"
-             class="empty-orders text-center shadow-sm">
+                <span th:text="${errorMessage}"></span>
 
-            <i class="fa-solid fa-box-open fa-4x text-muted mb-4"></i>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                </button>
 
-            <h3 class="fw-bold">
-
-                No Orders Found
-
-            </h3>
-
-            <p class="text-muted mb-4">
-
-                You haven't placed any orders yet.
-
-            </p>
-
-            <a th:href="@{/products}"
-               class="btn btn-dark">
-
-                <i class="fa-solid fa-cart-shopping me-2"></i>
-
-                Start Shopping
-
-            </a>
-
-        </div>
+            </div>
 
 
+            <!-- ================= EMPTY ORDERS ================= -->
 
-        <!-- ================= ORDERS ================= -->
+            <div th:if="${#lists.isEmpty(orders)}"
+                 class="empty-orders text-center shadow-sm">
 
-        <div th:unless="${#lists.isEmpty(orders)}">
+                <i class="fa-solid fa-box-open fa-4x text-muted mb-4"></i>
+
+                <h3 class="fw-bold">
+                    No Orders Found
+                </h3>
+
+                <p class="text-muted mb-4">
+                    You haven't placed any orders yet.
+                </p>
+
+                <a th:href="@{/products}"
+                   class="btn btn-dark">
+
+                    <i class="fa-solid fa-cart-shopping me-2"></i>
+                    Start Shopping
+
+                </a>
+
+            </div>
 
 
-            <!-- EACH ORDER -->
+            <!-- ================= ORDERS ================= -->
 
-			<div th:each="order : ${orders}"
-			     class="card order-card shadow-sm border-0 mb-4"
-			     th:id="'order-' + ${order.id}"
-			     th:attr="data-order-id=${order.id}">
+            <div th:unless="${#lists.isEmpty(orders)}">
 
+                <!-- EACH ORDER -->
 
-                <!-- ================= ORDER HEADER ================= -->
-
-                <div class="order-header p-4">
-
-                    <div class="row align-items-center">
+                <div th:each="order : ${orders}"
+                     class="card order-card shadow-sm border-0 mb-4"
+                     th:id="'order-' + ${order.id}"
+                     th:attr="data-order-id=${order.id}">
 
 
-                        <!-- ORDER ID -->
+                    <!-- ================= ORDER HEADER ================= -->
 
-                        <div class="col-md-3 mb-3 mb-md-0">
+                    <div class="order-header p-4">
 
-                            <small class="text-muted d-block mb-1">
+                        <div class="row align-items-center">
 
-                                Order ID
+                            <!-- ORDER ID -->
 
-                            </small>
+                            <div class="col-md-3 mb-3 mb-md-0">
 
-                            <span class="order-id">
+                                <small class="text-muted d-block mb-1">
+                                    Order ID
+                                </small>
 
-                                #
+                                <span class="order-id">
+                                    #
+                                    <span th:text="${order.id}">1</span>
+                                </span>
 
-								<span th:text="${order.id}">
-								    1
-								</span>
+                            </div>
 
-                            </span>
+
+                            <!-- ORDER DATE -->
+
+                            <div class="col-md-3 mb-3 mb-md-0">
+
+                                <small class="text-muted d-block mb-1">
+                                    Order Date
+                                </small>
+
+                                <span th:text="${#dates.format(order.orderDate, 'dd MMM yyyy, hh:mm a')}">
+                                    07 Oct 2026, 02:10 AM
+                                </span>
+
+                            </div>
+
+
+                            <!-- STATUS -->
+
+                            <div class="col-md-3 mb-3 mb-md-0">
+
+                                <small class="text-muted d-block mb-1">
+                                    Status
+                                </small>
+
+                                <span class="badge status-badge"
+                                      th:classappend="${order.status == 'Delivered' ? 'bg-success' :
+                                                       order.status == 'Shipped' ? 'bg-info text-dark' :
+                                                       order.status == 'Processing' ? 'bg-primary' :
+                                                       order.status == 'Cancelled' ? 'bg-danger' :
+                                                       'bg-warning text-dark'}"
+                                      th:attr="data-status-order-id=${order.id}"
+                                      th:text="${order.status}">
+                                    Pending
+                                </span>
+
+                            </div>
+
+
+                            <!-- TOTAL AMOUNT -->
+
+                            <div class="col-md-3 text-md-end">
+
+                                <small class="text-muted d-block mb-1">
+                                    Total Amount
+                                </small>
+
+                                <h5 class="fw-bold mb-0">
+
+                                    ₹<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">
+                                        0.00
+                                    </span>
+
+                                </h5>
+
+                            </div>
+
+
+                            <!-- ================= DELIVERY PROGRESS ================= -->
+
+                            <div class="col-12 mt-3">
+
+                                <!-- Progress bar: hidden for cancelled orders -->
+
+                                <div class="order-progress"
+                                     th:unless="${order.status == 'Cancelled'}"
+                                     th:attr="data-progress-order-id=${order.id}">
+
+                                    <div class="d-flex justify-content-between small text-muted mb-2">
+                                        <span>Pending</span>
+                                        <span>Processing</span>
+                                        <span>Shipped</span>
+                                        <span>Delivered</span>
+                                    </div>
+
+                                    <div class="progress" style="height: 7px;">
+
+                                        <div class="progress-bar"
+                                             role="progressbar"
+                                             th:attr="data-progress-bar-id=${order.id}"
+                                             style="width: 0%">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- One permanent cancellation message -->
+
+                                <div th:if="${order.status == 'Cancelled'}"
+                                     class="small text-danger mt-2">
+
+                                    <i class="fa-solid fa-circle-xmark me-1"></i>
+                                    This order has been cancelled.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ================= CANCEL ORDER BUTTON ================= -->
+
+                            <div class="col-12 mt-3"
+                                 th:if="${order.status == 'Pending' or order.status == 'Processing'}">
+
+                                <form th:action="@{/my-orders/cancel/{orderId}(orderId=${order.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Are you sure you want to cancel this order?');">
+
+                                    <!-- CSRF Protection -->
+
+                                    <input type="hidden"
+                                           th:if="${_csrf != null}"
+                                           th:name="${_csrf.parameterName}"
+                                           th:value="${_csrf.token}">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger btn-sm">
+
+                                        <i class="fa-solid fa-xmark me-1"></i>
+                                        Cancel Order
+
+                                    </button>
+
+                                </form>
+
+                            </div>
 
                         </div>
-
-
-
-                        <!-- ORDER DATE -->
-
-                        <div class="col-md-3 mb-3 mb-md-0">
-
-                            <small class="text-muted d-block mb-1">
-
-                                Order Date
-
-                            </small>
-
-							<span th:text="${#dates.format(order.orderDate, 'dd MMM yyyy, hh:mm a')}">
-							    07 Oct 2026, 02:10 AM
-							</span>
-
-                        </div>
-
-
-
-                        <!-- STATUS -->
-
-                        <div class="col-md-3 mb-3 mb-md-0">
-
-                            <small class="text-muted d-block mb-1">
-
-                                Status
-
-                            </small>
-							<span class="badge status-badge"
-							      th:classappend="${order.status == 'Delivered' ? 'bg-success' :
-							                      order.status == 'Shipped' ? 'bg-info text-dark' :
-							                      order.status == 'Processing' ? 'bg-primary' :
-							                      order.status == 'Cancelled' ? 'bg-danger' :
-							                      'bg-warning text-dark'}"
-							      th:attr="data-status-order-id=${order.id}"
-							      th:text="${order.status}">
-							    Pending
-							</span>
-
-                        </div>
-						
-						
-						<!---Delivery Progress Indicator 
-							--->
-						
-						<div class="order-progress mt-3"
-						     th:unless="${order.status == 'Cancelled'}"
-						     th:attr="data-progress-order-id=${order.id}">
-
-						    <div class="d-flex justify-content-between small text-muted mb-2">
-						        <span>Pending</span>
-						        <span>Processing</span>
-						        <span>Shipped</span>
-						        <span>Delivered</span>
-						    </div>
-
-						    <div class="progress" style="height: 7px;">
-						        <div class="progress-bar"
-						             role="progressbar"
-						             th:attr="data-progress-bar-id=${order.id}"
-						             style="width: 0%">
-						        </div>
-						    </div>
-						</div>
-
-						<div th:if="${order.status == 'Cancelled'}"
-						     class="small text-danger mt-2">
-						    <i class="fa-solid fa-circle-xmark me-1"></i>
-						    This order has been cancelled.
-						</div>
-
-
-
-                        <!-- TOTAL -->
-
-                        <div class="col-md-3 text-md-end">
-
-                            <small class="text-muted d-block mb-1">
-
-                                Total Amount
-
-                            </small>
-
-							<h5 class="fw-bold mb-0">
-							    ₹<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">
-							        2,499.00
-							    </span>
-							</h5>
-
-                        </div>
-						
-						<!-- ================= DELIVERY PROGRESS INDICATOR ================= -->
-
-						<div class="col-12 mt-3">
-
-						    <!-- Progress bar: hide when order is cancelled -->
-						    <div class="order-progress"
-						         th:unless="${order.status == 'Cancelled'}"
-						         th:attr="data-progress-order-id=${order.id}">
-
-						        <div class="d-flex justify-content-between small text-muted mb-2">
-						            <span>Pending</span>
-						            <span>Processing</span>
-						            <span>Shipped</span>
-						            <span>Delivered</span>
-						        </div>
-
-						        <div class="progress" style="height: 7px;">
-						            <div class="progress-bar"
-						                 role="progressbar"
-						                 th:attr="data-progress-bar-id=${order.id}"
-						                 style="width: 0%">
-						            </div>
-						        </div>
-
-						    </div>
-
-						    <!-- Cancelled order message -->
-						    <div th:if="${order.status == 'Cancelled'}"
-						         class="small text-danger mt-2">
-
-						        <i class="fa-solid fa-circle-xmark me-1"></i>
-						        This order has been cancelled.
-
-						    </div>
-
-						</div>
-						
-						<!-- ================= CANCEL ORDER BUTTON ================= -->
-
-						<div class="col-12 mt-3"
-						     th:if="${order.status == 'Pending' or order.status == 'Processing'}">
-
-						    <form th:action="@{/my-orders/cancel/{orderId}(orderId=${order.id})}"
-						          method="post"
-						          onsubmit="return confirm('Are you sure you want to cancel this order?');">
-
-						        <!-- CSRF Protection -->
-						        <input type="hidden"
-						               th:if="${_csrf != null}"
-						               th:name="${_csrf.parameterName}"
-						               th:value="${_csrf.token}">
-
-						        <button type="submit" class="btn btn-outline-danger btn-sm">
-						            <i class="fa-solid fa-xmark me-1"></i>
-						            Cancel Order
-						        </button>
-
-						    </form>
-
-						</div>
-						
 
                     </div>
 
-                </div>
+
+                    <!-- ================= ORDER BODY ================= -->
+
+                    <div class="card-body p-4">
+
+                        <h6 class="fw-bold mb-3">
+                            <i class="fa-solid fa-cart-shopping me-2"></i>
+                            Order Items
+                        </h6>
 
 
+                        <!-- ORDER ITEMS -->
 
-                <!-- ================= ORDER BODY ================= -->
-
-                <div class="card-body p-4">
-
-
-                    <h6 class="fw-bold mb-3">
-
-                        <i class="fa-solid fa-cart-shopping me-2"></i>
-
-                        Order Items
-
-                    </h6>
+                        <div th:each="item : ${order.orderItems}"
+                             class="order-item d-flex justify-content-between align-items-center border-bottom py-3">
 
 
+                            <!-- PRODUCT INFORMATION -->
 
-                    <!-- ORDER ITEMS -->
+                            <div>
 
-                    <div th:each="item : ${order.orderItems}"
-                         class="order-item d-flex justify-content-between align-items-center border-bottom py-3">
+                                <strong th:text="${item.productName}">
+                                    Product Name
+                                </strong>
+
+                                <div class="text-muted small mt-1">
+
+                                    ₹<span th:text="${#numbers.formatDecimal(item.productPrice, 1, 'COMMA', 2, 'POINT')}">
+                                        0.00
+                                    </span>
+
+                                    ×
+
+                                    <span th:text="${item.quantity}">
+                                        1
+                                    </span>
+
+                                </div>
+
+                            </div>
 
 
-                        <!-- PRODUCT INFORMATION -->
+                            <!-- ITEM TOTAL -->
 
-                        <div>
+                            <div class="price">
 
-                            <strong th:text="${item.productName}">
-
-                                Product Name
-
-                            </strong>
-
-                            <div class="text-muted small mt-1">
-
-								₹<span th:text="${#numbers.formatDecimal(item.productPrice, 1, 'COMMA', 2, 'POINT')}">
-								    0.00
-								</span>
-
-                                ×
-
-                                <span th:text="${item.quantity}">
-                                    1
+                                ₹<span th:text="${#numbers.formatDecimal(item.productPrice * item.quantity, 1, 'COMMA', 2, 'POINT')}">
+                                    0.00
                                 </span>
 
                             </div>
 
                         </div>
 
-
-
-                        <!-- ITEM TOTAL -->
-
-                        <div class="price">
-
-							₹<span th:text="${#numbers.formatDecimal(item.productPrice * item.quantity, 1, 'COMMA', 2, 'POINT')}">
-							    0.00
-							</span>
-
-                        </div>
-
-
                     </div>
-
 
                 </div>
 
-
             </div>
-
 
         </div>
 
-
-    </div>
-
-</section>
+    </section>
 
 
+    <!-- ================= FOOTER ================= -->
 
-<!-- ================= FOOTER ================= -->
-
-<div th:replace="~{fragments/footer :: footer}"></div>
-
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
 
-<!-- Bootstrap JS -->
+    <!-- Bootstrap JS -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    const statusUrl = /*[[@{/my-orders/status}]]*/ "/my-orders/status";
+    <!-- ================= ORDER STATUS AUTO-REFRESH ================= -->
 
-    function updateOrderStatusBadge(orderId, status) {
-        const badge = document.querySelector(
-            '[data-status-order-id="' + orderId + '"]'
-        );
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-        if (!badge) return;
+            const statusUrl = /*[[@{/my-orders/status}]]*/ "/my-orders/status";
 
-        badge.textContent = status;
 
-        badge.classList.remove(
-            "bg-warning",
-            "bg-primary",
-            "bg-info",
-            "bg-success",
-            "bg-danger",
-            "text-dark"
-        );
+            // ================= UPDATE STATUS BADGE =================
 
-        switch (status) {
-            case "Processing":
-                badge.classList.add("bg-primary");
-                break;
+            function updateOrderStatusBadge(orderId, status) {
 
-            case "Shipped":
-                badge.classList.add("bg-info", "text-dark");
-                break;
+                const badge = document.querySelector(
+                    '[data-status-order-id="' + orderId + '"]'
+                );
 
-            case "Delivered":
-                badge.classList.add("bg-success");
-                break;
+                if (!badge) return;
 
-            case "Cancelled":
-                badge.classList.add("bg-danger");
-                break;
+                badge.textContent = status;
 
-            default:
-                badge.classList.add("bg-warning", "text-dark");
-        }
-    }
+                badge.classList.remove(
+                    "bg-warning",
+                    "bg-primary",
+                    "bg-info",
+                    "bg-success",
+                    "bg-danger",
+                    "text-dark"
+                );
 
-    function updateProgress(orderId, status) {
-        const progressBar = document.querySelector(
-            '[data-progress-bar-id="' + orderId + '"]'
-        );
+                switch (status) {
 
-        const progressContainer = document.querySelector(
-            '[data-progress-order-id="' + orderId + '"]'
-        );
+                    case "Processing":
+                        badge.classList.add("bg-primary");
+                        break;
 
-        const card = document.querySelector(
-            '[data-order-id="' + orderId + '"]'
-        );
+                    case "Shipped":
+                        badge.classList.add("bg-info", "text-dark");
+                        break;
 
-        if (status === "Cancelled") {
-            if (progressContainer) {
-                progressContainer.remove();
-            }
+                    case "Delivered":
+                        badge.classList.add("bg-success");
+                        break;
 
-            if (card && !card.querySelector(".cancelled-order-message")) {
-                const message = document.createElement("div");
-                message.className = "small text-danger mt-2 cancelled-order-message";
-                message.textContent = "This order has been cancelled.";
+                    case "Cancelled":
+                        badge.classList.add("bg-danger");
+                        break;
 
-                const body = card.querySelector(".card-body");
+                    default:
+                        badge.classList.add("bg-warning", "text-dark");
 
-                if (body) {
-                    body.prepend(message);
                 }
+
             }
 
-            return;
-        }
 
-        if (!progressBar) return;
+            // ================= UPDATE DELIVERY PROGRESS =================
 
-        const progressValues = {
-            "Pending": 25,
-            "Processing": 50,
-            "Shipped": 75,
-            "Delivered": 100
-        };
+            function updateProgress(orderId, status) {
 
-        progressBar.style.width =
-            (progressValues[status] || 0) + "%";
+                const card = document.querySelector(
+                    '[data-order-id="' + orderId + '"]'
+                );
 
-        progressBar.setAttribute(
-            "aria-valuenow",
-            progressValues[status] || 0
-        );
+                if (!card) return;
 
-        progressBar.classList.remove("bg-success", "bg-primary");
 
-        progressBar.classList.add(
-            status === "Delivered" ? "bg-success" : "bg-primary"
-        );
-    }
+                // Cancelled orders must not show a progress bar.
+                // The permanent cancellation message is rendered by Thymeleaf.
 
-    async function refreshOrderStatuses() {
-        try {
-            const response = await fetch(statusUrl, {
-                method: "GET",
-                credentials: "same-origin",
-                headers: {
-                    "Accept": "application/json"
-                },
-                cache: "no-store"
+                if (status === "Cancelled") {
+
+                    card.querySelectorAll(".order-progress").forEach(function (element) {
+                        element.remove();
+                    });
+
+                    // Remove any duplicate messages previously inserted by JavaScript.
+                    card.querySelectorAll(".cancelled-order-message").forEach(function (element) {
+                        element.remove();
+                    });
+
+                    return;
+
+                }
+
+
+                const progressBar = card.querySelector(
+                    '[data-progress-bar-id="' + orderId + '"]'
+                );
+
+                if (!progressBar) return;
+
+
+                const progressValues = {
+                    "Pending": 25,
+                    "Processing": 50,
+                    "Shipped": 75,
+                    "Delivered": 100
+                };
+
+                const progressValue = progressValues[status] || 0;
+
+                progressBar.style.width = progressValue + "%";
+
+                progressBar.setAttribute(
+                    "aria-valuenow",
+                    progressValue
+                );
+
+                progressBar.classList.remove(
+                    "bg-success",
+                    "bg-primary"
+                );
+
+                progressBar.classList.add(
+                    status === "Delivered" ? "bg-success" : "bg-primary"
+                );
+
+            }
+
+
+            // ================= REFRESH ORDER STATUSES =================
+
+            async function refreshOrderStatuses() {
+
+                try {
+
+                    const response = await fetch(statusUrl, {
+                        method: "GET",
+                        credentials: "same-origin",
+                        headers: {
+                            "Accept": "application/json"
+                        },
+                        cache: "no-store"
+                    });
+
+                    if (response.status === 401) {
+                        return;
+                    }
+
+                    if (!response.ok) {
+                        console.error("Unable to refresh order statuses.");
+                        return;
+                    }
+
+                    const orders = await response.json();
+
+                    orders.forEach(function (order) {
+
+                        updateOrderStatusBadge(order.id, order.status);
+
+                        updateProgress(order.id, order.status);
+
+                    });
+
+                } catch (error) {
+
+                    console.error("Order status refresh failed:", error);
+
+                }
+
+            }
+
+
+            // ================= INITIALIZE PROGRESS BARS =================
+
+            document.querySelectorAll("[data-progress-order-id]").forEach(function (element) {
+
+                const orderId = element.getAttribute("data-progress-order-id");
+
+                const badge = document.querySelector(
+                    '[data-status-order-id="' + orderId + '"]'
+                );
+
+                if (badge) {
+
+                    updateProgress(
+                        orderId,
+                        badge.textContent.trim()
+                    );
+
+                }
+
             });
 
-            if (response.status === 401) {
-                return;
-            }
 
-            if (!response.ok) {
-                console.error("Unable to refresh order statuses.");
-                return;
-            }
+            // Refresh every 5 seconds.
 
-            const orders = await response.json();
+            setInterval(refreshOrderStatuses, 5000);
 
-            orders.forEach(function (order) {
-                updateOrderStatusBadge(order.id, order.status);
-                updateProgress(order.id, order.status);
+
+            // Refresh when the customer returns to this browser tab.
+
+            document.addEventListener("visibilitychange", function () {
+
+                if (!document.hidden) {
+                    refreshOrderStatuses();
+                }
+
             });
 
-        } catch (error) {
-            console.error("Order status refresh failed:", error);
-        }
-    }
 
-    // Refresh every 5 seconds.
-    setInterval(refreshOrderStatuses, 5000);
+            // ================= AUTO-HIDE SUCCESS / ERROR ALERTS =================
 
-    // Also refresh when the customer returns to this browser tab.
-    document.addEventListener("visibilitychange", function () {
-        if (!document.hidden) {
-            refreshOrderStatuses();
-        }
-    });
+            document.querySelectorAll(".alert").forEach(function (alert) {
 
-    // Set the initial progress indicators.
-    document.querySelectorAll("[data-progress-order-id]").forEach(function (element) {
-        const orderId = element.getAttribute("data-progress-order-id");
+                setTimeout(function () {
 
-        const badge = document.querySelector(
-            '[data-status-order-id="' + orderId + '"]'
-        );
+                    alert.style.transition = "opacity 0.5s ease";
+                    alert.style.opacity = "0";
 
-        if (badge) {
-            updateProgress(orderId, badge.textContent.trim());
-        }
-    });
+                    setTimeout(function () {
+                        alert.remove();
+                    }, 500);
 
-});
-</script>
+                }, 3500);
 
+            });
+
+        });
+    </script>
 
 </body>
-
 </html>
