@@ -2,6 +2,7 @@ package com.example.mohit.Ecomm.controller;
 
 import java.util.List;
 
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.mohit.Ecomm.model.Feedback;
 import com.example.mohit.Ecomm.model.Feedback.FeedbackStatus;
 import com.example.mohit.Ecomm.model.User;
+import com.example.mohit.Ecomm.service.EmailService;
 import com.example.mohit.Ecomm.service.FeedbackService;
 
 import jakarta.servlet.http.HttpSession;
@@ -22,11 +24,16 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/admin/feedback")
 public class AdminFeedbackController {
 
-    private final FeedbackService feedbackService;
+	private final FeedbackService feedbackService;
+	private final EmailService emailService;
 
-    public AdminFeedbackController(FeedbackService feedbackService) {
-        this.feedbackService = feedbackService;
-    }
+	public AdminFeedbackController(
+	        FeedbackService feedbackService,
+	        EmailService emailService) {
+
+	    this.feedbackService = feedbackService;
+	    this.emailService = emailService;
+	}
 
     // ==========================================
     // ADMIN AUTHORIZATION
@@ -167,12 +174,31 @@ public class AdminFeedbackController {
         }
 
         try {
-            feedbackService.saveAdminResponse(id, adminResponse);
+            // Step 1: Save the response in the database
+            Feedback feedback =
+                    feedbackService.saveAdminResponse(id, adminResponse);
 
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Your response has been saved successfully."
-            );
+            // Step 2: Send the response to the customer's email
+            try {
+                emailService.sendFeedbackResponse(
+                        feedback.getUser().getEmail(),
+                        feedback.getUser().getName(),
+                        feedback.getAdminResponse()
+                );
+
+                redirectAttributes.addFlashAttribute(
+                        "successMessage",
+                        "Your response has been saved and emailed to the customer."
+                );
+
+            } catch (MailException | IllegalArgumentException emailException) {
+
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "Your response was saved, but the email could not be sent. "
+                        + "Please check your email configuration and try again."
+                );
+            }
 
         } catch (IllegalArgumentException exception) {
             redirectAttributes.addFlashAttribute(
