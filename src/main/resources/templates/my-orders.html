@@ -278,11 +278,9 @@
                                 </small>
 
                                 <h5 class="fw-bold mb-0">
-
                                     ₹<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">
                                         0.00
                                     </span>
-
                                 </h5>
 
                             </div>
@@ -317,7 +315,7 @@
 
                                 </div>
 
-                                <!-- One permanent cancellation message -->
+                                <!-- The single permanent cancellation message -->
 
                                 <div th:if="${order.status == 'Cancelled'}"
                                      class="small text-danger mt-2">
@@ -377,7 +375,6 @@
 
                         <div th:each="item : ${order.orderItems}"
                              class="order-item d-flex justify-content-between align-items-center border-bottom py-3">
-
 
                             <!-- PRODUCT INFORMATION -->
 
@@ -502,8 +499,7 @@
 
                 if (!card) return;
 
-
-                // Cancelled orders must not show a progress bar.
+                // Remove progress bars when the order is cancelled.
                 // The permanent cancellation message is rendered by Thymeleaf.
 
                 if (status === "Cancelled") {
@@ -512,7 +508,9 @@
                         element.remove();
                     });
 
-                    // Remove any duplicate messages previously inserted by JavaScript.
+                    // Remove only messages dynamically created by JavaScript.
+                    // The Thymeleaf cancellation message remains visible.
+
                     card.querySelectorAll(".cancelled-order-message").forEach(function (element) {
                         element.remove();
                     });
@@ -586,7 +584,6 @@
                     orders.forEach(function (order) {
 
                         updateOrderStatusBadge(order.id, order.status);
-
                         updateProgress(order.id, order.status);
 
                     });
@@ -611,12 +608,7 @@
                 );
 
                 if (badge) {
-
-                    updateProgress(
-                        orderId,
-                        badge.textContent.trim()
-                    );
-
+                    updateProgress(orderId, badge.textContent.trim());
                 }
 
             });

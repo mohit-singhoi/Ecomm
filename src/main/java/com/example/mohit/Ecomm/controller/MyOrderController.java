@@ -87,6 +87,11 @@ public class MyOrderController {
 
         // Check whether the user is logged in
         if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please log in to cancel an order."
+            );
+
             return "redirect:/userlogin";
         }
 
