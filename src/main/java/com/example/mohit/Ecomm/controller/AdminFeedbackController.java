@@ -157,7 +157,8 @@ public class AdminFeedbackController {
     // SAVE ADMIN RESPONSE
     // ==========================================
 
-    @PostMapping("/{id}/respond")
+    @SuppressWarnings("null")
+	@PostMapping("/{id}/respond")
     public String respondToFeedback(
             @PathVariable Long id,
             @RequestParam String adminResponse,
@@ -174,29 +175,36 @@ public class AdminFeedbackController {
         }
 
         try {
-            // Step 1: Save the response in the database
-            Feedback feedback =
+            // 1. Save the admin response.
+            Feedback savedFeedback =
                     feedbackService.saveAdminResponse(id, adminResponse);
 
-            // Step 2: Send the response to the customer's email
+            // 2. Retrieve customer details safely.
+            Feedback feedback =
+                    feedbackService.getFeedbackWithCustomer(id);
+
+            String customerEmail = feedback.getUser().getEmail();
+            String customerName = feedback.getUser().getName();
+            String savedResponse = savedFeedback.getAdminResponse();
+
+            // 3. Send a separate email containing the admin response.
             try {
                 emailService.sendFeedbackResponse(
-                        feedback.getUser().getEmail(),
-                        feedback.getUser().getName(),
-                        feedback.getAdminResponse()
+                        customerEmail,
+                        customerName,
+                        savedResponse
                 );
 
                 redirectAttributes.addFlashAttribute(
                         "successMessage",
-                        "Your response has been saved and emailed to the customer."
+                        "Response saved and email sent to the customer successfully."
                 );
 
             } catch (MailException | IllegalArgumentException emailException) {
-
                 redirectAttributes.addFlashAttribute(
                         "errorMessage",
-                        "Your response was saved, but the email could not be sent. "
-                        + "Please check your email configuration and try again."
+                        "The response was saved, but the email could not be sent. "
+                        + "Please check your email configuration."
                 );
             }
 

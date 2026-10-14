@@ -1,5 +1,6 @@
 package com.example.mohit.Ecomm.controller;
 
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,17 +16,23 @@ import jakarta.validation.Valid;
 
 import com.example.mohit.Ecomm.model.Feedback;
 import com.example.mohit.Ecomm.model.User;
+import com.example.mohit.Ecomm.service.EmailService;
 import com.example.mohit.Ecomm.service.FeedbackService;
 
 @Controller
 @RequestMapping("/feedback")
 public class FeedbackController {
 
-    private final FeedbackService feedbackService;
+	private final FeedbackService feedbackService;
+	private final EmailService emailService;
 
-    public FeedbackController(FeedbackService feedbackService) {
-        this.feedbackService = feedbackService;
-    }
+	public FeedbackController(
+	        FeedbackService feedbackService,
+	        EmailService emailService) {
+
+	    this.feedbackService = feedbackService;
+	    this.emailService = emailService;
+	}
 
     // Display the feedback page.
     @GetMapping
@@ -61,33 +68,29 @@ public class FeedbackController {
 
             RedirectAttributes redirectAttributes) {
 
-        // Prevent submissions without a logged-in user.
+        // Ensure the customer is logged in.
         if (loggedInUser == null) {
-        	return "redirect:/userlogin";
+            return "redirect:/userlogin";
         }
 
-        // Validate all submitted fields.
+        // Validate the submitted feedback.
         if (bindingResult.hasErrors()) {
+
             redirectAttributes.addFlashAttribute(
                     "org.springframework.validation.BindingResult.feedbackRequest",
                     bindingResult);
 
             redirectAttributes.addFlashAttribute(
-                    "feedbackRequest", feedback);
+                    "feedbackRequest",
+                    feedback);
 
             return "redirect:/feedback";
         }
 
         try {
 
-            // Save feedback for the currently logged-in user.
+            // Step 1: Save feedback in the database.
             feedbackService.saveFeedback(feedback, loggedInUser);
-
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Your feedback has been submitted successfully. Thank you for helping us improve ShopSphere!");
-
-            return "redirect:/feedback";
 
         } catch (Exception exception) {
 
@@ -97,5 +100,33 @@ public class FeedbackController {
 
             return "redirect:/feedback";
         }
+
+        // Step 2: Send the acknowledgement email separately.
+        try {
+
+            emailService.sendFeedbackAcknowledgement(
+                    loggedInUser.getEmail(),
+                    loggedInUser.getName()
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Your feedback has been submitted successfully. "
+                    + "A confirmation email has been sent to you.");
+
+        } catch (MailException | IllegalArgumentException exception) {
+
+            // Feedback is already saved, even if email delivery fails.
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Your feedback has been submitted successfully.");
+
+            redirectAttributes.addFlashAttribute(
+                    "emailWarning",
+                    "We couldn't send the confirmation email. "
+                    + "Your feedback has still been recorded.");
+        }
+
+        return "redirect:/feedback";
     }
 }

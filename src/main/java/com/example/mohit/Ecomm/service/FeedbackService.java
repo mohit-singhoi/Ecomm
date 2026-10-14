@@ -176,4 +176,25 @@ public class FeedbackService {
 
         return feedbackRepository.findByStatusOrderByCreatedAtDesc(status);
     }
+    
+    /**
+     * Retrieve feedback with its associated customer.
+     * The customer details are accessed inside the transaction.
+     */
+    @Transactional(readOnly = true)
+    public Feedback getFeedbackWithCustomer(Long feedbackId) {
+
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Feedback not found with ID: " + feedbackId
+                        )
+                );
+
+        // Initialize the associated customer while the transaction is open.
+        feedback.getUser().getEmail();
+        feedback.getUser().getName();
+
+        return feedback;
+    }
 }

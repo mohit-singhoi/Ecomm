@@ -54,7 +54,54 @@ public class EmailService {
     }
 
     // ==========================================
-    // CUSTOMER FEEDBACK RESPONSE EMAIL
+    // CUSTOMER FEEDBACK ACKNOWLEDGEMENT EMAIL
+    // Sent when the customer submits feedback
+    // ==========================================
+
+    public void sendFeedbackAcknowledgement(
+            String recipientEmail,
+            String customerName) {
+
+        validateRecipientEmail(recipientEmail);
+
+        String name = getCustomerName(customerName);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom(fromEmail);
+        message.setTo(recipientEmail.trim());
+
+        message.setSubject(
+                "ShopSphere - Feedback Received"
+        );
+
+        message.setText(
+                "Dear " + name + ",\n\n"
+
+                + "Thank you for sharing your feedback with ShopSphere.\n\n"
+
+                + "We appreciate you taking the time to help us "
+                + "improve our services.\n\n"
+
+                + "Your feedback has been successfully submitted "
+                + "to our customer support team.\n\n"
+
+                + "Our team will review your feedback and respond "
+                + "as soon as possible.\n\n"
+
+                + "If you need further assistance, please contact "
+                + "our support team.\n\n"
+
+                + "Best regards,\n"
+                + "ShopSphere Customer Support"
+        );
+
+        mailSender.send(message);
+    }
+
+    // ==========================================
+    // ADMIN RESPONSE EMAIL
+    // Sent when the admin responds to feedback
     // ==========================================
 
     public void sendFeedbackResponse(
@@ -82,23 +129,55 @@ public class EmailService {
 
         message.setFrom(fromEmail);
         message.setTo(recipientEmail.trim());
+
         message.setSubject(
                 "ShopSphere - Response to Your Feedback"
         );
 
         message.setText(
                 "Dear " + name + ",\n\n"
-                + "Thank you for sharing your feedback with ShopSphere. "
-                + "We appreciate you taking the time to help us improve.\n\n"
-                + "Our customer support team has responded to your feedback:\n\n"
+
+                + "Thank you for taking the time to share your feedback with us.\n\n"
+
+                + "We have reviewed your feedback. Your suggestions are "
+                + "valuable to us and help us improve our services.\n\n"
+
+                + "Admin's Response:\n"
                 + "----------------------------------------\n"
-                + adminResponse.trim() + "\n"
-                + "----------------------------------------\n\n"
-                + "If you need further assistance, please contact our support team.\n\n"
+
+                + adminResponse.trim()
+
+                + "\n----------------------------------------\n\n"
+
+                + "If you have any further questions or suggestions, "
+                + "please feel free to contact us.\n\n"
+
                 + "Best regards,\n"
-                + "ShopSphere Customer Support"
+                + "ShopSphere Support Team"
         );
 
         mailSender.send(message);
+    }
+
+    // ==========================================
+    // COMMON VALIDATION
+    // ==========================================
+
+    private void validateRecipientEmail(String recipientEmail) {
+
+        if (recipientEmail == null || recipientEmail.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Customer email address is missing."
+            );
+        }
+    }
+
+    private String getCustomerName(String customerName) {
+
+        if (customerName == null || customerName.isBlank()) {
+            return "Customer";
+        }
+
+        return customerName.trim();
     }
 }
