@@ -134,7 +134,7 @@ public class AdminFeedbackController {
                     session.getAttribute("loggedInUser"));
             model.addAttribute("activePage", "feedback");
 
-            return "admin/feedback-details";
+            return "admin/view-feedback";
 
         } catch (IllegalArgumentException exception) {
             redirectAttributes.addFlashAttribute(

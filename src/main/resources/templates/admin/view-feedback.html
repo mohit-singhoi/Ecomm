@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>View Feedback | ShopSphere Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Existing Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+
+    <!-- Feedback Details Page CSS -->
+    <link rel="stylesheet" th:href="@{/css/view-feedback.css}">
+</head>
+
+<body>
+
+    <!-- Existing Admin Navbar -->
+    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+
+    <main class="feedback-page">
+
+        <!-- Page Header -->
+        <section class="feedback-header">
+            <div>
+                <span class="page-eyebrow">CUSTOMER SUPPORT</span>
+                <h1>View Customer Feedback</h1>
+                <p>
+                    Review the customer's concern and provide a professional response.
+                </p>
+            </div>
+
+            <a th:href="@{/admin/feedback}" class="back-button">
+                <span aria-hidden="true">&larr;</span>
+                Back to Feedback
+            </a>
+        </section>
+
+        <!-- Flash Messages -->
+        <div th:if="${successMessage}"
+             class="feedback-alert alert-success"
+             role="status"
+             th:text="${successMessage}">
+        </div>
+
+        <div th:if="${errorMessage}"
+             class="feedback-alert alert-error"
+             role="alert"
+             th:text="${errorMessage}">
+        </div>
+
+        <!-- Customer Feedback Details -->
+        <section class="feedback-card">
+
+            <div class="card-heading">
+                <div>
+                    <span class="section-label">CUSTOMER SUBMISSION</span>
+                    <h2>Feedback Details</h2>
+                </div>
+
+                <span class="status-badge"
+                      th:classappend="${feedback.status != null and feedback.status.name() == 'RESOLVED'}
+                          ? ' status-resolved'
+                          : (${feedback.status != null and feedback.status.name() == 'IN_PROGRESS'}
+                              ? ' status-progress'
+                              : ' status-pending')"
+                      th:text="${feedback.status}">
+                    PENDING
+                </span>
+            </div>
+
+            <div class="feedback-details-grid">
+
+                <div class="detail-item">
+                    <span class="detail-label">Feedback ID</span>
+                    <strong th:text="${feedback.id}">1</strong>
+                </div>
+
+				<div class="detail-item">
+				    <span class="detail-label">Customer Name</span>
+				    <strong th:text="${feedback.user.name}">Customer Name</strong>
+				</div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Customer Email</span>
+                    <strong th:text="${feedback.user.email}">
+                        customer@example.com
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Category</span>
+                    <strong th:text="${feedback.category}">
+                        General Feedback
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Submitted On</span>
+                    <strong th:if="${feedback.createdAt != null}"
+                            th:text="${#temporals.format(feedback.createdAt, 'dd MMM yyyy, hh:mm a')}">
+                        14 Oct 2026
+                    </strong>
+                    <strong th:unless="${feedback.createdAt != null}">
+                        Not available
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Customer Rating</span>
+
+                    <div class="rating-display"
+                         th:attr="aria-label=${feedback.rating} + ' out of 5 stars'">
+
+                        <span th:each="star : ${#numbers.sequence(1, 5)}"
+                              th:text="${star <= feedback.rating} ? '★' : '☆'"
+                              th:classappend="${star <= feedback.rating}
+                                  ? ' star-filled'
+                                  : ' star-empty'">
+                            ★
+                        </span>
+
+                        <span class="rating-number"
+                              th:text="${feedback.rating} + '/5'">
+                            5/5
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="feedback-message-section">
+
+                <span class="detail-label">Subject</span>
+
+                <h3 th:text="${feedback.subject}">
+                    Customer feedback subject
+                </h3>
+
+                <span class="detail-label message-label">
+                    Customer Message
+                </span>
+
+                <div class="customer-message"
+                     th:text="${feedback.message}">
+                    Customer feedback appears here.
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Previously Saved Admin Response -->
+        <section class="feedback-card existing-response"
+                 th:if="${feedback.adminResponse != null
+                         and !#strings.isEmpty(feedback.adminResponse)}">
+
+            <div class="card-heading">
+                <div>
+                    <span class="section-label">RESPONSE HISTORY</span>
+                    <h2>Previously Sent Response</h2>
+                </div>
+            </div>
+
+            <div class="previous-response-message"
+                 th:text="${feedback.adminResponse}">
+                Previously sent response
+            </div>
+
+            <p class="response-timestamp"
+               th:if="${feedback.respondedAt != null}">
+
+                Responded on
+
+                <strong th:text="${#temporals.format(feedback.respondedAt, 'dd MMM yyyy, hh:mm a')}">
+                    14 Oct 2026
+                </strong>
+            </p>
+
+        </section>
+
+        <!-- Professional Admin Response Section -->
+        <section class="feedback-card response-card">
+
+            <div class="card-heading">
+                <div>
+                    <span class="section-label">SHOPSPHERE CUSTOMER SUPPORT</span>
+                    <h2>Write a Response</h2>
+                    <p class="section-description">
+                        Prepare a professional reply to the customer's feedback.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Response Guidance -->
+            <div class="response-guidance">
+                <span class="guidance-icon" aria-hidden="true">✉</span>
+
+                <div>
+                    <strong>Professional Response Template</strong>
+                    <p>
+                        Start with the suggested response below and customize it
+                        according to the customer's concern.
+                    </p>
+                </div>
+            </div>
+
+            <!--
+                Matches AdminFeedbackController:
+                POST /admin/feedback/{id}/respond
+            -->
+            <form th:action="@{/admin/feedback/{id}/respond(id=${feedback.id})}"
+                  method="post"
+                  id="adminResponseForm">
+
+                <!-- Include CSRF token when Spring Security provides one -->
+                <input type="hidden"
+                       th:if="${_csrf != null}"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+                <label for="adminResponse" class="form-label">
+                    Response Message
+                    <span class="required-mark">*</span>
+                </label>
+
+                <!--
+                    th:text must contain one valid expression.
+                    JavaScript supplies the default response only when
+                    no response has previously been saved.
+                -->
+                <textarea
+                    id="adminResponse"
+                    name="adminResponse"
+                    class="response-textarea"
+                    rows="10"
+                    minlength="10"
+                    maxlength="2000"
+                    required
+                    aria-describedby="responseHelp responseCounter"
+                    placeholder="Write a professional response to the customer..."
+                    th:text="${feedback.adminResponse}"></textarea>
+
+                <div class="textarea-footer">
+                    <small id="responseHelp">
+                        Be courteous, acknowledge the customer's concern, and provide
+                        an appropriate next step.
+                    </small>
+
+                    <span id="responseCounter" aria-live="polite">
+                        0 / 2000
+                    </span>
+                </div>
+
+                <!-- Live Response Preview -->
+                <div class="response-preview">
+
+                    <div class="preview-heading">
+                        <span class="preview-icon" aria-hidden="true">▤</span>
+
+                        <div>
+                            <h3>Response Preview</h3>
+                            <p>
+                                Review the message before submitting.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="responsePreviewText"
+                         class="response-preview-text"
+                         aria-live="polite">
+                    </div>
+
+                </div>
+
+                <!-- Form Actions -->
+                <div class="response-actions">
+
+                    <a th:href="@{/admin/feedback}"
+                       class="secondary-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="primary-button"
+                            id="sendResponseButton">
+
+                        <span aria-hidden="true">✓</span>
+
+                        <span th:text="${feedback.status != null and feedback.status.name() == 'RESOLVED'}
+                            ? 'Update Response & Resolve'
+                            : 'Send Response & Resolve'">
+                            Send Response &amp; Resolve
+                        </span>
+
+                    </button>
+
+                </div>
+
+                <p class="response-notice">
+                    Submitting this form saves your response. The backend must also
+                    update the feedback status if the feedback is to be marked resolved.
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <!-- Existing Admin Footer -->
+    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+    <!-- Existing Admin Navbar JS -->
+    <script th:src="@{/js/admin-navbar.js}"></script>
+
+    <!-- Feedback Details JS -->
+    <script th:src="@{/js/view-feedback.js}" defer></script>
+	
+	<script>
+	    document.addEventListener("DOMContentLoaded", function () {
+	        const alerts = document.querySelectorAll(
+	            ".feedback-alert.alert-success, .feedback-alert.alert-error"
+	        );
+
+	        alerts.forEach(function (alert) {
+	            setTimeout(function () {
+	                alert.style.transition = "opacity 0.4s ease";
+	                alert.style.opacity = "0";
+
+	                setTimeout(function () {
+	                    alert.remove();
+	                }, 400);
+	            }, 3000);
+	        });
+	    });
+	</script>
+
+</body>
+</html>
