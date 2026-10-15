@@ -94,9 +94,15 @@ public class ProductService {
 
     // Get active products by category
     public List<Product> getActiveProductsByCategory(String category) {
-        return productRepository.findByCategoryIgnoreCaseAndActiveTrue(category);
-    }
 
+        if (category == null || category.isBlank()) {
+            return getActiveProducts();
+        }
+
+        return productRepository.findActiveProductsByCategory(
+                category.trim()
+        );
+    }
     // Search active products by name
     public List<Product> searchActiveProducts(String name) {
         return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(name);

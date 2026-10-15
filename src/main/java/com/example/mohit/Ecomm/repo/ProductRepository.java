@@ -3,6 +3,8 @@ package com.example.mohit.Ecomm.repo;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.mohit.Ecomm.model.Product;
 
@@ -13,7 +15,14 @@ public interface ProductRepository
     List<Product> findByActiveTrue();
 
     // Get active products by category
-    List<Product> findByCategoryIgnoreCaseAndActiveTrue(String category);
+    @Query("""
+    	    SELECT p FROM Product p
+    	    WHERE LOWER(TRIM(p.category)) = LOWER(TRIM(:category))
+    	      AND p.active = true
+    	    """)
+    	List<Product> findActiveProductsByCategory(
+    	        @Param("category") String category
+    	);
 
     // Search active products by name
     List<Product> findByNameContainingIgnoreCaseAndActiveTrue(String name);

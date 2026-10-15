@@ -55,11 +55,14 @@ public class ProductController {
     // ==============================
     @GetMapping("/category/{category}")
     public String getProductsByCategory(
-            @PathVariable String category,
-            Model model) {
+            @PathVariable String category, Model model) {
+
+        System.out.println("Requested category: " + category);
 
         List<Product> products =
-                productService.getActiveProductsByCategory(category);
+                productService.getActiveProductsByCategory(category.trim());
+
+        System.out.println("Products found: " + products.size());
 
         model.addAttribute("products", products);
         model.addAttribute("selectedCategory", category);
