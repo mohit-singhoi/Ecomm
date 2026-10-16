@@ -1,15 +1,13 @@
-<!--- Product Details Page 
---->
-
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Product Details | ShopSphere</title>
+    <title th:text="${product.name} + ' | ShopSphere'">
+        Product Details | ShopSphere
+    </title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -18,100 +16,152 @@
     <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	
-		  
-		  <!-- Navbar CSS -->
-		  <link rel="stylesheet"
-		        th:href="@{/css/navbar.css}">
-				
-				<!-- User Navbar CSS -->
-				<link rel="stylesheet"
-				      th:href="@{/css/user-navbar.css}">
 
-
-		  <!-- Footer CSS -->
-		  <link rel="stylesheet"
-		  	   th:href="@{/css/footer.css}">
-			   
-			
-			   <!-- product-details CSS -->
-			   <link rel="stylesheet"
-			   	   th:href="@{/css/product-details.css}">
-
-
+    <!-- Existing CSS -->
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/user-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/product-details.css}">
 </head>
 
 <body>
-	
-	<!-- =========================
-	     NAVBAR
-	     ========================= -->
 
-		 <!-- PUBLIC NAVBAR -->
-		 <th:block th:if="${session.loggedInUser == null}">
-		     <div th:replace="~{fragments/navbar :: navbar}"></div>
-		 </th:block>
+<!-- ================= NAVBAR ================= -->
 
-		 <!-- LOGGED-IN USER NAVBAR -->
-		 <th:block th:if="${session.loggedInUser != null}">
-		     <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
-		 </th:block>
+<th:block th:if="${session.loggedInUser == null}">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+</th:block>
+
+<th:block th:if="${session.loggedInUser != null}">
+    <div th:replace="~{fragments/user-navbar :: userNavbar}"></div>
+</th:block>
 
 
 <!-- ================= PRODUCT DETAILS ================= -->
 
-<div class="container product-details">
+<main class="container product-details">
 
     <!-- Back Button -->
-
     <div class="mb-4">
-        <a href="/products" class="back-link">
+        <a th:href="@{/products}" class="back-link">
             <i class="fa-solid fa-arrow-left me-2"></i>
             Back to Products
         </a>
     </div>
 
-
     <div class="card border-0 shadow-sm product-card">
 
-        <div class="row align-items-center g-4">
+        <div class="row g-4">
 
-            <!-- PRODUCT IMAGE -->
+            <!-- ================= IMAGE GALLERY ================= -->
 
             <div class="col-lg-6">
 
-				<img th:src="${product.imageUrl}"
-				     th:alt="${product.name}"
-				     class="product-image">
+                <div class="product-gallery">
+
+                    <!-- Main Image Slider -->
+                    <div class="product-image-container"
+                         id="productImageSlider">
+
+                        <!-- Previous Image -->
+                        <button type="button"
+                                class="gallery-arrow gallery-prev"
+                                id="previousImage"
+                                aria-label="Previous product image"
+                                title="Previous image">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </button>
+
+                        <!-- Main Product Image -->
+                        <img id="mainProductImage"
+                             th:src="${productImages != null and !#lists.isEmpty(productImages)
+                                ? (productImages.?[primaryImage].size() > 0
+                                    ? productImages.?[primaryImage][0].imageUrl
+                                    : productImages[0].imageUrl)
+                                : product.imageUrl}"
+                             th:alt="${product.name}"
+                             class="product-image">
+
+                        <!-- Next Image -->
+                        <button type="button"
+                                class="gallery-arrow gallery-next"
+                                id="nextImage"
+                                aria-label="Next product image"
+                                title="Next image">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                        <!-- Image Counter -->
+                        <span class="gallery-image-counter"
+                              id="galleryImageCounter"
+                              th:if="${productImages != null and !#lists.isEmpty(productImages)}"
+                              th:text="'1 / ' + ${#lists.size(productImages)}">
+                            1 / 5
+                        </span>
+
+                    </div>
+
+
+                    <!-- Image Thumbnails -->
+                    <div class="product-thumbnail-gallery"
+                         id="productThumbnailGallery"
+                         th:if="${productImages != null and !#lists.isEmpty(productImages)}">
+
+                        <button type="button"
+                                class="product-thumbnail"
+                                th:each="img, stat : ${productImages}"
+                                th:classappend="${img.primaryImage} ? ' active' : ''"
+                                th:attr="data-image-url=${img.imageUrl},
+                                         data-image-index=${stat.index}"
+                                th:aria-label="'View product image ' + ${stat.count}"
+                                th:title="'View image ' + ${stat.count}">
+
+                            <img th:src="${img.imageUrl}"
+                                 th:alt="${product.name} + ' image ' + ${stat.count}">
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Gallery Caption -->
+                    <p class="gallery-caption"
+                       th:if="${productImages != null and !#lists.isEmpty(productImages)}"
+                       th:text="${#lists.size(productImages)} + ' product images · Click to explore'">
+
+                        Product images
+                    </p>
+
+                </div>
 
             </div>
 
 
-            <!-- PRODUCT INFORMATION -->
+            <!-- ================= PRODUCT INFORMATION ================= -->
 
             <div class="col-lg-6">
 
                 <div class="product-info">
 
                     <!-- Category -->
-
                     <span class="category"
                           th:text="${product.category}">
-                        Jewellery
+                        Category
                     </span>
 
-
                     <!-- Product Name -->
-
                     <h1 class="product-title"
                         th:text="${product.name}">
-                        Classic Watch
+                        Product Name
                     </h1>
 
-
                     <!-- Rating -->
-
-                    <div class="rating mb-3">
+                    <div class="rating mb-3"
+                         aria-label="Sample product rating">
 
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-star"></i>
@@ -119,127 +169,102 @@
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-regular fa-star"></i>
 
-                        <span class="text-muted ms-2">
-                            (4.0)
-                        </span>
+                        <span class="text-muted ms-2">(4.0)</span>
 
                     </div>
-
 
                     <!-- Price -->
-
                     <div class="product-price">
-
-                        ₹<span th:text="${product.price}">
-                            1,999
-                        </span>
-
+                        ₹<span th:text="${product.price}">1,999</span>
                     </div>
 
-
                     <!-- Description -->
-
                     <p class="product-description"
                        th:text="${product.description}">
-
-                        A stylish classic watch designed for everyday
-                        wear. Elegant design, comfortable strap and
-                        reliable performance make it a perfect choice
-                        for every occasion.
-
+                        Product description
                     </p>
-
 
                     <hr>
 
+                    <!-- Quantity -->
+                    <div class="quantity-box">
 
-					<!-- ================= QUANTITY ================= -->
+                        <label for="quantity" class="fw-bold">
+                            Quantity:
+                        </label>
 
-					<div class="quantity-box">
+                        <input type="number"
+                               id="quantity"
+                               name="quantity"
+                               class="form-control"
+                               value="1"
+                               min="1"
+                               max="99"
+                               step="1"
+                               required>
 
-					    <label for="quantity"
-					           class="fw-bold">
-
-					        Quantity:
-
-					    </label>
-
-					    <input type="number"
-					           id="quantity"
-					           name="quantity"
-					           class="form-control"
-					           value="1"
-					           min="1"
-					           required>
-
-					</div>
+                    </div>
 
 
-					<!-- ================= ACTION BUTTONS ================= -->
+                    <!-- ================= ACTION BUTTONS ================= -->
 
-					<div class="d-flex gap-3 flex-wrap mt-3">
+                    <div class="product-actions">
 
-					    <!-- ADD TO CART -->
+                        <!-- Add to Cart -->
+                        <form th:action="@{/cart/add/{id}(id=${product.id})}"
+                              method="post">
 
-					    <form th:action="@{/cart/add/{id}(id=${product.id})}"
-					          method="post">
+                            <input type="hidden"
+                                   name="quantity"
+                                   id="cartQuantity"
+                                   value="1">
 
-					        <input type="hidden"
-					               name="quantity"
-					               id="cartQuantity"
-					               value="1">
+                            <button type="submit"
+                                    class="btn btn-primary btn-cart">
 
-					        <button type="submit"
-					                class="btn btn-primary btn-cart">
+                                <i class="fa-solid fa-cart-plus me-2"></i>
+                                Add to Cart
 
-					            <i class="fa-solid fa-cart-plus me-2"></i>
+                            </button>
 
-					            Add to Cart
-
-					        </button>
-
-					    </form>
-						
-						<!-- ADD TO WISHLIST -->
-
-						<form th:action="@{/wishlist/add/{id}(id=${product.id})}"
-						      method="post">
-
-						    <button type="submit"
-						            class="btn btn-danger btn-cart">
-
-						        <i class="fa-regular fa-heart me-2"></i>
-
-						        Add to Wishlist
-
-						    </button>
-
-						</form>
-						
+                        </form>
 
 
-					    <!-- BUY NOW -->
+                        <!-- Add to Wishlist -->
+                        <form th:action="@{/wishlist/add/{id}(id=${product.id})}"
+                              method="post">
 
-					    <form th:action="@{/cart/buy-now/{id}(id=${product.id})}"
-					          method="post">
+                            <button type="submit"
+                                    class="btn btn-danger btn-cart">
 
-					        <input type="hidden"
-					               name="quantity"
-					               id="buyQuantity"
-					               value="1">
+                                <i class="fa-regular fa-heart me-2"></i>
+                                Add to Wishlist
 
-					        <button type="submit"
-					                class="btn btn-success btn-buy">
+                            </button>
 
-					            <i class="fa-solid fa-bag-shopping me-2"></i>
+                        </form>
 
-					            Buy Now
 
-					        </button>
+                        <!-- Buy Now -->
+                        <form th:action="@{/cart/buy-now/{id}(id=${product.id})}"
+                              method="post">
 
-					    </form>
+                            <input type="hidden"
+                                   name="quantity"
+                                   id="buyQuantity"
+                                   value="1">
 
-					</div>
+                            <button type="submit"
+                                    class="btn btn-success btn-buy">
+
+                                <i class="fa-solid fa-bag-shopping me-2"></i>
+                                Buy Now
+
+                            </button>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
@@ -249,21 +274,235 @@
 
     </div>
 
-</div>
+</main>
 
-<!-- =========================
-     FOOTER
-     ========================= -->
+
+<!-- ================= FOOTER ================= -->
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 
-<!-- Bootstrap JS -->
+<!-- ================= JAVASCRIPT ================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- Preserve existing product details JS -->
 <script th:src="@{/js/product-details.js}"></script>
 
-</body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    const mainImage = document.getElementById("mainProductImage");
+    const slider = document.getElementById("productImageSlider");
+    const previousButton = document.getElementById("previousImage");
+    const nextButton = document.getElementById("nextImage");
+    const counter = document.getElementById("galleryImageCounter");
+
+    const thumbnails = Array.from(
+        document.querySelectorAll(".product-thumbnail")
+    );
+
+    let currentIndex = thumbnails.findIndex(
+        thumbnail => thumbnail.classList.contains("active")
+    );
+
+    if (currentIndex < 0) {
+        currentIndex = 0;
+    }
+
+    function showImage(index) {
+
+        if (!mainImage || thumbnails.length === 0) {
+            return;
+        }
+
+        currentIndex = (index + thumbnails.length) % thumbnails.length;
+
+        const selectedThumbnail = thumbnails[currentIndex];
+        const imageUrl = selectedThumbnail.getAttribute("data-image-url");
+        const thumbnailImage = selectedThumbnail.querySelector("img");
+
+        if (!imageUrl) {
+            return;
+        }
+
+        mainImage.src = imageUrl;
+
+        if (thumbnailImage && thumbnailImage.alt) {
+            mainImage.alt = thumbnailImage.alt;
+        }
+
+        thumbnails.forEach(function (thumbnail, thumbnailIndex) {
+
+            thumbnail.classList.toggle(
+                "active",
+                thumbnailIndex === currentIndex
+            );
+
+            thumbnail.setAttribute(
+                "aria-pressed",
+                thumbnailIndex === currentIndex ? "true" : "false"
+            );
+
+        });
+
+        if (counter) {
+            counter.textContent =
+                (currentIndex + 1) + " / " + thumbnails.length;
+        }
+
+        selectedThumbnail.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "nearest"
+        });
+
+    }
+
+
+    /* Thumbnail click */
+    thumbnails.forEach(function (thumbnail, index) {
+
+        thumbnail.addEventListener("click", function () {
+            showImage(index);
+        });
+
+    });
+
+
+    /* Previous image */
+    if (previousButton) {
+
+        previousButton.addEventListener("click", function () {
+            showImage(currentIndex - 1);
+        });
+
+    }
+
+
+    /* Next image */
+    if (nextButton) {
+
+        nextButton.addEventListener("click", function () {
+            showImage(currentIndex + 1);
+        });
+
+    }
+
+
+    /* Keyboard navigation */
+    if (slider) {
+
+        slider.addEventListener("keydown", function (event) {
+
+            if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                showImage(currentIndex - 1);
+            }
+
+            if (event.key === "ArrowRight") {
+                event.preventDefault();
+                showImage(currentIndex + 1);
+            }
+
+        });
+
+    }
+
+
+    /* Swipe support on touch screens */
+    if (slider) {
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        slider.addEventListener("touchstart", function (event) {
+
+            if (!event.touches.length) {
+                return;
+            }
+
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+
+        }, { passive: true });
+
+
+        slider.addEventListener("touchend", function (event) {
+
+            if (!event.changedTouches.length) {
+                return;
+            }
+
+            const deltaX = event.changedTouches[0].clientX - touchStartX;
+            const deltaY = event.changedTouches[0].clientY - touchStartY;
+
+            if (Math.abs(deltaX) > 50 &&
+                Math.abs(deltaX) > Math.abs(deltaY)) {
+
+                if (deltaX < 0) {
+                    showImage(currentIndex + 1);
+                } else {
+                    showImage(currentIndex - 1);
+                }
+
+            }
+
+        }, { passive: true });
+
+    }
+
+
+    /* Quantity synchronization */
+    const quantityInput = document.getElementById("quantity");
+    const cartQuantity = document.getElementById("cartQuantity");
+    const buyQuantity = document.getElementById("buyQuantity");
+
+    function updateQuantity() {
+
+        if (!quantityInput) {
+            return;
+        }
+
+        let quantity = parseInt(quantityInput.value, 10);
+
+        if (isNaN(quantity) || quantity < 1) {
+            quantity = 1;
+        }
+
+        if (quantity > 99) {
+            quantity = 99;
+        }
+
+        quantityInput.value = quantity;
+
+        if (cartQuantity) {
+            cartQuantity.value = quantity;
+        }
+
+        if (buyQuantity) {
+            buyQuantity.value = quantity;
+        }
+
+    }
+
+    if (quantityInput) {
+
+        quantityInput.addEventListener("input", updateQuantity);
+        quantityInput.addEventListener("change", updateQuantity);
+
+        updateQuantity();
+
+    }
+
+
+    /* Initialize selected image */
+    if (thumbnails.length > 0) {
+        showImage(currentIndex);
+    }
+
+});
+</script>
+
+</body>
 </html>

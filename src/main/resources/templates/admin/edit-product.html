@@ -1,324 +1,368 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Edit Product | ShopSphere Admin</title>
 
-    <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- Existing Admin CSS -->
     <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
     <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
-
-    <style>
-        body {
-            background: #f8fafc;
-            color: #172033;
-        }
-
-        .edit-container {
-            max-width: 1000px;
-            margin: 40px auto;
-        }
-
-        .page-title {
-            font-weight: 700;
-            color: #101828;
-        }
-
-        .page-subtitle {
-            color: #64748b;
-        }
-
-        .edit-card {
-            background: #ffffff;
-            border: 1px solid #e5eaf2;
-            border-radius: 14px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-        }
-
-        .edit-card-header {
-            padding: 24px 28px;
-            border-bottom: 1px solid #e5eaf2;
-        }
-
-        .edit-card-body {
-            padding: 28px;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #344054;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            padding: 12px 14px;
-            border-radius: 8px;
-            border-color: #d8e0ec;
-        }
-
-        .form-control:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .form-text {
-            color: #64748b;
-        }
-
-        .current-image {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            padding: 8px;
-            border: 1px solid #e5eaf2;
-            border-radius: 10px;
-            background: #ffffff;
-        }
-
-        .btn-save {
-            background: #2563eb;
-            color: #ffffff;
-            border: 1px solid #2563eb;
-            padding: 11px 22px;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-
-        .btn-save:hover {
-            background: #1d4ed8;
-            color: #ffffff;
-        }
-
-        .btn-cancel {
-            padding: 11px 22px;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-
-        @media (max-width: 576px) {
-            .edit-card-body,
-            .edit-card-header {
-                padding: 20px;
-            }
-
-            .edit-container {
-                margin: 24px auto;
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/admin-edit-product.css}">
 </head>
 
 <body>
 
-    <!-- Admin Navbar -->
-    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
 
-    <main class="container edit-container">
+<main class="container edit-container">
 
-        <!-- Page Heading -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-
-            <div>
-                <h2 class="page-title mb-2">
-                    <i class="fa-solid fa-pen-to-square text-primary me-2"></i>
-                    Edit Product
-                </h2>
-
-                <p class="page-subtitle mb-0">
-                    Update your ShopSphere product information.
-                </p>
-            </div>
-
-            <a th:href="@{/admin/products}"
-               class="btn btn-outline-secondary">
-                <i class="fa-solid fa-arrow-left me-2"></i>
-                Back to Products
-            </a>
-
+    <header class="edit-page-header">
+        <div>
+            <span class="eyebrow">INVENTORY MANAGEMENT</span>
+            <h1 class="page-title">Edit Product</h1>
+            <p class="page-subtitle">
+                Update product information and manage its image gallery.
+            </p>
+            <p class="product-id">
+                Product ID: <strong th:text="${product.id}"></strong>
+            </p>
         </div>
 
-        <!-- Error Message -->
-        <div th:if="${errorMessage}"
-             class="alert alert-danger"
-             role="alert"
-             th:text="${errorMessage}">
-        </div>
+        <a th:href="@{/admin/products}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i> Back to Products
+        </a>
+    </header>
 
-        <!-- Edit Product Card -->
+    <div th:if="${errorMessage}"
+         class="alert alert-danger"
+         role="alert"
+         th:text="${errorMessage}">
+    </div>
+
+    <div th:if="${successMessage}"
+         class="alert alert-success"
+         role="status"
+         th:text="${successMessage}">
+    </div>
+
+    <form th:action="@{/admin/products/update/{id}(id=${product.id})}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data"
+          id="editProductForm">
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
         <section class="edit-card">
 
-            <div class="edit-card-header">
-
-                <h5 class="fw-bold mb-2">Product Information</h5>
-
-                <p class="text-muted mb-0">
-                    Product ID:
-                    <strong th:text="${product.id}"></strong>
-                </p>
-
+            <div class="card-heading">
+                <span class="heading-icon">01</span>
+                <div>
+                    <h2>Product Information</h2>
+                    <p>Update your product's basic details.</p>
+                </div>
             </div>
 
-            <div class="edit-card-body">
+            <div class="form-grid">
 
-                <!-- Update Product Form -->
-                <form th:action="@{/admin/products/update/{id}(id=${product.id})}"
-                      th:object="${product}"
+                <div class="form-group">
+                    <label for="name">Product Name <span>*</span></label>
+                    <input type="text"
+                           id="name"
+                           th:field="*{name}"
+                           maxlength="150"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category <span>*</span></label>
+                    <input type="text"
+                           id="category"
+                           th:field="*{category}"
+                           maxlength="100"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Selling Price (₹) <span>*</span></label>
+                    <input type="number"
+                           id="price"
+                           th:field="*{price}"
+                           min="0.01"
+                           step="0.01"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUrl">External / Legacy Image URL</label>
+                    <input type="url"
+                           id="imageUrl"
+                           th:field="*{imageUrl}"
+                           maxlength="2048"
+                           placeholder="https://example.com/image.jpg">
+                    <small class="help-text">
+                        Existing URL-based products remain supported.
+                    </small>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="description">Product Description</label>
+                    <textarea id="description"
+                              th:field="*{description}"
+                              maxlength="2000"
+                              rows="5"></textarea>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Existing gallery is managed using separate POST forms.
+             These forms must remain outside the main edit form. -->
+
+    </form>
+
+    <section class="edit-card">
+
+        <div class="card-heading">
+            <span class="heading-icon">02</span>
+            <div>
+                <h2>Existing Image Gallery</h2>
+                <p>Choose a primary image or remove an image.</p>
+            </div>
+        </div>
+
+        <p class="empty-state"
+           th:if="${#lists.isEmpty(productImages)}">
+            No uploaded gallery images yet. You can upload images below.
+        </p>
+
+        <div class="gallery-grid"
+             th:if="${!#lists.isEmpty(productImages)}">
+
+            <article class="gallery-item"
+                     th:each="img : ${productImages}">
+
+                <img th:src="${img.imageUrl}"
+                     th:alt="${product.name} + ' product image'">
+
+                <span class="primary-badge"
+                      th:if="${img.primaryImage}">
+                    <i class="fa-solid fa-star"></i> Primary Image
+                </span>
+
+                <form th:if="${!img.primaryImage}"
+                      th:action="@{/admin/products/{pid}/images/{iid}/primary(pid=${product.id},iid=${img.id})}"
                       method="post">
 
-                    <!-- CSRF Protection -->
                     <input type="hidden"
                            th:name="${_csrf.parameterName}"
                            th:value="${_csrf.token}">
 
-                    <div class="row g-4">
-
-                        <!-- Product Name -->
-                        <div class="col-md-6">
-
-                            <label for="name" class="form-label">
-                                Product Name <span class="text-danger">*</span>
-                            </label>
-
-                            <input type="text"
-                                   id="name"
-                                   th:field="*{name}"
-                                   class="form-control"
-                                   placeholder="Enter product name"
-                                   maxlength="150"
-                                   required>
-
-                        </div>
-
-                        <!-- Category -->
-                        <div class="col-md-6">
-
-                            <label for="category" class="form-label">
-                                Category <span class="text-danger">*</span>
-                            </label>
-
-                            <input type="text"
-                                   id="category"
-                                   th:field="*{category}"
-                                   class="form-control"
-                                   placeholder="e.g. Electronics"
-                                   maxlength="100"
-                                   required>
-
-                        </div>
-
-                        <!-- Price -->
-                        <div class="col-md-6">
-
-                            <label for="price" class="form-label">
-                                Price (₹) <span class="text-danger">*</span>
-                            </label>
-
-                            <input type="number"
-                                   id="price"
-                                   th:field="*{price}"
-                                   class="form-control"
-                                   placeholder="Enter product price"
-                                   min="0.01"
-                                   step="0.01"
-                                   required>
-
-                            <div class="form-text">
-                                Enter the updated selling price.
-                            </div>
-
-                        </div>
-
-                        <!-- Image URL -->
-                        <div class="col-md-6">
-
-                            <label for="imageUrl" class="form-label">
-                                Product Image URL
-                            </label>
-
-                            <input type="url"
-                                   id="imageUrl"
-                                   th:field="*{imageUrl}"
-                                   class="form-control"
-                                   placeholder="https://example.com/image.jpg">
-
-                            <div class="form-text">
-                                Leave the existing URL unchanged to keep the current image.
-                            </div>
-
-                        </div>
-
-                        <!-- Current Image Preview -->
-                        <div class="col-12"
-                             th:if="${product.imageUrl != null
-                                     and !product.imageUrl.isBlank()}">
-
-                            <label class="form-label d-block">
-                                Current Product Image
-                            </label>
-
-                            <img th:src="${product.imageUrl}"
-                                 th:alt="${product.name}"
-                                 class="current-image">
-
-                        </div>
-
-                        <!-- Description -->
-                        <div class="col-12">
-
-                            <label for="description" class="form-label">
-                                Product Description
-                                <span class="text-danger">*</span>
-                            </label>
-
-                            <textarea id="description"
-                                      th:field="*{description}"
-                                      class="form-control"
-                                      rows="5"
-                                      maxlength="2000"
-                                      placeholder="Enter product description"
-                                      required></textarea>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Form Buttons -->
-                    <div class="d-flex flex-wrap gap-3 mt-5">
-
-                        <button type="submit" class="btn btn-save">
-                            <i class="fa-solid fa-floppy-disk me-2"></i>
-                            Save Changes
-                        </button>
-
-                        <a th:href="@{/admin/products}"
-                           class="btn btn-outline-secondary btn-cancel">
-                            Cancel
-                        </a>
-
-                    </div>
-
+                    <button type="submit" class="btn btn-outline-primary btn-full">
+                        Set as Primary
+                    </button>
                 </form>
 
+                <form th:action="@{/admin/products/{pid}/images/{iid}/delete(pid=${product.id},iid=${img.id})}"
+                      method="post"
+                      onsubmit="return confirm('Remove this image from the product gallery?');">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+                    <button type="submit" class="btn btn-outline-danger btn-full">
+                        <i class="fa-solid fa-trash me-1"></i> Remove Image
+                    </button>
+                </form>
+
+            </article>
+        </div>
+    </section>
+
+    <section class="edit-card">
+
+        <div class="card-heading">
+            <span class="heading-icon">03</span>
+            <div>
+                <h2>Upload Additional Images</h2>
+                <p>Add more product angles to the existing gallery.</p>
+            </div>
+        </div>
+
+        <form th:action="@{/admin/products/update/{id}(id=${product.id})}"
+              method="post"
+              enctype="multipart/form-data"
+              id="galleryUploadForm">
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <!-- Preserve current product fields because this form submits
+                 to the existing update route as well. -->
+            <input type="hidden" name="name" th:value="${product.name}">
+            <input type="hidden" name="category" th:value="${product.category}">
+            <input type="hidden" name="price" th:value="${product.price}">
+            <input type="hidden" name="imageUrl" th:value="${product.imageUrl}">
+            <input type="hidden" name="description" th:value="${product.description}">
+
+            <div class="upload-box">
+                <label for="images">
+                    <span class="upload-icon">↑</span>
+                    <strong>Select additional images</strong>
+                    <span>JPG, PNG or WEBP · Maximum 5 MB per image</span>
+                </label>
+
+                <input type="file"
+                       id="images"
+                       name="images"
+                       accept="image/jpeg,image/png,image/webp"
+                       multiple>
             </div>
 
-        </section>
+            <div id="newPreviewGrid" class="new-preview-grid"></div>
 
-    </main>
+            <p id="newImageCount" class="help-text" aria-live="polite">
+                No new images selected.
+            </p>
 
-    <!-- Admin Footer -->
-    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-upload me-2"></i> Upload Images
+                </button>
+
+                <a th:href="@{/admin/products}" class="btn btn-outline-secondary">
+                    Finish
+                </a>
+            </div>
+        </form>
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const fileInput = document.getElementById("images");
+    const gallery = document.getElementById("newPreviewGrid");
+    const count = document.getElementById("newImageCount");
+    const form = document.getElementById("galleryUploadForm");
+
+    let files = [];
+    let previewUrls = [];
+
+    function syncFiles() {
+        const transfer = new DataTransfer();
+        files.forEach(file => transfer.items.add(file));
+        fileInput.files = transfer.files;
+    }
+
+    function renderImages() {
+        previewUrls.forEach(url => URL.revokeObjectURL(url));
+        previewUrls = [];
+        gallery.replaceChildren();
+
+        files.forEach((file, index) => {
+            const card = document.createElement("article");
+            card.className = "new-preview-item";
+
+            const image = document.createElement("img");
+            image.alt = file.name;
+
+            const objectUrl = URL.createObjectURL(file);
+            previewUrls.push(objectUrl);
+            image.src = objectUrl;
+
+            const filename = document.createElement("p");
+            filename.className = "image-filename";
+            filename.textContent = file.name;
+
+            const label = document.createElement("label");
+            label.className = "primary-choice";
+
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "primaryImageIndex";
+            radio.value = index;
+            radio.checked = index === 0;
+
+            label.append(radio, document.createTextNode(" Make primary"));
+
+            if (index === 0) card.classList.add("is-primary");
+
+            radio.addEventListener("change", function () {
+                gallery.querySelectorAll(".new-preview-item")
+                    .forEach(item => item.classList.remove("is-primary"));
+                card.classList.add("is-primary");
+            });
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "btn-remove";
+            remove.textContent = "Remove";
+
+            remove.addEventListener("click", function () {
+                files.splice(index, 1);
+                syncFiles();
+                renderImages();
+            });
+
+            card.append(image, filename, label, remove);
+            gallery.appendChild(card);
+        });
+
+        count.textContent = files.length
+            ? files.length + " image(s) selected."
+            : "No new images selected.";
+    }
+
+    fileInput.addEventListener("change", function () {
+        Array.from(fileInput.files).forEach(file => {
+            if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+                alert(file.name + ": unsupported image format.");
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert(file.name + ": image exceeds 5 MB.");
+                return;
+            }
+
+            if (files.length >= 6) {
+                alert("Select up to six images per upload.");
+                return;
+            }
+
+            files.push(file);
+        });
+
+        syncFiles();
+        renderImages();
+    });
+
+    form.addEventListener("submit", function (event) {
+        syncFiles();
+
+        if (files.length === 0) {
+            event.preventDefault();
+            alert("Please select at least one image to upload.");
+        }
+    });
+});
+</script>
+
+<!-- Admin Navbar JS -->
+<script th:src="@{/js/admin-navbar.js}"></script>
 
 </body>
 </html>

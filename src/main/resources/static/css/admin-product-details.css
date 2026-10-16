@@ -1,0 +1,90 @@
+.product-details-card {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.admin-main-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 300px;
+    padding: 15px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.admin-main-product-image {
+    display: block;
+    width: 100%;
+    height: 340px;
+    object-fit: contain;
+}
+
+.admin-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 300px;
+    background: #f8fafc;
+}
+
+.admin-thumbnail-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.admin-thumbnail {
+    width: 75px;
+    height: 75px;
+    padding: 4px;
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+    border-radius: 9px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.admin-thumbnail:hover,
+.admin-thumbnail.active {
+    border-color: #0d6efd;
+}
+
+.admin-thumbnail img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.admin-thumbnail:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 3px;
+}
+
+.product-description {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    line-height: 1.7;
+}
+
+@media (max-width: 767px) {
+    .admin-main-image-container {
+        min-height: 250px;
+    }
+
+    .admin-main-product-image {
+        height: 280px;
+    }
+
+    .admin-thumbnail {
+        width: 65px;
+        height: 65px;
+    }
+}

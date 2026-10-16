@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mohit.Ecomm.model.Product;
 import com.example.mohit.Ecomm.service.ProductService;
+import com.example.mohit.Ecomm.service.ProductImageService;
 
 @Controller
 @RequestMapping("/products")
@@ -19,6 +20,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductImageService productImageService;
 
     // ==============================
     // SHOW ALL PRODUCTS OR FILTER BY CATEGORY
@@ -31,15 +35,10 @@ public class ProductController {
         List<Product> products;
 
         if (category != null && !category.isBlank()) {
-
-            // Show products belonging to the selected category
             products = productService.getActiveProductsByCategory(
                     category.trim()
             );
-
         } else {
-
-            // Show all active products
             products = productService.getActiveProducts();
         }
 
@@ -50,19 +49,15 @@ public class ProductController {
     }
 
     // ==============================
-    // SHOW PRODUCTS BY CATEGORY PATH
-    // Existing route retained
+    // SHOW PRODUCTS BY CATEGORY
     // ==============================
     @GetMapping("/category/{category}")
     public String getProductsByCategory(
-            @PathVariable String category, Model model) {
-
-        System.out.println("Requested category: " + category);
+            @PathVariable String category,
+            Model model) {
 
         List<Product> products =
                 productService.getActiveProductsByCategory(category.trim());
-
-        System.out.println("Products found: " + products.size());
 
         model.addAttribute("products", products);
         model.addAttribute("selectedCategory", category);
@@ -71,7 +66,7 @@ public class ProductController {
     }
 
     // ==============================
-    // SHOW PRODUCT DETAILS
+    // SHOW PRODUCT DETAILS WITH IMAGE GALLERY
     // ==============================
     @GetMapping("/{id}")
     public String productDetails(
@@ -84,7 +79,14 @@ public class ProductController {
             return "redirect:/products";
         }
 
+        // Existing product information
         model.addAttribute("product", product);
+
+        // Load all uploaded images for this product
+        model.addAttribute(
+                "productImages",
+                productImageService.getProductImages(id)
+        );
 
         return "product-details";
     }

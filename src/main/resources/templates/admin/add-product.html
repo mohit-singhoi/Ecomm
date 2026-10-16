@@ -1,343 +1,323 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Add Product | ShopSphere Admin</title>
 
-	<!-- =====================================================
-	     ADMIN NAVBAR CSS
-	====================================================== -->
-
-	<link rel="stylesheet"
-	      th:href="@{/css/admin-navbar.css}">
-
-
-	<!-- =====================================================
-	     ADMIN FOOTER CSS
-	====================================================== -->
-
-	<link rel="stylesheet"
-	      th:href="@{/css/admin-footer.css}">
-
-    <!-- Add Product CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-footer.css}">
     <link rel="stylesheet" th:href="@{/css/admin-add-product.css}">
 </head>
 
 <body>
 
-    <!-- Existing Admin Navbar -->
-    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
 
+<main class="product-page">
 
-    <main class="add-product-container">
+    <div class="breadcrumb">
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <span>/</span>
+        <a th:href="@{/admin/products}">Products</a>
+        <span>/</span>
+        <span>Add Product</span>
+    </div>
 
-        <!-- Breadcrumb -->
-        <div class="breadcrumb">
-            <a th:href="@{/admin/dashboard}">Dashboard</a>
-            <span>/</span>
-            <a th:href="@{/admin/products}">Products</a>
-            <span>/</span>
-            <span class="current-page">Add Product</span>
+    <header class="page-header">
+        <div>
+            <span class="eyebrow">INVENTORY MANAGEMENT</span>
+            <h1>Add New Product</h1>
+            <p>Create a product listing for your ShopSphere store.</p>
         </div>
 
+        <a th:href="@{/admin/products}" class="btn btn-secondary">
+            &larr; Back to Products
+        </a>
+    </header>
 
-        <!-- Page Header -->
-        <div class="page-header">
+    <div th:if="${errorMessage}"
+         class="alert alert-error"
+         role="alert"
+         th:text="${errorMessage}">
+    </div>
 
-            <div>
-                <span class="page-label">INVENTORY MANAGEMENT</span>
+    <form th:action="@{/admin/products/save}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data"
+          id="addProductForm">
 
-                <h1>Add New Product</h1>
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
 
-                <p>Add a new product to your ShopSphere store.</p>
-            </div>
-
-            <a th:href="@{/admin/products}" class="back-button">
-                &larr; Back to Products
-            </a>
-
-        </div>
-
-
-        <!-- Error Message -->
-        <div th:if="${errorMessage}"
-             class="alert alert-error"
-             role="alert"
-             th:text="${errorMessage}">
-        </div>
-
-
-        <!-- Product Form Card -->
         <section class="form-card">
 
-            <div class="form-card-header">
-
-                <div class="form-icon">+</div>
-
+            <div class="section-heading">
+                <div class="heading-icon">01</div>
                 <div>
                     <h2>Product Information</h2>
-
-                    <p>
-                        Enter the details below to add a product
-                        to your inventory.
-                    </p>
+                    <p>Enter the essential details of your product.</p>
                 </div>
-
             </div>
 
+            <div class="form-grid">
 
-            <!-- Add Product Form -->
-            <form th:action="@{/admin/products/save}"
-                  th:object="${product}"
-                  method="post"
-                  class="product-form">
-
-                <!-- CSRF Token -->
-                <input type="hidden"
-                       th:name="${_csrf.parameterName}"
-                       th:value="${_csrf.token}">
-
-
-                <!-- Product Name -->
                 <div class="form-group full-width">
-
-                    <label for="name">
-                        Product Name <span class="required">*</span>
-                    </label>
-
+                    <label for="name">Product Name <span>*</span></label>
                     <input type="text"
                            id="name"
                            th:field="*{name}"
-                           placeholder="Enter product name"
                            maxlength="150"
+                           placeholder="e.g. Premium Wireless Headphones"
                            required>
-
-                    <small class="field-hint">
-                        Enter a clear and descriptive product name.
-                    </small>
-
                 </div>
 
-
-                <!-- Category -->
                 <div class="form-group">
-
-                    <label for="category">
-                        Product Category <span class="required">*</span>
-                    </label>
-
-                    <select id="category"
-                            th:field="*{category}"
-                            required>
-
-                        <option value="">Select a category</option>
-
+                    <label for="category">Category <span>*</span></label>
+                    <select id="category" th:field="*{category}" required>
+                        <option value="">Select category</option>
                         <option value="Electronics">Electronics</option>
-
                         <option value="Clothes">Clothes</option>
-
                         <option value="Stationery">Stationery</option>
-
                         <option value="Jewelry">Jewellery</option>
-
                         <option value="Home Items">Home Decor Items</option>
-
                     </select>
-
                 </div>
 
-
-                <!-- Price -->
                 <div class="form-group">
-
-                    <label for="price">
-                        Product Price (₹) <span class="required">*</span>
-                    </label>
-
-                    <div class="price-input-wrapper">
-                        <span class="currency-symbol">₹</span>
-
-                        <input type="number"
-                               id="price"
-                               th:field="*{price}"
-                               placeholder="0.00"
-                               min="0.01"
-                               step="0.01"
-                               required>
-                    </div>
-
-                    <small class="field-hint">
-                        Enter the selling price in Indian rupees.
-                    </small>
-
+                    <label for="price">Selling Price (₹) <span>*</span></label>
+                    <input type="number"
+                           id="price"
+                           th:field="*{price}"
+                           min="0.01"
+                           step="0.01"
+                           placeholder="0.00"
+                           required>
                 </div>
 
-
-                <!-- Image URL -->
                 <div class="form-group full-width">
-
-                    <label for="imageUrl">
-                        Product Image URL
-                    </label>
-
-                    <input type="url"
-                           id="imageUrl"
-                           th:field="*{imageUrl}"
-                           placeholder="https://example.com/product-image.jpg"
-                           maxlength="2048">
-
-                    <small class="field-hint">
-                        Enter a publicly accessible image URL.
-                    </small>
-
-                    <!-- Image Preview -->
-                    <div class="image-preview-container">
-
-                        <span class="preview-label">Image Preview</span>
-
-                        <div class="image-preview">
-
-                            <img id="imagePreview"
-                                 src=""
-                                 alt="Product preview"
-                                 hidden>
-
-                            <div id="imagePlaceholder"
-                                 class="image-placeholder">
-
-                                <span class="placeholder-icon">&#128247;</span>
-
-                                <span>Image preview will appear here</span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Description -->
-                <div class="form-group full-width">
-
-                    <label for="description">
-                        Product Description
-                    </label>
-
+                    <label for="description">Product Description</label>
                     <textarea id="description"
                               th:field="*{description}"
-                              rows="5"
                               maxlength="2000"
-                              placeholder="Describe the product, its features, and benefits..."></textarea>
-
-                    <small class="field-hint">
-                        Provide useful information to help customers
-                        understand the product.
-                    </small>
-
+                              rows="5"
+                              placeholder="Describe product features, benefits and specifications..."></textarea>
                 </div>
 
-
-                <!-- Form Actions -->
-                <div class="form-actions">
-
-                    <a th:href="@{/admin/products}"
-                       class="cancel-button">
-                        Cancel
-                    </a>
-
-                    <button type="submit"
-                            class="save-button">
-
-                        <span>+</span>
-                        Save Product
-
-                    </button>
-
-                </div>
-
-            </form>
-
+            </div>
         </section>
 
+        <section class="form-card">
 
-        <!-- Information Notice -->
-        <div class="info-notice">
+            <div class="section-heading">
+                <div class="heading-icon">02</div>
+                <div>
+                    <h2>Product Images</h2>
+                    <p>Upload multiple product images or use an image URL.</p>
+                </div>
+            </div>
 
-            <span class="info-icon">i</span>
+            <div class="form-group">
+                <label for="imageUrl">External Image URL (Optional)</label>
+                <input type="url"
+                       id="imageUrl"
+                       th:field="*{imageUrl}"
+                       maxlength="2048"
+                       placeholder="https://example.com/product-image.jpg">
 
-            <p>
-                Please verify the product name, category, price,
-                and image URL before saving. Products added here
-                will become part of your ShopSphere inventory.
-            </p>
+                <small class="help-text">
+                    Retains compatibility with existing URL-based products.
+                </small>
+            </div>
 
+            <div class="url-preview" id="urlPreviewContainer" hidden>
+                <img id="urlPreview" src="" alt="External product image preview">
+                <span>External image preview</span>
+            </div>
+
+            <div class="upload-area">
+                <label for="images" class="upload-box">
+                    <span class="upload-icon">↑</span>
+                    <strong>Choose product images</strong>
+                    <span>Click to browse files from your device</span>
+                    <span class="help-text">JPG, PNG or WEBP · Maximum 5 MB per image</span>
+                </label>
+
+                <input type="file"
+                       id="images"
+                       name="images"
+                       accept="image/jpeg,image/png,image/webp"
+                       multiple>
+
+                <div id="galleryPreview" class="image-grid"></div>
+
+                <p id="galleryCount" class="help-text" aria-live="polite">
+                    No images selected.
+                </p>
+            </div>
+        </section>
+
+        <div class="form-actions">
+            <a th:href="@{/admin/products}" class="btn btn-secondary">
+                Cancel
+            </a>
+
+            <button type="submit" class="btn btn-primary">
+                + Save Product
+            </button>
         </div>
 
-    </main>
+    </form>
 
+</main>
 
-    <!-- Existing Admin Footer -->
-    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+<div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const fileInput = document.getElementById("images");
+    const gallery = document.getElementById("galleryPreview");
+    const count = document.getElementById("galleryCount");
+    const form = document.getElementById("addProductForm");
 
-    <!-- Product Image Preview Script -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    const urlInput = document.getElementById("imageUrl");
+    const urlPreview = document.getElementById("urlPreview");
+    const urlPreviewContainer = document.getElementById("urlPreviewContainer");
 
-            const imageUrlInput = document.getElementById("imageUrl");
-            const imagePreview = document.getElementById("imagePreview");
-            const imagePlaceholder =
-                document.getElementById("imagePlaceholder");
+    let files = [];
+    let previewUrls = [];
 
-            function updateImagePreview() {
+    function syncFiles() {
+        const transfer = new DataTransfer();
+        files.forEach(file => transfer.items.add(file));
+        fileInput.files = transfer.files;
+    }
 
-                const url = imageUrlInput.value.trim();
+    function renderImages() {
+        previewUrls.forEach(url => URL.revokeObjectURL(url));
+        previewUrls = [];
+        gallery.replaceChildren();
 
-                imagePreview.hidden = true;
-                imagePlaceholder.hidden = false;
-                imagePreview.removeAttribute("src");
+        files.forEach((file, index) => {
+            const card = document.createElement("article");
+            card.className = "image-card";
 
-                if (!url) {
-                    return;
-                }
+            const image = document.createElement("img");
+            const objectUrl = URL.createObjectURL(file);
+            previewUrls.push(objectUrl);
+            image.src = objectUrl;
+            image.alt = file.name;
 
-                try {
-                    const parsedUrl = new URL(url);
+            const filename = document.createElement("p");
+            filename.className = "image-filename";
+            filename.textContent = file.name;
 
-                    if (parsedUrl.protocol !== "https:" &&
-                        parsedUrl.protocol !== "http:") {
-                        return;
-                    }
-                } catch (error) {
-                    return;
-                }
+            const primaryLabel = document.createElement("label");
+            primaryLabel.className = "primary-choice";
 
-                imagePreview.onload = function () {
-                    imagePreview.hidden = false;
-                    imagePlaceholder.hidden = true;
-                };
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "primaryImageIndex";
+            radio.value = index;
+            radio.checked = index === 0;
 
-                imagePreview.onerror = function () {
-                    imagePreview.hidden = true;
-                    imagePlaceholder.hidden = false;
-                };
+            primaryLabel.append(radio, document.createTextNode(" Primary image"));
 
-                imagePreview.src = url;
+            if (index === 0) card.classList.add("is-primary");
+
+            radio.addEventListener("change", function () {
+                gallery.querySelectorAll(".image-card")
+                    .forEach(item => item.classList.remove("is-primary"));
+                card.classList.add("is-primary");
+            });
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "btn-remove";
+            remove.textContent = "Remove";
+
+            remove.addEventListener("click", function () {
+                files.splice(index, 1);
+                syncFiles();
+                renderImages();
+            });
+
+            card.append(image, filename, primaryLabel, remove);
+            gallery.appendChild(card);
+        });
+
+        count.textContent = files.length
+            ? files.length + " image(s) selected."
+            : "No images selected.";
+    }
+
+    fileInput.addEventListener("change", function () {
+        const incoming = Array.from(fileInput.files);
+
+        incoming.forEach(file => {
+            if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+                alert(file.name + ": unsupported image format.");
+                return;
             }
 
-            imageUrlInput.addEventListener("input", updateImagePreview);
+            if (file.size > 5 * 1024 * 1024) {
+                alert(file.name + ": image exceeds 5 MB.");
+                return;
+            }
 
-            updateImagePreview();
+            if (files.length >= 6) {
+                alert("Select up to six images per upload.");
+                return;
+            }
 
+            files.push(file);
         });
-    </script>
-	
-	<script th:src="@{/js/admin-navbar.js}"></script>
+
+        syncFiles();
+        renderImages();
+    });
+
+    function updateUrlPreview() {
+        urlPreviewContainer.hidden = true;
+
+        const value = urlInput.value.trim();
+        if (!value) return;
+
+        try {
+            const url = new URL(value);
+            if (!["https:", "http:"].includes(url.protocol)) return;
+
+            urlPreview.onload = () => {
+                urlPreviewContainer.hidden = false;
+            };
+
+            urlPreview.onerror = () => {
+                urlPreviewContainer.hidden = true;
+            };
+
+            urlPreview.src = url.href;
+        } catch (error) {
+            urlPreviewContainer.hidden = true;
+        }
+    }
+
+    urlInput.addEventListener("input", updateUrlPreview);
+
+    form.addEventListener("submit", function (event) {
+        syncFiles();
+
+        if (files.length > 0 &&
+            !form.querySelector('input[name="primaryImageIndex"]:checked')) {
+            event.preventDefault();
+            alert("Please select a primary image.");
+        }
+    });
+});
+</script>
+
+<script th:src="@{/js/admin-navbar.js}"></script>
 
 </body>
 </html>
