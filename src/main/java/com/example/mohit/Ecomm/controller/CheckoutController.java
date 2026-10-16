@@ -31,7 +31,6 @@ public class CheckoutController {
     @Autowired
     private OrderService orderService;
 
-
     // =====================================================
     // SHOW CHECKOUT
     // URL: GET /checkout
@@ -43,18 +42,11 @@ public class CheckoutController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        // Get logged-in user
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
 
-
-        // =================================================
-        // USER NOT LOGGED IN
-        // =================================================
-
         if (loggedInUser == null) {
 
-            // Remember that user wanted checkout
             session.setAttribute(
                     "redirectAfterLogin",
                     "/checkout"
@@ -68,19 +60,11 @@ public class CheckoutController {
             return "redirect:/userlogin";
         }
 
-
         Long userId = loggedInUser.getId();
-
-
-        // =================================================
-        // GET USER CART
-        // =================================================
 
         List<CartItem> cartItems =
                 cartService.getCartItems(userId);
 
-
-        // Cart empty
         if (cartItems == null || cartItems.isEmpty()) {
 
             redirectAttributes.addFlashAttribute(
@@ -91,17 +75,10 @@ public class CheckoutController {
             return "redirect:/cart";
         }
 
-
         double total = 0.0;
-
-
-        // =================================================
-        // PREPARE CHECKOUT ITEMS
-        // =================================================
 
         List<Map<String, Object>> checkoutItems =
                 new ArrayList<>();
-
 
         for (CartItem cartItem : cartItems) {
 
@@ -111,43 +88,21 @@ public class CheckoutController {
 
             total += itemTotal;
 
-
             Map<String, Object> item =
                     new LinkedHashMap<>();
 
-            item.put(
-                    "product",
-                    cartItem.getProduct()
-            );
-
-            item.put(
-                    "quantity",
-                    cartItem.getQuantity()
-            );
-
-            item.put(
-                    "itemTotal",
-                    itemTotal
-            );
+            item.put("product", cartItem.getProduct());
+            item.put("quantity", cartItem.getQuantity());
+            item.put("itemTotal", itemTotal);
 
             checkoutItems.add(item);
         }
 
-
-        model.addAttribute(
-                "checkoutItems",
-                checkoutItems
-        );
-
-        model.addAttribute(
-                "total",
-                total
-        );
-
+        model.addAttribute("checkoutItems", checkoutItems);
+        model.addAttribute("total", total);
 
         return "checkout";
     }
-
 
     // =====================================================
     // PLACE ORDER
@@ -156,33 +111,18 @@ public class CheckoutController {
 
     @PostMapping("/place-order")
     public String placeOrder(
-
             @RequestParam String fullName,
-
             @RequestParam String email,
-
             @RequestParam String phone,
-
             @RequestParam String address,
-
             @RequestParam String city,
-
             @RequestParam String pinCode,
-
             @RequestParam String payment,
-
             HttpSession session,
-
             RedirectAttributes redirectAttributes) {
-
-
-        // =================================================
-        // CHECK LOGIN
-        // =================================================
 
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
-
 
         if (loggedInUser == null) {
 
@@ -199,14 +139,9 @@ public class CheckoutController {
             return "redirect:/userlogin";
         }
 
-
         Long userId = loggedInUser.getId();
 
-
-        // =================================================
-        // BASIC VALIDATION
-        // =================================================
-
+        // Validate checkout details
         if (fullName == null || fullName.trim().isEmpty()
                 || email == null || email.trim().isEmpty()
                 || phone == null || phone.trim().isEmpty()
@@ -223,14 +158,9 @@ public class CheckoutController {
             return "redirect:/checkout";
         }
 
-
-        // =================================================
-        // GET USER CART
-        // =================================================
-
+        // Get cart items
         List<CartItem> cartItems =
                 cartService.getCartItems(userId);
-
 
         if (cartItems == null || cartItems.isEmpty()) {
 
@@ -242,17 +172,11 @@ public class CheckoutController {
             return "redirect:/cart";
         }
 
-
-        // =================================================
-        // CREATE PRODUCT QUANTITIES MAP
-        // =================================================
-
+        // Prepare product quantities
         Map<Long, Integer> productQuantities =
                 new LinkedHashMap<>();
 
-
         double totalAmount = 0.0;
-
 
         for (CartItem cartItem : cartItems) {
 
@@ -262,50 +186,52 @@ public class CheckoutController {
             Integer quantity =
                     cartItem.getQuantity();
 
-
-            productQuantities.put(
-                    productId,
-                    quantity
-            );
-
+            productQuantities.put(productId, quantity);
 
             totalAmount +=
                     cartItem.getProduct().getPrice()
                     * quantity;
         }
 
-
-        // =================================================
-        // SAVE ORDER
-        // =================================================
-
+        // Save the order using your existing service
         orderService.placeOrder(
                 userId,
                 productQuantities,
                 totalAmount
         );
 
-
-        // =================================================
-        // CLEAR USER CART
-        // =================================================
-
+        // Clear the cart after placing the order
         cartService.clearCart(userId);
 
+        // Prepare the payment method for display
+        String displayPaymentMethod;
 
-        // =================================================
-        // SUCCESS MESSAGE
-        // =================================================
+        String normalizedPayment = payment.trim();
 
+        if ("COD".equalsIgnoreCase(normalizedPayment)
+                || "CASH_ON_DELIVERY".equalsIgnoreCase(normalizedPayment)
+                || "CASH ON DELIVERY".equalsIgnoreCase(normalizedPayment)) {
+
+            displayPaymentMethod = "Cash on Delivery (COD)";
+
+        } else {
+            displayPaymentMethod = normalizedPayment;
+        }
+
+        // Success message
         redirectAttributes.addFlashAttribute(
                 "successMessage",
                 "Your order has been placed successfully!"
         );
 
+        // Pass payment method through the redirect
+        redirectAttributes.addFlashAttribute(
+                "paymentMethod",
+                displayPaymentMethod
+        );
 
         return "redirect:/checkout/success";
     }
-
 
     // =====================================================
     // ORDER SUCCESS PAGE
@@ -315,11 +241,11 @@ public class CheckoutController {
     @GetMapping("/success")
     public String orderSuccess(
             HttpSession session,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
-
 
         // Protect success page
         if (loggedInUser == null) {
@@ -332,6 +258,11 @@ public class CheckoutController {
             return "redirect:/userlogin";
         }
 
+        // Display customer name
+        model.addAttribute(
+                "customerName",
+                loggedInUser.getName()
+        );
 
         return "order-success";
     }

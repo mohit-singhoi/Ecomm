@@ -58,17 +58,16 @@
                         Your order has been successfully placed.
                     </p>
 
-                    <div class="alert alert-light border mt-4">
-
-                        <strong>
-                            Payment Method:
-                        </strong>
-
-                        <span th:text="${paymentMethod}">
-                            COD
-                        </span>
-
-                    </div>
+					<div class="alert alert-light border mt-4">
+					    <strong>Payment Method:</strong>
+					    <span th:if="${paymentMethod != null}"
+					          th:text="${paymentMethod}">
+					        Cash on Delivery (COD)
+					    </span>
+					    <span th:unless="${paymentMethod != null}">
+					        Not available
+					    </span>
+					</div>
 
                     <div class="d-flex justify-content-center gap-2 mt-4">
 
