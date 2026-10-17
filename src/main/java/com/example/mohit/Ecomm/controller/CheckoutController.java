@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.mohit.Ecomm.model.CartItem;
+import com.example.mohit.Ecomm.model.Orders;
 import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.CartService;
 import com.example.mohit.Ecomm.service.OrderService;
+import com.example.mohit.Ecomm.service.RazorpayService;
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,15 +29,26 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/checkout")
 public class CheckoutController {
 
-    @Autowired
-    private CartService cartService;
+    private final CartService cartService;
+    private final OrderService orderService;
+    private final RazorpayService razorpayService;
 
-    @Autowired
-    private OrderService orderService;
+    @Value("${razorpay.key.id}")
+    private String razorpayKeyId;
+
+    public CheckoutController(
+            CartService cartService,
+            OrderService orderService,
+            RazorpayService razorpayService) {
+
+        this.cartService = cartService;
+        this.orderService = orderService;
+        this.razorpayService = razorpayService;
+    }
 
     // =====================================================
     // SHOW CHECKOUT
-    // URL: GET /checkout
+    // GET /checkout
     // =====================================================
 
     @GetMapping
@@ -46,39 +61,28 @@ public class CheckoutController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-
-            session.setAttribute(
-                    "redirectAfterLogin",
-                    "/checkout"
-            );
+            session.setAttribute("redirectAfterLogin", "/checkout");
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Please login to continue to checkout."
-            );
+                    "Please login to continue to checkout.");
 
             return "redirect:/userlogin";
         }
 
-        Long userId = loggedInUser.getId();
-
         List<CartItem> cartItems =
-                cartService.getCartItems(userId);
+                cartService.getCartItems(loggedInUser.getId());
 
         if (cartItems == null || cartItems.isEmpty()) {
-
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Your cart is empty."
-            );
+                    "Your cart is empty.");
 
             return "redirect:/cart";
         }
 
         double total = 0.0;
-
-        List<Map<String, Object>> checkoutItems =
-                new ArrayList<>();
+        List<Map<String, Object>> checkoutItems = new ArrayList<>();
 
         for (CartItem cartItem : cartItems) {
 
@@ -88,9 +92,7 @@ public class CheckoutController {
 
             total += itemTotal;
 
-            Map<String, Object> item =
-                    new LinkedHashMap<>();
-
+            Map<String, Object> item = new LinkedHashMap<>();
             item.put("product", cartItem.getProduct());
             item.put("quantity", cartItem.getQuantity());
             item.put("itemTotal", itemTotal);
@@ -106,7 +108,7 @@ public class CheckoutController {
 
     // =====================================================
     // PLACE ORDER
-    // URL: POST /checkout/place-order
+    // POST /checkout/place-order
     // =====================================================
 
     @PostMapping("/place-order")
@@ -119,123 +121,288 @@ public class CheckoutController {
             @RequestParam String pinCode,
             @RequestParam String payment,
             HttpSession session,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-
-            session.setAttribute(
-                    "redirectAfterLogin",
-                    "/checkout"
-            );
+            session.setAttribute("redirectAfterLogin", "/checkout");
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Please login to place your order."
-            );
+                    "Please login to place your order.");
 
             return "redirect:/userlogin";
         }
 
-        Long userId = loggedInUser.getId();
-
-        // Validate checkout details
-        if (fullName == null || fullName.trim().isEmpty()
-                || email == null || email.trim().isEmpty()
-                || phone == null || phone.trim().isEmpty()
-                || address == null || address.trim().isEmpty()
-                || city == null || city.trim().isEmpty()
-                || pinCode == null || pinCode.trim().isEmpty()
-                || payment == null || payment.trim().isEmpty()) {
+        // Validate required customer details.
+        if (isBlank(fullName)
+                || isBlank(email)
+                || isBlank(phone)
+                || isBlank(address)
+                || isBlank(city)
+                || isBlank(pinCode)
+                || isBlank(payment)) {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Please fill all details before placing the order."
-            );
+                    "Please fill all details before placing the order.");
 
             return "redirect:/checkout";
         }
 
-        // Get cart items
+        String normalizedPayment = payment.trim().toUpperCase();
+
+        if (!normalizedPayment.equals("COD")
+                && !normalizedPayment.equals("ONLINE")) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please select a valid payment method.");
+
+            return "redirect:/checkout";
+        }
+
+        Long userId = loggedInUser.getId();
+
         List<CartItem> cartItems =
                 cartService.getCartItems(userId);
 
         if (cartItems == null || cartItems.isEmpty()) {
-
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Your cart is empty."
-            );
+                    "Your cart is empty.");
 
             return "redirect:/cart";
         }
 
-        // Prepare product quantities
-        Map<Long, Integer> productQuantities =
-                new LinkedHashMap<>();
-
-        double totalAmount = 0.0;
+        // Build quantities from the server-side cart.
+        Map<Long, Integer> productQuantities = new LinkedHashMap<>();
 
         for (CartItem cartItem : cartItems) {
 
-            Long productId =
-                    cartItem.getProduct().getId();
+            if (cartItem.getProduct() == null
+                    || cartItem.getProduct().getId() == null
+                    || cartItem.getQuantity() == null
+                    || cartItem.getQuantity() <= 0) {
 
-            Integer quantity =
-                    cartItem.getQuantity();
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "Your cart contains an invalid item.");
 
-            productQuantities.put(productId, quantity);
+                return "redirect:/cart";
+            }
 
-            totalAmount +=
-                    cartItem.getProduct().getPrice()
-                    * quantity;
+            productQuantities.put(
+                    cartItem.getProduct().getId(),
+                    cartItem.getQuantity());
         }
 
-        // Save the order using your existing service
-        orderService.placeOrder(
-                userId,
-                productQuantities,
-                totalAmount
-        );
+        try {
 
-        // Clear the cart after placing the order
-        cartService.clearCart(userId);
+        	// CASH ON DELIVERY
+        	if ("COD".equals(normalizedPayment)) {
 
-        // Prepare the payment method for display
-        String displayPaymentMethod;
+        	    orderService.placeOrder(
+        	            userId,
+        	            productQuantities,
+        	            0.0
+        	    );
 
-        String normalizedPayment = payment.trim();
+        	    cartService.clearCart(userId);
 
-        if ("COD".equalsIgnoreCase(normalizedPayment)
-                || "CASH_ON_DELIVERY".equalsIgnoreCase(normalizedPayment)
-                || "CASH ON DELIVERY".equalsIgnoreCase(normalizedPayment)) {
+        	    redirectAttributes.addFlashAttribute(
+        	            "successMessage",
+        	            "Your order has been placed successfully!"
+        	    );
 
-            displayPaymentMethod = "Cash on Delivery (COD)";
+        	    redirectAttributes.addFlashAttribute(
+        	            "paymentMethod",
+        	            "Cash on Delivery (COD)"
+        	    );
 
-        } else {
-            displayPaymentMethod = normalizedPayment;
+        	    return "redirect:/checkout/success";
+        	}
+
+            // -------------------------------------------------
+            // ONLINE PAYMENT
+            // -------------------------------------------------
+
+            Orders order = orderService.createOnlinePaymentOrder(
+                    userId,
+                    productQuantities);
+
+            JSONObject razorpayOrder = razorpayService.createOrder(
+                    order.getTotalAmount(),
+                    "SHOPSPHERE_" + order.getId());
+
+            String razorpayOrderId =
+                    razorpayOrder.getString("id");
+
+            long amountInPaise =
+                    razorpayOrder.getLong("amount");
+
+            String currency =
+                    razorpayOrder.getString("currency");
+
+            orderService.saveRazorpayOrderId(
+                    order.getId(),
+                    userId,
+                    razorpayOrderId);
+
+            // Render the Razorpay payment page.
+            model.addAttribute("razorpayKeyId", razorpayKeyId);
+            model.addAttribute("razorpayOrderId", razorpayOrderId);
+            model.addAttribute("amountInPaise", amountInPaise);
+            model.addAttribute("currency", currency);
+            model.addAttribute("shopSphereOrderId", order.getId());
+            model.addAttribute("customerName", fullName.trim());
+            model.addAttribute("customerEmail", email.trim());
+            model.addAttribute("customerPhone", phone.trim());
+
+            return "payment";
+
+        } catch (RazorpayException exception) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Unable to initiate online payment. Please try again.");
+
+            return "redirect:/checkout";
+
+        } catch (RuntimeException exception) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Unable to place your order: "
+                            + exception.getMessage());
+
+            return "redirect:/checkout";
+        }
+    }
+
+    // =====================================================
+    // VERIFY PAYMENT
+    // POST /checkout/verify-payment
+    // =====================================================
+
+    @PostMapping("/verify-payment")
+    public String verifyPayment(
+            @RequestParam Long shopSphereOrderId,
+            @RequestParam String razorpay_order_id,
+            @RequestParam String razorpay_payment_id,
+            @RequestParam String razorpay_signature,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Please login to verify your payment.");
+
+            return "redirect:/userlogin";
         }
 
-        // Success message
-        redirectAttributes.addFlashAttribute(
-                "successMessage",
-                "Your order has been placed successfully!"
-        );
+        try {
 
-        // Pass payment method through the redirect
-        redirectAttributes.addFlashAttribute(
-                "paymentMethod",
-                displayPaymentMethod
-        );
+            // Verify the checkout signature first.
+            if (!razorpayService.verifyPaymentSignature(
+                    razorpay_order_id,
+                    razorpay_payment_id,
+                    razorpay_signature)) {
 
-        return "redirect:/checkout/success";
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "Payment verification failed. Your order has not been marked as paid.");
+
+                return "redirect:/checkout";
+            }
+
+            // Confirm that the order belongs to the logged-in user.
+            Orders order = orderService.getOrderForCustomer(
+                    shopSphereOrderId,
+                    loggedInUser.getId());
+
+            // Do not trust the order ID submitted by the browser.
+            if (!razorpay_order_id.equals(order.getRazorpayOrderId())) {
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "The payment order does not match your ShopSphere order.");
+
+                return "redirect:/checkout";
+            }
+
+            // Fetch payment details directly from Razorpay.
+            JSONObject payment =
+                    razorpayService.fetchPayment(razorpay_payment_id);
+
+            if (!razorpay_payment_id.equals(payment.optString("id"))
+                    || !razorpay_order_id.equals(
+                            payment.optString("order_id"))
+                    || !"captured".equalsIgnoreCase(
+                            payment.optString("status"))
+                    || !"INR".equalsIgnoreCase(
+                            payment.optString("currency"))) {
+
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "Payment is not captured or its details do not match.");
+
+                return "redirect:/checkout";
+            }
+
+            long verifiedAmountInPaise =
+                    payment.getLong("amount");
+
+            // Mark paid only after server-side verification.
+            orderService.markOrderAsPaid(
+                    shopSphereOrderId,
+                    loggedInUser.getId(),
+                    razorpay_order_id,
+                    razorpay_payment_id,
+                    verifiedAmountInPaise,
+                    payment.getString("currency"));
+
+            // Clear the cart only after verified payment.
+            cartService.clearCart(loggedInUser.getId());
+
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Your online payment was successful!");
+
+            redirectAttributes.addFlashAttribute(
+                    "paymentMethod",
+                    "Online Payment");
+
+            return "redirect:/checkout/success";
+
+        } catch (RazorpayException exception) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Unable to confirm payment with Razorpay. Please contact support if money was deducted.");
+
+            return "redirect:/checkout";
+
+        } catch (RuntimeException exception) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Unable to verify payment: "
+                            + exception.getMessage());
+
+            return "redirect:/checkout";
+        }
     }
 
     // =====================================================
     // ORDER SUCCESS PAGE
-    // URL: GET /checkout/success
+    // GET /checkout/success
     // =====================================================
 
     @GetMapping("/success")
@@ -247,23 +414,22 @@ public class CheckoutController {
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
 
-        // Protect success page
         if (loggedInUser == null) {
-
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Please login to continue."
-            );
+                    "Please login to continue.");
 
             return "redirect:/userlogin";
         }
 
-        // Display customer name
         model.addAttribute(
                 "customerName",
-                loggedInUser.getName()
-        );
+                loggedInUser.getName());
 
         return "order-success";
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 }
