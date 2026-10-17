@@ -61,7 +61,9 @@ public class CheckoutController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            session.setAttribute("redirectAfterLogin", "/checkout");
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/checkout");
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
@@ -82,7 +84,9 @@ public class CheckoutController {
         }
 
         double total = 0.0;
-        List<Map<String, Object>> checkoutItems = new ArrayList<>();
+
+        List<Map<String, Object>> checkoutItems =
+                new ArrayList<>();
 
         for (CartItem cartItem : cartItems) {
 
@@ -92,7 +96,9 @@ public class CheckoutController {
 
             total += itemTotal;
 
-            Map<String, Object> item = new LinkedHashMap<>();
+            Map<String, Object> item =
+                    new LinkedHashMap<>();
+
             item.put("product", cartItem.getProduct());
             item.put("quantity", cartItem.getQuantity());
             item.put("itemTotal", itemTotal);
@@ -128,7 +134,10 @@ public class CheckoutController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            session.setAttribute("redirectAfterLogin", "/checkout");
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/checkout");
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
@@ -137,7 +146,7 @@ public class CheckoutController {
             return "redirect:/userlogin";
         }
 
-        // Validate required customer details.
+        // Validate customer details.
         if (isBlank(fullName)
                 || isBlank(email)
                 || isBlank(phone)
@@ -153,7 +162,8 @@ public class CheckoutController {
             return "redirect:/checkout";
         }
 
-        String normalizedPayment = payment.trim().toUpperCase();
+        String normalizedPayment =
+                payment.trim().toUpperCase();
 
         if (!normalizedPayment.equals("COD")
                 && !normalizedPayment.equals("ONLINE")) {
@@ -171,6 +181,7 @@ public class CheckoutController {
                 cartService.getCartItems(userId);
 
         if (cartItems == null || cartItems.isEmpty()) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Your cart is empty.");
@@ -178,8 +189,9 @@ public class CheckoutController {
             return "redirect:/cart";
         }
 
-        // Build quantities from the server-side cart.
-        Map<Long, Integer> productQuantities = new LinkedHashMap<>();
+        // Build product quantities from the server-side cart.
+        Map<Long, Integer> productQuantities =
+                new LinkedHashMap<>();
 
         for (CartItem cartItem : cartItems) {
 
@@ -202,41 +214,45 @@ public class CheckoutController {
 
         try {
 
-        	// CASH ON DELIVERY
-        	if ("COD".equals(normalizedPayment)) {
+            // =============================================
+            // CASH ON DELIVERY
+            // =============================================
 
-        	    orderService.placeOrder(
-        	            userId,
-        	            productQuantities,
-        	            0.0
-        	    );
+            if ("COD".equals(normalizedPayment)) {
 
-        	    cartService.clearCart(userId);
+                orderService.placeOrder(
+                        userId,
+                        productQuantities,
+                        0.0);
 
-        	    redirectAttributes.addFlashAttribute(
-        	            "successMessage",
-        	            "Your order has been placed successfully!"
-        	    );
+                // Clear cart only after order creation succeeds.
+                cartService.clearCart(userId);
 
-        	    redirectAttributes.addFlashAttribute(
-        	            "paymentMethod",
-        	            "Cash on Delivery (COD)"
-        	    );
+                redirectAttributes.addFlashAttribute(
+                        "successMessage",
+                        "Your order has been placed successfully!");
 
-        	    return "redirect:/checkout/success";
-        	}
+                redirectAttributes.addFlashAttribute(
+                        "paymentMethod",
+                        "Cash on Delivery (COD)");
 
-            // -------------------------------------------------
-            // ONLINE PAYMENT
-            // -------------------------------------------------
+                return "redirect:/checkout/success";
+            }
 
-            Orders order = orderService.createOnlinePaymentOrder(
-                    userId,
-                    productQuantities);
+            // =============================================
+            // ONLINE PAYMENT - CREATE SHOPSPHERE ORDER
+            // =============================================
 
-            JSONObject razorpayOrder = razorpayService.createOrder(
-                    order.getTotalAmount(),
-                    "SHOPSPHERE_" + order.getId());
+            Orders order =
+                    orderService.createOnlinePaymentOrder(
+                            userId,
+                            productQuantities);
+
+            // Create the corresponding Razorpay order.
+            JSONObject razorpayOrder =
+                    razorpayService.createOrder(
+                            order.getTotalAmount(),
+                            "SHOPSPHERE_" + order.getId());
 
             String razorpayOrderId =
                     razorpayOrder.getString("id");
@@ -247,20 +263,48 @@ public class CheckoutController {
             String currency =
                     razorpayOrder.getString("currency");
 
+            // Save Razorpay order ID against our database order.
             orderService.saveRazorpayOrderId(
                     order.getId(),
                     userId,
                     razorpayOrderId);
 
-            // Render the Razorpay payment page.
-            model.addAttribute("razorpayKeyId", razorpayKeyId);
-            model.addAttribute("razorpayOrderId", razorpayOrderId);
-            model.addAttribute("amountInPaise", amountInPaise);
-            model.addAttribute("currency", currency);
-            model.addAttribute("shopSphereOrderId", order.getId());
-            model.addAttribute("customerName", fullName.trim());
-            model.addAttribute("customerEmail", email.trim());
-            model.addAttribute("customerPhone", phone.trim());
+            // Supply all attributes required by payment.html.
+            model.addAttribute(
+                    "razorpayKeyId",
+                    razorpayKeyId);
+
+            model.addAttribute(
+                    "razorpayOrderId",
+                    razorpayOrderId);
+
+            model.addAttribute(
+                    "amountInPaise",
+                    amountInPaise);
+
+            model.addAttribute(
+                    "currency",
+                    currency);
+
+            model.addAttribute(
+                    "shopSphereOrderId",
+                    order.getId());
+
+            model.addAttribute(
+                    "totalAmount",
+                    order.getTotalAmount());
+
+            model.addAttribute(
+                    "customerName",
+                    fullName.trim());
+
+            model.addAttribute(
+                    "customerEmail",
+                    email.trim());
+
+            model.addAttribute(
+                    "customerPhone",
+                    phone.trim());
 
             return "payment";
 
@@ -276,8 +320,7 @@ public class CheckoutController {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Unable to place your order: "
-                            + exception.getMessage());
+                    "Unable to place your order. Please try again.");
 
             return "redirect:/checkout";
         }
@@ -291,9 +334,12 @@ public class CheckoutController {
     @PostMapping("/verify-payment")
     public String verifyPayment(
             @RequestParam Long shopSphereOrderId,
-            @RequestParam String razorpay_order_id,
-            @RequestParam String razorpay_payment_id,
-            @RequestParam String razorpay_signature,
+            @RequestParam("razorpay_order_id")
+            String razorpayOrderId,
+            @RequestParam("razorpay_payment_id")
+            String razorpayPaymentId,
+            @RequestParam("razorpay_signature")
+            String razorpaySignature,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -301,6 +347,7 @@ public class CheckoutController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Please login to verify your payment.");
@@ -310,11 +357,14 @@ public class CheckoutController {
 
         try {
 
-            // Verify the checkout signature first.
-            if (!razorpayService.verifyPaymentSignature(
-                    razorpay_order_id,
-                    razorpay_payment_id,
-                    razorpay_signature)) {
+            // 1. Verify the payment signature.
+            boolean signatureValid =
+                    razorpayService.verifyPaymentSignature(
+                            razorpayOrderId,
+                            razorpayPaymentId,
+                            razorpaySignature);
+
+            if (!signatureValid) {
 
                 redirectAttributes.addFlashAttribute(
                         "errorMessage",
@@ -323,13 +373,17 @@ public class CheckoutController {
                 return "redirect:/checkout";
             }
 
-            // Confirm that the order belongs to the logged-in user.
-            Orders order = orderService.getOrderForCustomer(
-                    shopSphereOrderId,
-                    loggedInUser.getId());
+            // 2. Retrieve the order belonging to this customer.
+            Orders order =
+                    orderService.getOrderForCustomer(
+                            shopSphereOrderId,
+                            loggedInUser.getId());
 
-            // Do not trust the order ID submitted by the browser.
-            if (!razorpay_order_id.equals(order.getRazorpayOrderId())) {
+            // 3. Verify the Razorpay order ID.
+            if (order.getRazorpayOrderId() == null
+                    || !order.getRazorpayOrderId()
+                            .equals(razorpayOrderId)) {
+
                 redirectAttributes.addFlashAttribute(
                         "errorMessage",
                         "The payment order does not match your ShopSphere order.");
@@ -337,17 +391,19 @@ public class CheckoutController {
                 return "redirect:/checkout";
             }
 
-            // Fetch payment details directly from Razorpay.
+            // 4. Fetch authoritative payment details from Razorpay.
             JSONObject payment =
-                    razorpayService.fetchPayment(razorpay_payment_id);
+                    razorpayService.fetchPayment(
+                            razorpayPaymentId);
 
-            if (!razorpay_payment_id.equals(payment.optString("id"))
-                    || !razorpay_order_id.equals(
-                            payment.optString("order_id"))
+            if (!razorpayPaymentId.equals(
+                        payment.optString("id"))
+                    || !razorpayOrderId.equals(
+                        payment.optString("order_id"))
                     || !"captured".equalsIgnoreCase(
-                            payment.optString("status"))
+                        payment.optString("status"))
                     || !"INR".equalsIgnoreCase(
-                            payment.optString("currency"))) {
+                        payment.optString("currency"))) {
 
                 redirectAttributes.addFlashAttribute(
                         "errorMessage",
@@ -359,16 +415,16 @@ public class CheckoutController {
             long verifiedAmountInPaise =
                     payment.getLong("amount");
 
-            // Mark paid only after server-side verification.
+            // 5. Mark the order paid after all checks pass.
             orderService.markOrderAsPaid(
                     shopSphereOrderId,
                     loggedInUser.getId(),
-                    razorpay_order_id,
-                    razorpay_payment_id,
+                    razorpayOrderId,
+                    razorpayPaymentId,
                     verifiedAmountInPaise,
                     payment.getString("currency"));
 
-            // Clear the cart only after verified payment.
+            // 6. Clear cart only after successful verification.
             cartService.clearCart(loggedInUser.getId());
 
             redirectAttributes.addFlashAttribute(
@@ -385,7 +441,7 @@ public class CheckoutController {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Unable to confirm payment with Razorpay. Please contact support if money was deducted.");
+                    "Unable to confirm payment with Razorpay. If money was deducted, please contact support.");
 
             return "redirect:/checkout";
 
@@ -393,8 +449,7 @@ public class CheckoutController {
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Unable to verify payment: "
-                            + exception.getMessage());
+                    "Unable to verify payment. Please try again or contact support if money was deducted.");
 
             return "redirect:/checkout";
         }
@@ -415,6 +470,7 @@ public class CheckoutController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Please login to continue.");
@@ -428,6 +484,10 @@ public class CheckoutController {
 
         return "order-success";
     }
+
+    // =====================================================
+    // VALIDATION HELPER
+    // =====================================================
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();

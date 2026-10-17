@@ -54,6 +54,10 @@ public class OrderService {
      order.setOrderDate(new Date());
      order.setStatus("Pending");
 
+     // COD payment details
+     order.setPaymentMethod("COD");
+     order.setPaymentStatus("PENDING");
+
      List<OrderItem> orderItems = new ArrayList<>();
      List<OrderItemDTO> orderItemDTOs = new ArrayList<>();
 

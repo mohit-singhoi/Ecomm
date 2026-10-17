@@ -55,9 +55,9 @@ public class RazorpayService {
             String razorpayPaymentId,
             String razorpaySignature) {
 
-        if (razorpayOrderId == null
-                || razorpayPaymentId == null
-                || razorpaySignature == null) {
+        if (razorpayOrderId == null || razorpayOrderId.isBlank()
+                || razorpayPaymentId == null || razorpayPaymentId.isBlank()
+                || razorpaySignature == null || razorpaySignature.isBlank()) {
             return false;
         }
 
@@ -69,37 +69,35 @@ public class RazorpayService {
 
             javax.crypto.spec.SecretKeySpec secretKey =
                     new javax.crypto.spec.SecretKeySpec(
-                            keySecret.getBytes(java.nio.charset.StandardCharsets.UTF_8),
-                            "HmacSHA256"
-                    );
+                            keySecret.getBytes(
+                                    java.nio.charset.StandardCharsets.UTF_8),
+                            "HmacSHA256");
 
             mac.init(secretKey);
 
             byte[] hash = mac.doFinal(
-                    payload.getBytes(java.nio.charset.StandardCharsets.UTF_8)
-            );
+                    payload.getBytes(
+                            java.nio.charset.StandardCharsets.UTF_8));
 
             StringBuilder expectedSignature = new StringBuilder();
 
             for (byte b : hash) {
-                expectedSignature.append(String.format("%02x", b & 0xff));
+                expectedSignature.append(
+                        String.format("%02x", b & 0xff));
             }
 
             return java.security.MessageDigest.isEqual(
-                    expectedSignature.toString()
-                            .getBytes(java.nio.charset.StandardCharsets.US_ASCII),
-                    razorpaySignature.trim()
-                            .getBytes(java.nio.charset.StandardCharsets.US_ASCII)
-            );
+                    expectedSignature.toString().getBytes(
+                            java.nio.charset.StandardCharsets.US_ASCII),
+                    razorpaySignature.getBytes(
+                            java.nio.charset.StandardCharsets.US_ASCII));
 
         } catch (java.security.GeneralSecurityException exception) {
             throw new IllegalStateException(
                     "Unable to verify Razorpay payment signature.",
-                    exception
-            );
+                    exception);
         }
     }
-    
     public JSONObject fetchPayment(String razorpayPaymentId)
             throws RazorpayException {
 
