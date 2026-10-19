@@ -1,0 +1,108 @@
+/* =====================================================
+   SHOPSPHERE RETURN REQUEST PAGE
+   ===================================================== */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.return-container {
+    max-width: 950px;
+    padding-top: 45px;
+    padding-bottom: 60px;
+}
+
+/* PAGE HEADER */
+
+.return-page-header {
+    margin-bottom: 30px;
+}
+
+.return-page-header h1 {
+    font-size: 32px;
+    font-weight: 750;
+    color: #212529;
+}
+
+.return-page-header p {
+    color: #6c757d;
+    margin-top: 12px;
+    line-height: 1.8;
+}
+
+/* CARDS */
+
+.return-product-card,
+.return-form-card {
+    border: none;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+.return-product-card .card-body,
+.return-form-card .card-body {
+    padding: 30px;
+}
+
+/* FORM */
+
+.return-form-card .form-label {
+    color: #343a40;
+}
+
+.return-form-card .form-control,
+.return-form-card .form-select {
+    min-height: 46px;
+    border-radius: 8px;
+    border-color: #dee2e6;
+}
+
+.return-form-card textarea.form-control {
+    min-height: 130px;
+}
+
+.return-form-card .form-control:focus,
+.return-form-card .form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.12);
+}
+
+/* BUTTONS */
+
+.return-form-card .btn {
+    min-height: 44px;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* POLICY NOTICE */
+
+.return-form-card .alert {
+    border-radius: 9px;
+    line-height: 1.8;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .return-container {
+        padding-top: 30px;
+        padding-bottom: 40px;
+    }
+
+    .return-page-header h1 {
+        font-size: 26px;
+    }
+
+    .return-product-card .card-body,
+    .return-form-card .card-body {
+        padding: 22px;
+    }
+
+    .return-form-card .d-flex .btn {
+        width: 100%;
+    }
+}

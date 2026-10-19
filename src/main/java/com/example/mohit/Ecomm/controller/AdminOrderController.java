@@ -1,5 +1,6 @@
 package com.example.mohit.Ecomm.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ public class AdminOrderController {
 
     // Check administrator access
     private boolean isAdmin(HttpSession session) {
-        User admin = (User) session.getAttribute("loggedInUser");
+
+        User admin =
+                (User) session.getAttribute("loggedInUser");
 
         return admin != null
                 && "ROLE_ADMIN".equals(admin.getRole());
@@ -41,6 +44,7 @@ public class AdminOrderController {
             RedirectAttributes redirectAttributes) {
 
         if (!isAdmin(session)) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Please log in as an administrator."
@@ -49,7 +53,8 @@ public class AdminOrderController {
             return "redirect:/adminlogin";
         }
 
-        List<Orders> orders = orderRepository.findAllOrderWithUsers();
+        List<Orders> orders =
+                orderRepository.findAllOrderWithUsers();
 
         model.addAttribute("orders", orders);
         model.addAttribute("activePage", "orders");
@@ -66,6 +71,7 @@ public class AdminOrderController {
             RedirectAttributes redirectAttributes) {
 
         if (!isAdmin(session)) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Please log in as an administrator."
@@ -74,9 +80,11 @@ public class AdminOrderController {
             return "redirect:/adminlogin";
         }
 
-        Orders order = orderRepository.findById(id).orElse(null);
+        Orders order =
+                orderRepository.findById(id).orElse(null);
 
         if (order == null) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Order not found."
@@ -99,7 +107,9 @@ public class AdminOrderController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
+        // Verify administrator access
         if (!isAdmin(session)) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Please log in as an administrator."
@@ -108,9 +118,12 @@ public class AdminOrderController {
             return "redirect:/adminlogin";
         }
 
-        Orders order = orderRepository.findById(id).orElse(null);
+        // Find the order
+        Orders order =
+                orderRepository.findById(id).orElse(null);
 
         if (order == null) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Order not found."
@@ -119,6 +132,7 @@ public class AdminOrderController {
             return "redirect:/admin/orders";
         }
 
+        // Allow only valid order statuses
         List<String> allowedStatuses = List.of(
                 "Pending",
                 "Processing",
@@ -128,6 +142,7 @@ public class AdminOrderController {
         );
 
         if (!allowedStatuses.contains(status)) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Invalid order status."
@@ -136,12 +151,24 @@ public class AdminOrderController {
             return "redirect:/admin/orders/view/" + id;
         }
 
+        // Record the first delivery date.
+        // Do not reset it if the Delivered status is selected again.
+        if ("Delivered".equals(status)
+                && order.getDeliveredAt() == null) {
+
+            order.setDeliveredAt(new Date());
+        }
+
+        // Update order status
         order.setStatus(status);
+
+        // Save the order and delivery timestamp
         orderRepository.save(order);
 
         redirectAttributes.addFlashAttribute(
                 "successMessage",
-                "Order #" + id + " status updated successfully."
+                "Order #" + id
+                        + " status updated successfully."
         );
 
         return "redirect:/admin/orders/view/" + id;

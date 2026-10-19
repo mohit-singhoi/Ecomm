@@ -13,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Orders {
@@ -30,6 +32,11 @@ public class Orders {
     private String status;
 
     private Date orderDate;
+
+    // Delivery timestamp for Return & Refund eligibility
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "delivered_at")
+    private Date deliveredAt;
 
     // Payment information
     @Column(length = 30)
@@ -91,6 +98,16 @@ public class Orders {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    // Delivery timestamp getter and setter
+
+    public Date getDeliveredAt() {
+        return deliveredAt;
+    }
+
+    public void setDeliveredAt(Date deliveredAt) {
+        this.deliveredAt = deliveredAt;
     }
 
     public String getPaymentMethod() {

@@ -107,16 +107,12 @@ public class OrderService {
      order.setTotalAmount(calculatedTotal);
      order.setOrderItems(orderItems);
 
-     // Save order and items
+  // Save order and items
      Orders savedOrder = orderRepository.save(order);
 
-     return new OrderDTO(
-             savedOrder.getId(),
-             savedOrder.getTotalAmount(),
-             savedOrder.getStatus(),
-             savedOrder.getOrderDate(),
-             orderItemDTOs
-     );
+     // Return the saved order with generated order-item IDs
+     return convertToDTO(savedOrder);
+     
  }
     // =====================================================
     // GET ALL ORDERS
@@ -132,36 +128,39 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    // =====================================================
-    // CONVERT ORDER ENTITY TO DTO
-    // =====================================================
+ // =====================================================
+ // CONVERT ORDER ENTITY TO DTO
+ // =====================================================
 
-    private OrderDTO convertToDTO(Orders order) {
+ private OrderDTO convertToDTO(Orders order) {
 
-        List<OrderItemDTO> orderItems =
-                order.getOrderItems()
-                        .stream()
-                        .map(item -> new OrderItemDTO(
-                                item.getProduct().getName(),
-                                item.getProduct().getPrice(),
-                                item.getQuantity()
-                        ))
-                        .collect(Collectors.toList());
+     List<OrderItemDTO> orderItems =
+             order.getOrderItems()
+                     .stream()
+                     .map(item -> new OrderItemDTO(
+                             item.getId(),
+                             item.getProduct().getName(),
+                             item.getProduct().getPrice(),
+                             item.getQuantity()
+                     ))
+                     .collect(Collectors.toList());
 
-        return new OrderDTO(
-                order.getId(),
-                order.getTotalAmount(),
-                order.getStatus(),
-                order.getOrderDate(),
-                order.getUser() != null
-                        ? order.getUser().getName()
-                        : "Unknown",
-                order.getUser() != null
-                        ? order.getUser().getEmail()
-                        : "Unknown",
-                orderItems
-        );
-    }
+     return new OrderDTO(
+             order.getId(),
+             order.getTotalAmount(),
+             order.getStatus(),
+             order.getOrderDate(),
+             order.getDeliveredAt(),
+             order.getUser() != null
+                     ? order.getUser().getName()
+                     : "Unknown",
+             order.getUser() != null
+                     ? order.getUser().getEmail()
+                     : "Unknown",
+             orderItems
+     );
+ }
+ 
 
     // =====================================================
     // GET ORDERS BY USER

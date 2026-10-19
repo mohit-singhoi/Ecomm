@@ -1,6 +1,8 @@
 package com.example.mohit.Ecomm.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.mohit.Ecomm.dto.OrderDTO;
+import com.example.mohit.Ecomm.dto.OrderItemDTO;
 import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.OrderService;
+import com.example.mohit.Ecomm.service.ReturnRequestService;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -26,8 +31,11 @@ public class MyOrderController {
 
     @Autowired
     private OrderService orderService;
+    
+    @Autowired
+    private ReturnRequestService returnRequestService;
 
-    // Display the My Orders page
+ // Display the My Orders page
     @GetMapping
     public String myOrders(
             HttpSession session,
@@ -38,25 +46,55 @@ public class MyOrderController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            session.setAttribute("redirectAfterLogin", "/my-orders");
+
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/my-orders");
 
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Please login to view your orders."
-            );
+                    "Please login to view your orders.");
 
             return "redirect:/userlogin";
         }
 
         List<OrderDTO> orders =
-                orderService.getOrderByUser(loggedInUser.getId());
+                orderService.getOrderByUser(
+                        loggedInUser.getId());
+
+        // Identify order items that are eligible for return.
+        Set<Long> returnEligibleItemIds = new HashSet<>();
+
+        for (OrderDTO order : orders) {
+
+            if (!"Delivered".equals(order.getStatus())
+                    || order.getOrderItems() == null) {
+                continue;
+            }
+
+            for (OrderItemDTO item : order.getOrderItems()) {
+
+                if (item.getId() != null
+                        && returnRequestService.canRequestReturn(
+                                item.getId(),
+                                loggedInUser.getId())) {
+
+                    returnEligibleItemIds.add(item.getId());
+                }
+            }
+        }
 
         model.addAttribute("orders", orders);
+
+        model.addAttribute(
+                "returnEligibleItemIds",
+                returnEligibleItemIds);
 
         return "my-orders";
     }
 
     // Return the logged-in user's latest orders as JSON
+    
     @GetMapping("/status")
     public ResponseEntity<?> getLatestOrderStatuses(
             HttpSession session) {
