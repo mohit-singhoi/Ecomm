@@ -61,6 +61,10 @@ public class ReturnRequest {
     // NOT_APPLICABLE, PENDING, INITIATED, REFUNDED, FAILED
     @Column(length = 40)
     private String refundStatus = "NOT_APPLICABLE";
+    
+ // Uploaded product evidence image filename
+    @Column(name = "evidence_image_path", length = 255)
+    private String evidenceImagePath;
 
     // Created timestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -210,5 +214,13 @@ public class ReturnRequest {
 
     public void setRazorpayRefundId(String razorpayRefundId) {
         this.razorpayRefundId = razorpayRefundId;
+    }
+    
+    public String getEvidenceImagePath() {
+        return evidenceImagePath;
+    }
+
+    public void setEvidenceImagePath(String evidenceImagePath) {
+        this.evidenceImagePath = evidenceImagePath;
     }
 }

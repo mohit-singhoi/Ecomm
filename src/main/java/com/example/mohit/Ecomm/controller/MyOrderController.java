@@ -19,11 +19,9 @@ import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.service.OrderService;
 import com.example.mohit.Ecomm.service.ReturnRequestService;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/my-orders")
@@ -31,11 +29,14 @@ public class MyOrderController {
 
     @Autowired
     private OrderService orderService;
-    
+
     @Autowired
     private ReturnRequestService returnRequestService;
 
- // Display the My Orders page
+    // =====================================================
+    // DISPLAY MY ORDERS PAGE
+    // =====================================================
+
     @GetMapping
     public String myOrders(
             HttpSession session,
@@ -45,6 +46,7 @@ public class MyOrderController {
         User loggedInUser =
                 (User) session.getAttribute("loggedInUser");
 
+        // Check customer login
         if (loggedInUser == null) {
 
             session.setAttribute(
@@ -58,17 +60,23 @@ public class MyOrderController {
             return "redirect:/userlogin";
         }
 
+        // Retrieve orders belonging to the logged-in customer
         List<OrderDTO> orders =
                 orderService.getOrderByUser(
                         loggedInUser.getId());
 
-        // Identify order items that are eligible for return.
+        // =====================================================
+        // CHECK RETURN ELIGIBILITY
+        // =====================================================
+
         Set<Long> returnEligibleItemIds = new HashSet<>();
 
         for (OrderDTO order : orders) {
 
+            // Only delivered orders can be eligible
             if (!"Delivered".equals(order.getStatus())
                     || order.getOrderItems() == null) {
+
                 continue;
             }
 
@@ -84,17 +92,30 @@ public class MyOrderController {
             }
         }
 
+        // Add orders to the page
         model.addAttribute("orders", orders);
 
+        // Add eligible order-item IDs for the Return Product button
         model.addAttribute(
                 "returnEligibleItemIds",
                 returnEligibleItemIds);
 
+        // =====================================================
+        // CUSTOMER RETURN REQUEST TRACKING
+        // =====================================================
+
+        model.addAttribute(
+                "returnRequests",
+                returnRequestService.getMyReturnRequests(
+                        loggedInUser.getId()));
+
         return "my-orders";
     }
 
-    // Return the logged-in user's latest orders as JSON
-    
+    // =====================================================
+    // REFRESH ORDER STATUSES
+    // =====================================================
+
     @GetMapping("/status")
     public ResponseEntity<?> getLatestOrderStatuses(
             HttpSession session) {
@@ -103,53 +124,61 @@ public class MyOrderController {
                 (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
+
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Please log in to view your orders.");
         }
 
         List<OrderDTO> orders =
-                orderService.getOrderByUser(loggedInUser.getId());
+                orderService.getOrderByUser(
+                        loggedInUser.getId());
 
         return ResponseEntity.ok(orders);
     }
-    
-    
+
+    // =====================================================
+    // CANCEL ORDER
+    // =====================================================
+
     @PostMapping("/cancel/{orderId}")
     public String cancelOrder(
             @PathVariable Long orderId,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        User loggedInUser =
+                (User) session.getAttribute("loggedInUser");
 
-        // Check whether the user is logged in
+        // Check customer login
         if (loggedInUser == null) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    "Please log in to cancel an order."
-            );
+                    "Please log in to cancel an order.");
 
             return "redirect:/userlogin";
         }
 
         try {
-            // Cancel only the logged-in user's own order
-            orderService.cancelOrder(orderId, loggedInUser.getId());
+
+            // Cancel only the logged-in customer's own order
+            orderService.cancelOrder(
+                    orderId,
+                    loggedInUser.getId());
 
             redirectAttributes.addFlashAttribute(
                     "successMessage",
-                    "Order #" + orderId + " cancelled successfully."
-            );
+                    "Order #" + orderId
+                            + " cancelled successfully.");
 
         } catch (RuntimeException e) {
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    e.getMessage()
-            );
+                    e.getMessage());
         }
 
         return "redirect:/my-orders";
     }
-    
 }

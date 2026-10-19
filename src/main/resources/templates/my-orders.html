@@ -87,6 +87,27 @@
             border-radius: 20px;
             transition: width 0.4s ease;
         }
+		
+		.return-tracking {
+		    width: 100%;
+		    max-width: 620px;
+		}
+
+		.return-tracking .card {
+		    border-radius: 10px;
+		}
+
+		.return-tracking .badge {
+		    padding: 7px 10px;
+		    border-radius: 20px;
+		}
+
+		.return-tracking .alert {
+		    margin-top: 12px;
+		    margin-bottom: 0;
+		    overflow-wrap: anywhere;
+		}
+		
     </style>
 </head>
 
@@ -413,6 +434,153 @@
 							         </a>
 
 							     </div>
+								 
+								 <!-- ==========================================
+								      CUSTOMER RETURN STATUS TRACKING
+								      ========================================== -->
+
+								 <div class="return-tracking mt-3"
+								      th:each="returnRequest : ${returnRequests}"
+								      th:if="${returnRequest.orderItem.id == item.id}">
+
+								     <div class="card border-0 bg-light">
+
+								         <div class="card-body p-3">
+
+								             <div class="d-flex justify-content-between
+								                         align-items-center flex-wrap gap-2">
+
+								                 <h6 class="fw-bold mb-0">
+
+								                     <i class="fa-solid fa-rotate-left me-2"></i>
+
+								                     Return Request #
+
+								                     <span th:text="${returnRequest.id}">
+								                         1
+								                     </span>
+
+								                 </h6>
+
+								                 <span class="badge"
+								                       th:classappend="${returnRequest.status == 'REJECTED'
+								                                       ? 'bg-danger'
+								                                       : (returnRequest.status == 'REFUNDED'
+								                                       ? 'bg-success'
+								                                       : (returnRequest.status == 'REQUESTED'
+								                                       ? 'bg-warning text-dark'
+								                                       : 'bg-info text-dark'))}"
+								                       th:text="${returnRequest.status}">
+								                     REQUESTED
+								                 </span>
+
+								             </div>
+
+								             <hr>
+
+								             <p class="small mb-2">
+
+								                 <strong>Reason:</strong>
+
+								                 <span th:text="${returnRequest.reason}">
+								                     Return reason
+								                 </span>
+
+								             </p>
+
+								             <p class="small mb-2">
+
+								                 <strong>Quantity:</strong>
+
+								                 <span th:text="${returnRequest.returnQuantity}">
+								                     1
+								                 </span>
+
+								             </p>
+
+								             <p class="small mb-2">
+
+								                 <strong>Submitted:</strong>
+
+								                 <span th:text="${#dates.format(
+								                                 returnRequest.requestDate,
+								                                 'dd MMM yyyy, hh:mm a')}">
+								                     Date
+								                 </span>
+
+								             </p>
+
+								             <!-- ADMIN REMARKS -->
+
+								             <div th:if="${returnRequest.adminRemarks != null
+								                          and !#strings.isEmpty(returnRequest.adminRemarks)}"
+								                  class="alert alert-secondary small mb-2">
+
+								                 <strong>Admin response:</strong>
+
+								                 <span th:text="${returnRequest.adminRemarks}">
+								                     Admin remarks
+								                 </span>
+
+								             </div>
+
+								             <!-- REFUND DETAILS -->
+
+								             <div th:if="${returnRequest.refundStatus != null
+								                          and returnRequest.refundStatus != 'NOT_APPLICABLE'}"
+								                  class="small mb-2">
+
+								                 <strong>Refund Status:</strong>
+
+								                 <span th:text="${returnRequest.refundStatus}">
+								                     PENDING
+								                 </span>
+
+								                 <span th:if="${returnRequest.refundAmount != null}">
+
+								                     — ₹<span th:text="${#numbers.formatDecimal(
+								                                       returnRequest.refundAmount,
+								                                       1, 'COMMA', 2, 'POINT')}">
+								                         0.00
+								                     </span>
+
+								                 </span>
+
+								             </div>
+
+								             <!-- UPLOADED EVIDENCE -->
+
+								             <div th:if="${returnRequest.evidenceImagePath != null}"
+								                  class="mt-2">
+
+								                 <a th:href="@{/my-orders/return/evidence/{id}(
+								                                 id=${returnRequest.id})}"
+								                    target="_blank"
+								                    rel="noopener"
+								                    class="btn btn-outline-secondary btn-sm">
+
+								                     <i class="fa-solid fa-image me-1"></i>
+
+								                     View Uploaded Photo
+
+								                 </a>
+
+								             </div>
+
+								             <div class="small text-muted mt-3">
+
+								                 <i class="fa-solid fa-circle-info me-1"></i>
+
+								                 You can track updates here as your return request
+								                 is reviewed.
+
+								             </div>
+
+								         </div>
+
+								     </div>
+
+								 </div>
 
 							 </div>
 

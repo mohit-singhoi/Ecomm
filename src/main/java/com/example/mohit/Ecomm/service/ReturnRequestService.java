@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.mohit.Ecomm.model.OrderItem;
 import com.example.mohit.Ecomm.model.Orders;
@@ -31,6 +32,9 @@ public class ReturnRequestService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ReturnEvidenceStorageService evidenceStorageService;
+
     // =====================================================
     // ALLOWED RETURN REASONS
     // =====================================================
@@ -43,7 +47,7 @@ public class ReturnRequestService {
             "Other"
     );
 
-    // Active or completed requests prevent another request
+    // These statuses prevent another return request
     // for the same order item.
     private static final List<String> BLOCKING_STATUSES = List.of(
             "REQUESTED",
@@ -56,112 +60,15 @@ public class ReturnRequestService {
 
     // Proposed return window: seven days after delivery.
     private static final long RETURN_WINDOW_DAYS = 7;
-    
- // =====================================================
- // GET AN ELIGIBLE ORDER ITEM FOR RETURN
- // =====================================================
-
- @Transactional
- public OrderItem getEligibleOrderItem(
-         Long orderItemId,
-         Long userId) {
-
-     if (orderItemId == null || userId == null) {
-         throw new RuntimeException(
-                 "Invalid order item or customer.");
-     }
-
-     OrderItem orderItem = orderItemRepository
-             .findById(orderItemId)
-             .orElseThrow(() ->
-                     new RuntimeException(
-                             "Order item not found."));
-
-     Orders order = orderItem.getOrder();
-
-     if (order == null
-             || order.getUser() == null
-             || !userId.equals(order.getUser().getId())) {
-
-         throw new RuntimeException(
-                 "You are not authorized to return this product.");
-     }
-
-     if (!"Delivered".equals(order.getStatus())) {
-         throw new RuntimeException(
-                 "Only delivered orders can be returned.");
-     }
-
-     Date deliveredAt = order.getDeliveredAt();
-
-     if (deliveredAt == null) {
-         throw new RuntimeException(
-                 "The delivery date is unavailable. "
-                 + "Please contact ShopSphere support.");
-     }
-
-     Instant deadline = deliveredAt.toInstant()
-             .plus(RETURN_WINDOW_DAYS, ChronoUnit.DAYS);
-
-     if (Instant.now().isAfter(deadline)) {
-         throw new RuntimeException(
-                 "The seven-day return window has expired.");
-     }
-
-     if (orderItem.getQuantity() <= 0) {
-         throw new RuntimeException(
-                 "This order item cannot be returned.");
-     }
-
-     boolean existingRequest =
-             returnRequestRepository
-                     .existsByOrderItem_IdAndStatusIn(
-                             orderItemId,
-                             BLOCKING_STATUSES);
-
-     if (existingRequest) {
-         throw new RuntimeException(
-                 "A return request already exists for this product.");
-     }
-
-     // Initialize the linked product information before returning.
-     orderItem.getProduct().getName();
-     order.getId();
-
-     return orderItem;
- }
-
-
- // =====================================================
- // CHECK WHETHER RETURN BUTTON SHOULD BE DISPLAYED
- // =====================================================
-
- @Transactional
- public boolean canRequestReturn(
-         Long orderItemId,
-         Long userId) {
-
-     try {
-         getEligibleOrderItem(orderItemId, userId);
-         return true;
-
-     } catch (RuntimeException ex) {
-         return false;
-     }
- }
- 
 
     // =====================================================
-    // CREATE RETURN REQUEST
+    // GET AN ELIGIBLE ORDER ITEM FOR RETURN
     // =====================================================
 
     @Transactional
-    public ReturnRequest createReturnRequest(
+    public OrderItem getEligibleOrderItem(
             Long orderItemId,
-            Long userId,
-            int returnQuantity,
-            String reason,
-            String description) {
+            Long userId) {
 
         // Validate required IDs
         if (orderItemId == null || userId == null) {
@@ -181,10 +88,10 @@ public class ReturnRequestService {
 
         if (order == null) {
             throw new RuntimeException(
-                    "The order associated with this product was not found.");
+                    "The associated order was not found.");
         }
 
-        // Verify that this order belongs to the logged-in customer
+        // Verify customer ownership
         if (order.getUser() == null
                 || !userId.equals(order.getUser().getId())) {
 
@@ -198,7 +105,7 @@ public class ReturnRequestService {
                     "Only delivered orders can be returned.");
         }
 
-        // Actual delivery timestamp is required
+        // Check the delivery timestamp
         Date deliveredAt = order.getDeliveredAt();
 
         if (deliveredAt == null) {
@@ -207,16 +114,79 @@ public class ReturnRequestService {
                     + "Please contact ShopSphere support.");
         }
 
-        // Check the seven-day return window
-        Instant returnDeadline = deliveredAt.toInstant()
+        // Calculate the seven-day deadline
+        Instant deadline = deliveredAt.toInstant()
                 .plus(RETURN_WINDOW_DAYS, ChronoUnit.DAYS);
 
-        if (Instant.now().isAfter(returnDeadline)) {
+        if (!Instant.now().isBefore(deadline)) {
             throw new RuntimeException(
                     "The seven-day return window has expired.");
         }
 
-        // Validate the requested quantity
+        // Validate purchased quantity
+        if (orderItem.getQuantity() <= 0) {
+            throw new RuntimeException(
+                    "This order item cannot be returned.");
+        }
+
+        // Prevent duplicate active or completed requests
+        boolean existingRequest =
+                returnRequestRepository
+                        .existsByOrderItem_IdAndStatusIn(
+                                orderItemId,
+                                BLOCKING_STATUSES);
+
+        if (existingRequest) {
+            throw new RuntimeException(
+                    "A return request already exists for this product.");
+        }
+
+        // Initialize product data while the transaction is active
+        if (orderItem.getProduct() == null) {
+            throw new RuntimeException(
+                    "Product information is unavailable.");
+        }
+
+        orderItem.getProduct().getName();
+
+        return orderItem;
+    }
+
+    // =====================================================
+    // CHECK WHETHER RETURN BUTTON SHOULD BE DISPLAYED
+    // =====================================================
+
+    public boolean canRequestReturn(
+            Long orderItemId,
+            Long userId) {
+
+        try {
+            getEligibleOrderItem(orderItemId, userId);
+            return true;
+
+        } catch (RuntimeException ex) {
+            return false;
+        }
+    }
+
+    // =====================================================
+    // CREATE RETURN REQUEST WITH OPTIONAL EVIDENCE IMAGE
+    // =====================================================
+
+    @Transactional
+    public ReturnRequest createReturnRequest(
+            Long orderItemId,
+            Long userId,
+            int returnQuantity,
+            String reason,
+            String description,
+            MultipartFile evidenceImage) {
+
+        // Validate eligibility and customer ownership again
+        OrderItem orderItem =
+                getEligibleOrderItem(orderItemId, userId);
+
+        // Validate return quantity
         if (returnQuantity <= 0
                 || returnQuantity > orderItem.getQuantity()) {
 
@@ -224,7 +194,7 @@ public class ReturnRequestService {
                     "Please provide a valid return quantity.");
         }
 
-        // Validate the reason
+        // Validate reason
         if (reason == null
                 || !ALLOWED_REASONS.contains(reason.trim())) {
 
@@ -232,26 +202,13 @@ public class ReturnRequestService {
                     "Please select a valid return reason.");
         }
 
-        // Validate the optional description
+        // Validate optional description
         String cleanDescription =
                 description == null ? "" : description.trim();
 
         if (cleanDescription.length() > 1000) {
             throw new RuntimeException(
                     "The return description cannot exceed 1000 characters.");
-        }
-
-        // Prevent a duplicate active or completed request
-        boolean existingRequest =
-                returnRequestRepository
-                        .existsByOrderItem_IdAndStatusIn(
-                                orderItemId,
-                                BLOCKING_STATUSES
-                        );
-
-        if (existingRequest) {
-            throw new RuntimeException(
-                    "A return request already exists for this product.");
         }
 
         // Find the customer
@@ -270,8 +227,26 @@ public class ReturnRequestService {
         request.setStatus("REQUESTED");
         request.setRefundStatus("NOT_APPLICABLE");
 
-        // Save the request
-        return returnRequestRepository.save(request);
+        // Store the optional evidence image
+        // The storage service validates the file and generates
+        // a unique filename. Empty uploads return null.
+        String savedImageFilename =
+                evidenceStorageService.store(evidenceImage);
+
+        request.setEvidenceImagePath(savedImageFilename);
+
+        try {
+            // Flush immediately so database errors can be handled
+            // before returning successfully from this method.
+            return returnRequestRepository.saveAndFlush(request);
+
+        } catch (RuntimeException ex) {
+
+            // Remove the newly uploaded file if saving fails
+            evidenceStorageService.delete(savedImageFilename);
+
+            throw ex;
+        }
     }
 
     // =====================================================
@@ -315,6 +290,7 @@ public class ReturnRequestService {
                         new RuntimeException(
                                 "Return request not found."));
 
+        // Only the request owner can access their request
         if (request.getUser() == null
                 || !userId.equals(request.getUser().getId())) {
 
