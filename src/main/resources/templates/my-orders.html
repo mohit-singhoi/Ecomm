@@ -108,6 +108,64 @@
 		    overflow-wrap: anywhere;
 		}
 		
+		/* RETURN PROGRESS FLOW */
+
+		.return-progress-flow {
+		    display: flex;
+		    flex-direction: column;
+		    gap: 14px;
+		    padding: 16px;
+		    background: #ffffff;
+		    border: 1px solid #e9ecef;
+		    border-radius: 10px;
+		}
+
+		.return-progress-step {
+		    display: flex;
+		    align-items: flex-start;
+		    gap: 12px;
+		    color: #6c757d;
+		}
+
+		.return-step-number {
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    flex-shrink: 0;
+		    width: 30px;
+		    height: 30px;
+		    border-radius: 50%;
+		    background: #e9ecef;
+		    color: #495057;
+		    font-size: 13px;
+		    font-weight: 700;
+		}
+
+		.return-progress-step strong {
+		    display: block;
+		    margin-bottom: 4px;
+		    color: #343a40;
+		}
+
+		.return-progress-step.completed .return-step-number {
+		    background: #198754;
+		    color: #ffffff;
+		}
+
+		.return-progress-step.current .return-step-number {
+		    background: #0d6efd;
+		    color: #ffffff;
+		}
+
+		.return-progress-step.rejected .return-step-number {
+		    background: #dc3545;
+		    color: #ffffff;
+		}
+
+		.return-progress-step p {
+		    line-height: 1.6;
+		}
+		
     </style>
 </head>
 
@@ -477,6 +535,219 @@
 								             </div>
 
 								             <hr>
+											 
+											 <!-- =====================================================
+											      RETURN PROGRESS TRACKER
+											      ===================================================== -->
+
+											 <div class="return-progress-flow mt-3 mb-4">
+
+											     <!-- STEP 1: REQUEST SUBMITTED -->
+
+											     <div class="return-progress-step completed">
+
+											         <span class="return-step-number">1</span>
+
+											         <div>
+
+											             <strong>Return Requested</strong>
+
+											             <p class="small text-muted mb-0">
+											                 Your return request has been submitted.
+											             </p>
+
+											         </div>
+
+											     </div>
+
+
+											     <!-- STEP 2: ADMIN REVIEW -->
+
+											     <div class="return-progress-step"
+											          th:classappend="${returnRequest.status == 'REQUESTED'
+											                          ? ' current'
+											                          : (returnRequest.status == 'REJECTED'
+											                          ? ' rejected'
+											                          : ' completed')}">
+
+											         <span class="return-step-number">2</span>
+
+											         <div>
+
+											             <strong>Admin Review</strong>
+
+											             <p class="small text-muted mb-0"
+											                th:if="${returnRequest.status == 'REQUESTED'}">
+
+											                 Waiting for admin review.
+
+											             </p>
+
+											             <p class="small text-success mb-0"
+											                th:if="${returnRequest.status == 'APPROVED'
+											                        or returnRequest.status == 'PICKUP_PENDING'
+											                        or returnRequest.status == 'RETURN_RECEIVED'
+											                        or returnRequest.status == 'REFUND_INITIATED'
+											                        or returnRequest.status == 'REFUNDED'}">
+
+											                 Return request approved.
+
+											             </p>
+
+											             <p class="small text-danger mb-0"
+											                th:if="${returnRequest.status == 'REJECTED'}">
+
+											                 Your return request was rejected.
+
+											             </p>
+
+											         </div>
+
+											     </div>
+
+
+											     <!-- STEP 3: PICKUP -->
+
+											     <div class="return-progress-step"
+											          th:classappend="${returnRequest.status == 'PICKUP_PENDING'
+											                          ? ' current'
+											                          : (returnRequest.status == 'RETURN_RECEIVED'
+											                          or returnRequest.status == 'REFUND_INITIATED'
+											                          or returnRequest.status == 'REFUNDED'
+											                          ? ' completed'
+											                          : '')}">
+
+											         <span class="return-step-number">3</span>
+
+											         <div>
+
+											             <strong>Pickup</strong>
+
+											             <p class="small text-muted mb-0"
+											                th:if="${returnRequest.status == 'APPROVED'}">
+
+											                 Pickup has not yet been arranged.
+
+											             </p>
+
+											             <p class="small text-primary mb-0"
+											                th:if="${returnRequest.status == 'PICKUP_PENDING'}">
+
+											                 Pickup is being arranged. Follow the instructions
+											                 provided by ShopSphere.
+
+											             </p>
+
+											             <p class="small text-success mb-0"
+											                th:if="${returnRequest.status == 'RETURN_RECEIVED'
+											                        or returnRequest.status == 'REFUND_INITIATED'
+											                        or returnRequest.status == 'REFUNDED'}">
+
+											                 Returned product received by ShopSphere.
+
+											             </p>
+
+											             <p class="small text-muted mb-0"
+											                th:if="${returnRequest.status == 'REQUESTED'}">
+
+											                 Pickup starts after return approval.
+
+											             </p>
+
+											         </div>
+
+											     </div>
+
+
+											     <!-- STEP 4: PRODUCT RECEIVED -->
+
+											     <div class="return-progress-step"
+											          th:classappend="${returnRequest.status == 'RETURN_RECEIVED'
+											                          ? ' current'
+											                          : (returnRequest.status == 'REFUND_INITIATED'
+											                          or returnRequest.status == 'REFUNDED'
+											                          ? ' completed'
+											                          : '')}">
+
+											         <span class="return-step-number">4</span>
+
+											         <div>
+
+											             <strong>Product Received</strong>
+
+											             <p class="small text-muted mb-0"
+											                th:if="${returnRequest.status != 'RETURN_RECEIVED'
+											                        and returnRequest.status != 'REFUND_INITIATED'
+											                        and returnRequest.status != 'REFUNDED'}">
+
+											                 Waiting for the returned product to be received.
+
+											             </p>
+
+											             <p class="small text-success mb-0"
+											                th:if="${returnRequest.status == 'RETURN_RECEIVED'
+											                        or returnRequest.status == 'REFUND_INITIATED'
+											                        or returnRequest.status == 'REFUNDED'}">
+
+											                 Returned product received.
+
+											             </p>
+
+											         </div>
+
+											     </div>
+
+
+											     <!-- STEP 5: REFUND -->
+
+											     <div class="return-progress-step"
+											          th:classappend="${returnRequest.status == 'REFUND_INITIATED'
+											                          ? ' current'
+											                          : (returnRequest.status == 'REFUNDED'
+											                          ? ' completed'
+											                          : '')}">
+
+											         <span class="return-step-number">5</span>
+
+											         <div>
+
+											             <strong>Refund</strong>
+
+											             <p class="small text-muted mb-0"
+											                th:if="${returnRequest.status == 'RETURN_RECEIVED'}">
+
+											                 The return is ready for refund review.
+
+											             </p>
+
+											             <p class="small text-muted mb-0"
+											                th:if="${returnRequest.status != 'RETURN_RECEIVED'
+											                        and returnRequest.status != 'REFUND_INITIATED'
+											                        and returnRequest.status != 'REFUNDED'}">
+
+											                 Refund processing has not started.
+
+											             </p>
+
+											             <p class="small text-primary mb-0"
+											                th:if="${returnRequest.status == 'REFUND_INITIATED'}">
+
+											                 Refund processing has started.
+
+											             </p>
+
+											             <p class="small text-success mb-0"
+											                th:if="${returnRequest.status == 'REFUNDED'}">
+
+											                 Refund completed.
+
+											             </p>
+
+											         </div>
+
+											     </div>
+
+											 </div>
 
 								             <p class="small mb-2">
 

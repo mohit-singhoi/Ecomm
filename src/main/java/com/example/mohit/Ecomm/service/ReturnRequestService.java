@@ -414,5 +414,81 @@ public class ReturnRequestService {
 
         return returnRequestRepository.save(request);
     }
+    
+ // =====================================================
+ // ADMIN: ADVANCE RETURN PICKUP STATUS
+ // =====================================================
+
+ @Transactional
+ public ReturnRequest advanceReturnStatus(
+         Long requestId,
+         String nextStatus,
+         String adminRemarks) {
+
+     if (requestId == null) {
+         throw new RuntimeException(
+                 "Invalid return request ID.");
+     }
+
+     ReturnRequest request = returnRequestRepository
+             .findById(requestId)
+             .orElseThrow(() ->
+                     new RuntimeException(
+                             "Return request not found."));
+
+     String currentStatus = request.getStatus();
+
+     if (nextStatus == null || nextStatus.isBlank()) {
+         throw new RuntimeException(
+                 "Please select the next return status.");
+     }
+
+     String targetStatus =
+             nextStatus.trim().toUpperCase(Locale.ROOT);
+
+     // Allow only valid sequential transitions.
+     if ("APPROVED".equals(currentStatus)
+             && "PICKUP_PENDING".equals(targetStatus)) {
+
+         // Admin is starting the pickup coordination process.
+
+     } else if ("PICKUP_PENDING".equals(currentStatus)
+             && "RETURN_RECEIVED".equals(targetStatus)) {
+
+         // Admin confirms that the returned product was received.
+
+     } else {
+         throw new RuntimeException(
+                 "Invalid return status transition from "
+                         + currentStatus + " to " + targetStatus + ".");
+     }
+
+     String remarks =
+             adminRemarks == null ? "" : adminRemarks.trim();
+
+     if (remarks.length() > 1000) {
+         throw new RuntimeException(
+                 "Admin remarks cannot exceed 1000 characters.");
+     }
+
+     if (remarks.isBlank()) {
+
+         if ("PICKUP_PENDING".equals(targetStatus)) {
+             remarks =
+                     "Your return has been approved. "
+                     + "Pickup is being arranged. "
+                     + "ShopSphere will provide further instructions.";
+         } else {
+             remarks =
+                     "ShopSphere has received your returned product. "
+                     + "The refund will be reviewed next, if eligible.";
+         }
+     }
+
+     request.setStatus(targetStatus);
+     request.setAdminRemarks(remarks);
+
+     return returnRequestRepository.save(request);
+ }
 
 }

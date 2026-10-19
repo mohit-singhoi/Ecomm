@@ -256,4 +256,49 @@ public class AdminReturnRequestController {
                     "Return evidence was not found.");
         }
     }
+    
+ // =====================================================
+ // UPDATE RETURN PICKUP STATUS
+ // =====================================================
+
+ @PostMapping("/update-status/{id}")
+ public String updateReturnStatus(
+         @PathVariable Long id,
+         @RequestParam String status,
+         @RequestParam(required = false) String adminRemarks,
+         HttpSession session,
+         RedirectAttributes redirectAttributes) {
+
+     if (!isAdmin(session)) {
+
+         redirectAttributes.addFlashAttribute(
+                 "errorMessage",
+                 "Please log in as an administrator.");
+
+         return "redirect:/adminlogin";
+     }
+
+     try {
+
+         ReturnRequest request =
+                 returnRequestService.advanceReturnStatus(
+                         id,
+                         status,
+                         adminRemarks);
+
+         redirectAttributes.addFlashAttribute(
+                 "successMessage",
+                 "Return request #" + request.getId()
+                         + " updated to "
+                         + request.getStatus() + ".");
+
+     } catch (RuntimeException ex) {
+
+         redirectAttributes.addFlashAttribute(
+                 "errorMessage",
+                 ex.getMessage());
+     }
+
+     return "redirect:/admin/returns/view/" + id;
+ }
 }
