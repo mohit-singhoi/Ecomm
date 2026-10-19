@@ -1,0 +1,343 @@
+/* =====================================================
+   SHOPSPHERE ADMIN - RETURN REQUESTS
+   ===================================================== */
+
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* =====================================================
+   MAIN PAGE
+   ===================================================== */
+
+.admin-return-requests-page {
+    max-width: 1400px;
+    min-height: 70vh;
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+/* =====================================================
+   PAGE HEADER
+   ===================================================== */
+
+.admin-return-requests-page h1 {
+    color: #212529;
+    font-size: 30px;
+    font-weight: 750;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.admin-return-requests-page .page-description {
+    color: #6c757d;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* =====================================================
+   ALERT MESSAGES
+   ===================================================== */
+
+.admin-return-requests-page .alert {
+    border-radius: 9px;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.admin-return-requests-page .alert-success {
+    border-color: #badbcc;
+}
+
+.admin-return-requests-page .alert-danger {
+    border-color: #f1aeb5;
+}
+
+/* =====================================================
+   EMPTY STATE
+   ===================================================== */
+
+.admin-return-requests-page .empty-returns {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    padding: 65px 25px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.admin-return-requests-page .empty-returns > i {
+    color: #adb5bd;
+    margin-bottom: 22px;
+}
+
+.admin-return-requests-page .empty-returns h4 {
+    font-size: 23px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.admin-return-requests-page .empty-returns p {
+    color: #6c757d;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* =====================================================
+   RETURN REQUEST TABLE CONTAINER
+   ===================================================== */
+
+.admin-return-requests-page .return-table-container {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.045);
+}
+
+/* =====================================================
+   TABLE
+   ===================================================== */
+
+.admin-return-requests-page .table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.admin-return-requests-page .table thead th {
+    background-color: #f1f3f5;
+    color: #343a40;
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: 0.45px;
+    padding: 17px 16px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.admin-return-requests-page .table tbody td {
+    padding: 18px 16px;
+    color: #495057;
+    font-size: 13px;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.admin-return-requests-page .table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-return-requests-page .table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.admin-return-requests-page .table tbody tr:hover {
+    background-color: #f8faf9;
+}
+
+/* =====================================================
+   REQUEST ID
+   ===================================================== */
+
+.admin-return-requests-page .request-id {
+    color: #198754;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+/* =====================================================
+   CUSTOMER INFORMATION
+   ===================================================== */
+
+.admin-return-requests-page .customer-name {
+    color: #212529;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.admin-return-requests-page .customer-email {
+    color: #6c757d;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   PRODUCT INFORMATION
+   ===================================================== */
+
+.admin-return-requests-page .product-name {
+    color: #212529;
+    font-size: 13px;
+    font-weight: 650;
+    margin-bottom: 5px;
+}
+
+.admin-return-requests-page .product-order-id {
+    color: #6c757d;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* =====================================================
+   RETURN REASON
+   ===================================================== */
+
+.admin-return-requests-page .return-reason {
+    min-width: 150px;
+    max-width: 240px;
+    color: #495057;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   REQUEST DATE
+   ===================================================== */
+
+.admin-return-requests-page .request-date {
+    color: #6c757d;
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: nowrap;
+}
+
+/* =====================================================
+   STATUS BADGES
+   ===================================================== */
+
+.admin-return-requests-page .status-badge {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.admin-return-requests-page .status-badge.bg-warning {
+    background-color: #fff3cd !important;
+    color: #664d03 !important;
+}
+
+.admin-return-requests-page .status-badge.bg-success {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+}
+
+.admin-return-requests-page .status-badge.bg-danger {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+}
+
+.admin-return-requests-page .status-badge.bg-info {
+    background-color: #cff4fc !important;
+    color: #055160 !important;
+}
+
+/* =====================================================
+   VIEW BUTTON
+   ===================================================== */
+
+.admin-return-requests-page .view-request-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 13px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.admin-return-requests-page .view-request-btn:hover {
+    background-color: #343a40;
+    border-color: #343a40;
+    color: #ffffff;
+}
+
+/* =====================================================
+   RESPONSIVE TABLE
+   ===================================================== */
+
+.admin-return-requests-page .table-responsive {
+    border-radius: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: #ced4da #f8f9fa;
+}
+
+.admin-return-requests-page .table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.admin-return-requests-page .table-responsive::-webkit-scrollbar-track {
+    background-color: #f8f9fa;
+}
+
+.admin-return-requests-page .table-responsive::-webkit-scrollbar-thumb {
+    background-color: #ced4da;
+    border-radius: 10px;
+}
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 991px) {
+
+    .admin-return-requests-page {
+        padding-top: 30px;
+        padding-bottom: 45px;
+    }
+
+    .admin-return-requests-page h1 {
+        font-size: 27px;
+    }
+
+    .admin-return-requests-page .table thead th {
+        padding: 15px 13px;
+    }
+
+    .admin-return-requests-page .table tbody td {
+        padding: 15px 13px;
+    }
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 576px) {
+
+    .admin-return-requests-page {
+        padding-top: 22px;
+        padding-bottom: 35px;
+    }
+
+    .admin-return-requests-page h1 {
+        font-size: 23px;
+    }
+
+    .admin-return-requests-page .page-description {
+        font-size: 14px;
+    }
+
+    .admin-return-requests-page .empty-returns {
+        padding: 45px 18px;
+    }
+
+    .admin-return-requests-page .empty-returns h4 {
+        font-size: 20px;
+    }
+
+    .admin-return-requests-page .view-request-btn {
+        padding: 8px 11px;
+    }
+}

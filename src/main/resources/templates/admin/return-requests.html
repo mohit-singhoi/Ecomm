@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Return Requests | ShopSphere Admin</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Admin Navbar CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/admin-navbar.css}">
+
+    <!-- Admin Footer CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/admin-footer.css}">
+
+    <!-- Return Requests CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/return-requests.css}">
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         EXISTING ADMIN NAVBAR
+         ===================================================== -->
+
+    <div th:replace="~{fragments/admin-navbar :: adminNavbar}">
+    </div>
+
+
+    <!-- =====================================================
+         MAIN RETURN REQUESTS PAGE
+         ===================================================== -->
+
+    <main class="container py-5 admin-return-requests-page">
+
+        <!-- PAGE HEADER -->
+
+        <div class="d-flex justify-content-between
+                    align-items-center flex-wrap gap-3 mb-4">
+
+            <div>
+
+                <h1 class="fw-bold">
+
+                    <i class="fa-solid fa-rotate-left me-2"></i>
+
+                    Return Requests
+
+                </h1>
+
+                <p class="page-description mb-0">
+
+                    Review customer return requests, inspect supporting
+                    evidence, and manage return decisions.
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <span class="badge bg-dark p-2">
+
+                    <i class="fa-solid fa-clipboard-list me-1"></i>
+
+                    Total Requests:
+
+                    <span th:text="${#lists.size(returnRequests)}">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SUCCESS MESSAGE
+             ===================================================== -->
+
+        <div th:if="${successMessage}"
+             class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-check me-2"></i>
+
+            <span th:text="${successMessage}">
+                Return request updated successfully.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+
+        <!-- =====================================================
+             ERROR MESSAGE
+             ===================================================== -->
+
+        <div th:if="${errorMessage}"
+             class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+            <span th:text="${errorMessage}">
+                An error occurred.
+            </span>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+
+        <!-- =====================================================
+             EMPTY RETURN REQUESTS
+             ===================================================== -->
+
+        <div th:if="${#lists.isEmpty(returnRequests)}"
+             class="empty-returns text-center">
+
+            <i class="fa-solid fa-box-open fa-3x"></i>
+
+            <h4>No Return Requests Yet</h4>
+
+            <p class="mb-0">
+
+                Customer return requests will appear here when
+                customers submit them from My Orders.
+
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             RETURN REQUEST TABLE
+             ===================================================== -->
+
+        <div th:unless="${#lists.isEmpty(returnRequests)}"
+             class="return-table-container">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <!-- TABLE HEADER -->
+
+                    <thead>
+
+                        <tr>
+
+                            <th scope="col">
+                                Request ID
+                            </th>
+
+                            <th scope="col">
+                                Customer
+                            </th>
+
+                            <th scope="col">
+                                Product
+                            </th>
+
+                            <th scope="col">
+                                Reason
+                            </th>
+
+                            <th scope="col">
+                                Submitted
+                            </th>
+
+                            <th scope="col">
+                                Status
+                            </th>
+
+                            <th scope="col">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- TABLE BODY -->
+
+                    <tbody>
+
+                        <tr th:each="request : ${returnRequests}">
+
+
+                            <!-- REQUEST ID -->
+
+                            <td>
+
+                                <span class="request-id"
+                                      th:text="'#' + ${request.id}">
+
+                                    #1
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- CUSTOMER DETAILS -->
+
+                            <td>
+
+                                <div class="customer-name"
+                                     th:text="${request.user.name}">
+
+                                    Customer Name
+
+                                </div>
+
+                                <div class="customer-email"
+                                     th:text="${request.user.email}">
+
+                                    customer@example.com
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- PRODUCT DETAILS -->
+
+                            <td>
+
+                                <div class="product-name"
+                                     th:text="${request.orderItem.product.name}">
+
+                                    Product Name
+
+                                </div>
+
+                                <div class="product-order-id">
+
+                                    Order #
+
+                                    <span th:text="${request.orderItem.order.id}">
+
+                                        1
+
+                                    </span>
+
+                                </div>
+
+                                <div class="small text-muted mt-1">
+
+                                    Return Quantity:
+
+                                    <strong
+                                        th:text="${request.returnQuantity}">
+
+                                        1
+
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- RETURN REASON -->
+
+                            <td>
+
+                                <div class="return-reason"
+                                     th:text="${request.reason}">
+
+                                    Damaged or defective product
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- REQUEST DATE -->
+
+                            <td>
+
+                                <div class="request-date"
+                                     th:text="${#dates.format(
+                                         request.requestDate,
+                                         'dd MMM yyyy, hh:mm a')}">
+
+                                    19 Oct 2026
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- REQUEST STATUS -->
+
+                            <td>
+
+                                <span class="status-badge badge"
+                                      th:classappend="${request.status == 'REQUESTED'
+                                          ? 'bg-warning text-dark'
+                                          : (request.status == 'APPROVED'
+                                          ? 'bg-success'
+                                          : (request.status == 'REJECTED'
+                                          ? 'bg-danger'
+                                          : (request.status == 'REFUNDED'
+                                          ? 'bg-success'
+                                          : 'bg-info text-dark')))}"
+                                      th:text="${request.status}">
+
+                                    REQUESTED
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- VIEW REQUEST -->
+
+                            <td>
+
+                                <a th:href="@{/admin/returns/view/{id}(
+                                                id=${request.id})}"
+                                   class="btn btn-dark btn-sm view-request-btn">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                    View
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         EXISTING ADMIN FOOTER
+         ===================================================== -->
+
+    <div th:replace="~{fragments/admin-footer :: adminFooter}">
+    </div>
+
+
+    <!-- =====================================================
+         BOOTSTRAP JS
+         ===================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <!-- =====================================================
+         ADMIN NAVBAR JS
+         ===================================================== -->
+
+    <script th:src="@{/js/admin-navbar.js}"></script>
+
+
+    <!-- =====================================================
+         AUTO-HIDE SUCCESS / ERROR MESSAGES AFTER 3 SECONDS
+         ===================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const alerts = document.querySelectorAll(
+                ".admin-return-requests-page .alert"
+            );
+
+            alerts.forEach(function (alert) {
+
+                setTimeout(function () {
+
+                    alert.style.transition = "opacity 0.4s ease";
+                    alert.style.opacity = "0";
+
+                    setTimeout(function () {
+                        alert.remove();
+                    }, 400);
+
+                }, 3000);
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

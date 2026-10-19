@@ -1,0 +1,233 @@
+/* =====================================================
+   SHOPSPHERE ADMIN - RETURN REQUEST DETAILS
+   ===================================================== */
+
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* MAIN PAGE */
+
+.admin-return-details-page {
+    max-width: 1200px;
+    min-height: 70vh;
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+/* PAGE HEADER */
+
+.admin-return-details-page h1 {
+    font-size: 30px;
+    font-weight: 750;
+    color: #212529;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+}
+
+.admin-return-details-page > div:first-child p {
+    line-height: 1.7;
+}
+
+/* BACK BUTTON */
+
+.admin-return-details-page > div:first-child > a {
+    border-radius: 7px;
+    padding: 9px 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* CARDS */
+
+.admin-return-details-page .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.045);
+    height: 100%;
+}
+
+.admin-return-details-page .card-body {
+    padding: 28px;
+}
+
+/* CARD HEADINGS */
+
+.admin-return-details-page .card-body h4 {
+    font-size: 21px;
+    font-weight: 700;
+    color: #212529;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 22px;
+}
+
+/* REQUEST INFORMATION */
+
+.admin-return-details-page .card-body p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #495057;
+    margin-bottom: 15px;
+    overflow-wrap: anywhere;
+}
+
+.admin-return-details-page .card-body p strong {
+    display: inline-block;
+    min-width: 125px;
+    color: #212529;
+    font-weight: 650;
+}
+
+/* STATUS BADGES */
+
+.admin-return-details-page .badge {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    letter-spacing: 0.2px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* EVIDENCE IMAGE LINK */
+
+.admin-return-details-page .card-body a[target="_blank"] {
+    color: #198754;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.admin-return-details-page .card-body a[target="_blank"]:hover {
+    color: #146c43;
+    text-decoration: underline;
+}
+
+/* REVIEW FORM */
+
+.admin-return-details-page .form-label {
+    font-size: 14px;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.admin-return-details-page textarea.form-control {
+    min-height: 140px;
+    resize: vertical;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.admin-return-details-page textarea.form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.12);
+}
+
+/* REVIEW BUTTONS */
+
+.admin-return-details-page .d-grid {
+    gap: 12px !important;
+}
+
+.admin-return-details-page .d-grid .btn {
+    min-height: 45px;
+    padding: 11px 16px;
+    border-radius: 7px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.admin-return-details-page .btn-success {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.admin-return-details-page .btn-success:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+.admin-return-details-page .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+/* ALERT MESSAGES */
+
+.admin-return-details-page .alert {
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* PREVIOUS ADMIN DECISION */
+
+.admin-return-details-page .alert-secondary {
+    padding: 18px;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+/* SEPARATORS */
+
+.admin-return-details-page hr {
+    border-color: #e9ecef;
+    opacity: 1;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 991px) {
+
+    .admin-return-details-page {
+        padding-top: 30px;
+    }
+
+    .admin-return-details-page h1 {
+        font-size: 27px;
+    }
+
+    .admin-return-details-page .card-body {
+        padding: 23px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .admin-return-details-page {
+        padding-top: 22px;
+        padding-bottom: 35px;
+    }
+
+    .admin-return-details-page h1 {
+        font-size: 23px;
+        line-height: 1.4;
+    }
+
+    .admin-return-details-page .card-body {
+        padding: 18px;
+    }
+
+    .admin-return-details-page .card-body h4 {
+        font-size: 19px;
+    }
+
+    .admin-return-details-page .card-body p strong {
+        min-width: 0;
+    }
+
+    .admin-return-details-page .d-grid .btn {
+        width: 100%;
+    }
+}

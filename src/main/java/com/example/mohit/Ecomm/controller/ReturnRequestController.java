@@ -93,7 +93,7 @@ public class ReturnRequestController {
             Date deliveredAt =
                     item.getOrder().getDeliveredAt();
 
-            // Seven-day return deadline
+            // Calculate the proposed seven-day return deadline
             Date returnDeadline = Date.from(
                     deliveredAt.toInstant()
                             .plus(7, ChronoUnit.DAYS)
@@ -155,6 +155,11 @@ public class ReturnRequestController {
         // Verify customer login
         if (loggedInUser == null) {
 
+            session.setAttribute(
+                    "redirectAfterLogin",
+                    "/my-orders/return/" + orderItemId
+            );
+
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
                     "Please log in to request a return."
@@ -165,7 +170,7 @@ public class ReturnRequestController {
 
         try {
 
-            // Create the return request and store the optional image
+            // Validate the request and store the optional evidence image
             ReturnRequest request =
                     returnRequestService.createReturnRequest(
                             orderItemId,
@@ -196,7 +201,7 @@ public class ReturnRequestController {
 
     // =====================================================
     // VIEW RETURN EVIDENCE IMAGE
-    // Only the request owner can view their image
+    // Only the request owner can access the image
     // =====================================================
 
     @GetMapping("/evidence/{requestId}")
@@ -217,7 +222,7 @@ public class ReturnRequestController {
 
         try {
 
-            // Verify that this return request belongs to the customer
+            // Verify that the return request belongs to this customer
             ReturnRequest request =
                     returnRequestService.getMyReturnRequest(
                             requestId,
@@ -251,6 +256,10 @@ public class ReturnRequestController {
                             HttpHeaders.CONTENT_DISPOSITION,
                             "inline; filename=\"return-evidence\""
                     )
+                    .header(
+                            "X-Content-Type-Options",
+                            "nosniff"
+                    )
                     .body(resource);
 
         } catch (ResponseStatusException ex) {
@@ -259,6 +268,7 @@ public class ReturnRequestController {
 
         } catch (RuntimeException ex) {
 
+            // Avoid exposing another customer's request or file
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "Return evidence was not found."

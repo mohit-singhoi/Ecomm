@@ -84,7 +84,19 @@
 				    <i class="fa-solid fa-receipt"></i>
 				    <span>Orders</span>
 				</a>
+				
+				<!-- Return Requests -->
 
+				<a th:href="@{/admin/returns}"
+				   class="admin-nav-link"
+				   th:classappend="${activePage == 'returns'} ? ' active' : ''">
+
+				    <i class="fa-solid fa-rotate-left"></i>
+				    <span>Return Requests</span>
+
+				</a>
+				
+				
 				<!-- Feedback / Queries -->
 				<a th:href="@{/admin/feedback}"
 				   class="admin-nav-link"

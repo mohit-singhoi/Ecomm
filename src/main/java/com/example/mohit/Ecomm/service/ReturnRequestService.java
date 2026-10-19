@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,7 @@ public class ReturnRequestService {
     // Proposed return window: seven days after delivery.
     private static final long RETURN_WINDOW_DAYS = 7;
 
+
     // =====================================================
     // GET AN ELIGIBLE ORDER ITEM FOR RETURN
     // =====================================================
@@ -105,7 +107,7 @@ public class ReturnRequestService {
                     "Only delivered orders can be returned.");
         }
 
-        // Check the delivery timestamp
+        // Check delivery timestamp
         Date deliveredAt = order.getDeliveredAt();
 
         if (deliveredAt == null) {
@@ -114,7 +116,7 @@ public class ReturnRequestService {
                     + "Please contact ShopSphere support.");
         }
 
-        // Calculate the seven-day deadline
+        // Calculate the seven-day return deadline
         Instant deadline = deliveredAt.toInstant()
                 .plus(RETURN_WINDOW_DAYS, ChronoUnit.DAYS);
 
@@ -141,21 +143,21 @@ public class ReturnRequestService {
                     "A return request already exists for this product.");
         }
 
-        // Initialize product data while the transaction is active
+        // Ensure product information is available
         if (orderItem.getProduct() == null) {
             throw new RuntimeException(
                     "Product information is unavailable.");
         }
 
-        orderItem.getProduct().getName();
-
         return orderItem;
     }
+
 
     // =====================================================
     // CHECK WHETHER RETURN BUTTON SHOULD BE DISPLAYED
     // =====================================================
 
+    @Transactional
     public boolean canRequestReturn(
             Long orderItemId,
             Long userId) {
@@ -168,6 +170,7 @@ public class ReturnRequestService {
             return false;
         }
     }
+
 
     // =====================================================
     // CREATE RETURN REQUEST WITH OPTIONAL EVIDENCE IMAGE
@@ -182,11 +185,11 @@ public class ReturnRequestService {
             String description,
             MultipartFile evidenceImage) {
 
-        // Validate eligibility and customer ownership again
+        // Revalidate eligibility and customer ownership
         OrderItem orderItem =
                 getEligibleOrderItem(orderItemId, userId);
 
-        // Validate return quantity
+        // Validate requested quantity
         if (returnQuantity <= 0
                 || returnQuantity > orderItem.getQuantity()) {
 
@@ -194,7 +197,7 @@ public class ReturnRequestService {
                     "Please provide a valid return quantity.");
         }
 
-        // Validate reason
+        // Validate return reason
         if (reason == null
                 || !ALLOWED_REASONS.contains(reason.trim())) {
 
@@ -228,26 +231,25 @@ public class ReturnRequestService {
         request.setRefundStatus("NOT_APPLICABLE");
 
         // Store the optional evidence image
-        // The storage service validates the file and generates
-        // a unique filename. Empty uploads return null.
         String savedImageFilename =
                 evidenceStorageService.store(evidenceImage);
 
         request.setEvidenceImagePath(savedImageFilename);
 
         try {
-            // Flush immediately so database errors can be handled
-            // before returning successfully from this method.
+
+            // Flush to detect database errors before returning
             return returnRequestRepository.saveAndFlush(request);
 
         } catch (RuntimeException ex) {
 
-            // Remove the newly uploaded file if saving fails
+            // Remove the image if saving fails
             evidenceStorageService.delete(savedImageFilename);
 
             throw ex;
         }
     }
+
 
     // =====================================================
     // GET RETURN REQUESTS FOR THE LOGGED-IN CUSTOMER
@@ -270,6 +272,7 @@ public class ReturnRequestService {
                         new RuntimeException("User not found."));
     }
 
+
     // =====================================================
     // GET RETURN REQUEST BY ID FOR ITS OWNER
     // =====================================================
@@ -290,7 +293,7 @@ public class ReturnRequestService {
                         new RuntimeException(
                                 "Return request not found."));
 
-        // Only the request owner can access their request
+        // Verify customer ownership
         if (request.getUser() == null
                 || !userId.equals(request.getUser().getId())) {
 
@@ -300,4 +303,116 @@ public class ReturnRequestService {
 
         return request;
     }
+
+
+    // =====================================================
+    // ADMIN: GET ALL RETURN REQUESTS
+    // =====================================================
+
+    @Transactional
+    public List<ReturnRequest> getAllReturnRequestsForAdmin() {
+
+        return returnRequestRepository
+                .findAllByOrderByRequestDateDesc();
+    }
+
+
+    // =====================================================
+    // ADMIN: GET ONE RETURN REQUEST WITH DETAILS
+    // =====================================================
+
+    @Transactional
+    public ReturnRequest getReturnRequestForAdmin(
+            Long requestId) {
+
+        if (requestId == null) {
+            throw new RuntimeException(
+                    "Invalid return request ID.");
+        }
+
+        return returnRequestRepository
+                .findDetailedById(requestId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Return request not found."));
+    }
+
+
+    // =====================================================
+    // ADMIN: APPROVE OR REJECT A RETURN REQUEST
+    // =====================================================
+
+    @Transactional
+    public ReturnRequest reviewReturnRequest(
+            Long requestId,
+            String decision,
+            String adminRemarks) {
+
+        // Find the request with its associated details
+        ReturnRequest request =
+                getReturnRequestForAdmin(requestId);
+
+        // Only requests awaiting review can be reviewed
+        if (!"REQUESTED".equals(request.getStatus())) {
+            throw new RuntimeException(
+                    "This return request has already been reviewed.");
+        }
+
+        // Validate decision
+        if (decision == null || decision.isBlank()) {
+            throw new RuntimeException(
+                    "Please select Approve or Reject.");
+        }
+
+        String normalizedDecision =
+                decision.trim().toUpperCase(Locale.ROOT);
+
+        if (!"APPROVE".equals(normalizedDecision)
+                && !"REJECT".equals(normalizedDecision)) {
+
+            throw new RuntimeException(
+                    "Invalid return decision.");
+        }
+
+        // Validate administrator remarks
+        String remarks =
+                adminRemarks == null ? "" : adminRemarks.trim();
+
+        if (remarks.length() > 1000) {
+            throw new RuntimeException(
+                    "Admin remarks cannot exceed 1000 characters.");
+        }
+
+        // A rejection must include an explanation
+        if ("REJECT".equals(normalizedDecision)
+                && remarks.isBlank()) {
+
+            throw new RuntimeException(
+                    "Please provide a reason for rejecting the request.");
+        }
+
+        // Save the decision
+        if ("APPROVE".equals(normalizedDecision)) {
+
+            request.setStatus("APPROVED");
+
+            if (remarks.isBlank()) {
+                remarks =
+                        "Your return request has been approved.";
+            }
+
+        } else {
+
+            request.setStatus("REJECTED");
+        }
+
+        request.setAdminRemarks(remarks);
+        request.setDecisionDate(new Date());
+
+        // Approval does not itself initiate a refund.
+        // Refund processing is implemented separately.
+
+        return returnRequestRepository.save(request);
+    }
+
 }
