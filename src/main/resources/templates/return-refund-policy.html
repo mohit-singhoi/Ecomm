@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Return, Refund & Replacement Policy - ShopSphere</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Existing Navbar CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
+
+    <!-- Logged-in User Navbar CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/user-navbar.css}">
+
+    <!-- Footer CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/footer.css}">
+
+    <!-- Return Policy CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/return-refund-policy.css}">
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         USER NAVBAR
+         ===================================================== -->
+
+    <div th:replace="~{fragments/user-navbar :: userNavbar}">
+    </div>
+
+
+    <!-- =====================================================
+         MAIN POLICY CONTENT
+         ===================================================== -->
+
+    <div class="container policy-container">
+
+        <!-- PAGE HEADER -->
+
+        <div class="policy-header text-center">
+
+            <div class="policy-icon">
+                <i class="fa-solid fa-rotate-left"></i>
+            </div>
+
+            <h1>Return, Refund & Replacement Policy</h1>
+
+            <p>
+                Your satisfaction matters to us. Learn how ShopSphere
+                handles returns, refunds, and replacements.
+            </p>
+
+            <span class="policy-updated">
+                <i class="fa-regular fa-calendar me-2"></i>
+                Last Updated: October 2026
+            </span>
+
+        </div>
+
+
+        <!-- POLICY INTRODUCTION -->
+
+        <div class="policy-introduction">
+
+            <h3>
+                <i class="fa-solid fa-circle-info me-2"></i>
+                Our Policy
+            </h3>
+
+            <p>
+                At ShopSphere, we aim to provide a reliable and
+                convenient shopping experience. If you receive a
+                damaged, defective, incorrect, or otherwise eligible
+                product, you may request a return or replacement
+                according to the applicable product policy.
+            </p>
+
+            <p class="mb-0">
+                Please read the following conditions before
+                submitting a return or refund request.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             1. RETURN POLICY
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">01</span>
+
+                <h3>Return Policy</h3>
+            </div>
+
+            <p>
+                Eligible products may be returned within seven days
+                of delivery, subject to the product's return
+                eligibility and the conditions stated in this policy.
+            </p>
+
+            <h5>Return conditions</h5>
+
+            <ul>
+                <li>
+                    The product must be eligible for return.
+                </li>
+
+                <li>
+                    The request must be submitted within the
+                    applicable return window.
+                </li>
+
+                <li>
+                    The product should be returned with its original
+                    packaging, accessories, tags, and invoice
+                    where applicable.
+                </li>
+
+                <li>
+                    The product must not have damage caused by
+                    misuse, unauthorized modification, or improper
+                    handling.
+                </li>
+
+                <li>
+                    ShopSphere may inspect the product before
+                    approving the return.
+                </li>
+            </ul>
+
+            <div class="policy-note">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                The seven-day return period is a proposed ShopSphere
+                policy. Product-specific terms and applicable
+                consumer protection requirements may differ.
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             2. DAMAGED OR INCORRECT PRODUCTS
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">02</span>
+
+                <h3>Damaged, Defective or Incorrect Products</h3>
+            </div>
+
+            <p>
+                If you receive a damaged, defective, or incorrect
+                product, contact the ShopSphere support team as
+                soon as reasonably possible after delivery.
+            </p>
+
+            <h5>Information to provide</h5>
+
+            <ul>
+                <li>Your order number.</li>
+                <li>The name of the affected product.</li>
+                <li>A description of the issue.</li>
+                <li>Photographs of the product or damage, where appropriate.</li>
+            </ul>
+
+            <p class="mb-0">
+                Our team will review the information and explain
+                the available resolution according to the applicable
+                policy.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             3. REPLACEMENT POLICY
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">03</span>
+
+                <h3>Replacement Policy</h3>
+            </div>
+
+            <p>
+                A replacement may be available for eligible products
+                that are damaged, defective, incorrect, or otherwise
+                covered by the applicable product policy.
+            </p>
+
+            <ul>
+                <li>
+                    Replacement requests are subject to verification.
+                </li>
+
+                <li>
+                    The returned product may be inspected.
+                </li>
+
+                <li>
+                    Replacement depends on product availability.
+                </li>
+
+                <li>
+                    If a suitable replacement is unavailable,
+                    our support team will explain the available
+                    resolution options.
+                </li>
+            </ul>
+
+        </div>
+
+
+        <!-- =====================================================
+             4. HOW TO REQUEST A RETURN
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">04</span>
+
+                <h3>How to Request a Return</h3>
+            </div>
+
+            <p>
+                Follow these steps to request a return through
+                your ShopSphere account.
+            </p>
+
+            <div class="return-steps">
+
+                <div class="return-step">
+
+                    <span class="step-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+
+                    <div>
+                        <h5>Step 1: Log in</h5>
+
+                        <p>
+                            Sign in to your ShopSphere customer account.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="return-step">
+
+                    <span class="step-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </span>
+
+                    <div>
+                        <h5>Step 2: Open My Orders</h5>
+
+                        <p>
+                            Find the delivered order containing
+                            the product you want to return.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="return-step">
+
+                    <span class="step-icon">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </span>
+
+                    <div>
+                        <h5>Step 3: Submit a Return Request</h5>
+
+                        <p>
+                            Select the eligible product, choose a
+                            return reason, and provide the requested
+                            details.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="return-step">
+
+                    <span class="step-icon">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </span>
+
+                    <div>
+                        <h5>Step 4: Track Your Request</h5>
+
+                        <p>
+                            Follow the return status and any
+                            instructions provided by ShopSphere.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="policy-note">
+                <i class="fa-solid fa-circle-info me-2"></i>
+
+                Submitting a request does not automatically approve
+                a return. Return requests must be reviewed according
+                to the applicable policy.
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             5. REFUND POLICY
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">05</span>
+
+                <h3>Refund Policy</h3>
+            </div>
+
+            <p>
+                Refunds are processed for eligible orders after
+                the applicable return or cancellation has been
+                approved and any required verification has
+                been completed.
+            </p>
+
+            <h5>Online payments</h5>
+
+            <p>
+                Eligible refunds for payments made through Razorpay
+                will generally be issued through the original
+                payment method, subject to payment-provider
+                capabilities and applicable rules.
+            </p>
+
+            <h5>Cash on Delivery orders</h5>
+
+            <p>
+                For eligible Cash on Delivery orders, the support
+                team will communicate the available refund method
+                and any information required to process the refund.
+            </p>
+
+            <h5>Refund processing time</h5>
+
+            <p class="mb-0">
+                The time required for a refund to reach your account
+                can vary depending on the payment provider, bank,
+                and payment method. A refund being initiated does
+                not necessarily mean the money has already reached
+                your account.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             6. ORDER CANCELLATION
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">06</span>
+
+                <h3>Order Cancellation</h3>
+            </div>
+
+            <p>
+                Orders may be eligible for cancellation before
+                shipment or fulfillment, depending on their
+                current status and the applicable policy.
+            </p>
+
+            <ul>
+                <li>
+                    Eligible cancellation requests will be reviewed.
+                </li>
+
+                <li>
+                    Shipped or delivered orders may need to follow
+                    the return process instead.
+                </li>
+
+                <li>
+                    Refunds for eligible prepaid cancellations
+                    will be handled according to the applicable
+                    refund terms.
+                </li>
+            </ul>
+
+        </div>
+
+
+        <!-- =====================================================
+             7. NON-RETURNABLE PRODUCTS
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">07</span>
+
+                <h3>Non-Returnable Products</h3>
+            </div>
+
+            <p>
+                Some products may be excluded from returns because
+                of their nature, hygiene requirements, customization,
+                applicable legal restrictions, or disclosed
+                product-specific terms.
+            </p>
+
+            <p class="mb-0">
+                Any exclusions should be clearly communicated
+                to customers before purchase. Nothing in this policy
+                limits rights that cannot lawfully be excluded
+                under applicable law.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             8. RETURN STATUS
+             ===================================================== -->
+
+        <div class="policy-card">
+
+            <div class="policy-card-header">
+                <span class="policy-number">08</span>
+
+                <h3>Return Request Status</h3>
+            </div>
+
+            <p>
+                Once return management is available in ShopSphere,
+                customers will be able to track the progress of
+                their requests through their account.
+            </p>
+
+            <div class="status-list">
+
+                <div class="status-item">
+                    <span class="status-dot status-requested"></span>
+
+                    <div>
+                        <strong>Request Submitted</strong>
+
+                        <p>
+                            Your request has been received.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="status-item">
+                    <span class="status-dot status-approved"></span>
+
+                    <div>
+                        <strong>Return Approved</strong>
+
+                        <p>
+                            Your request has been approved.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="status-item">
+                    <span class="status-dot status-received"></span>
+
+                    <div>
+                        <strong>Product Received</strong>
+
+                        <p>
+                            The returned product has been received
+                            where a physical return is required.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="status-item">
+                    <span class="status-dot status-refunded"></span>
+
+                    <div>
+                        <strong>Refund Completed</strong>
+
+                        <p>
+                            The refund has been processed.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             9. CONTACT SUPPORT
+             ===================================================== -->
+
+        <div class="policy-contact">
+
+            <div class="contact-icon">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+
+            <h3>Need Help With a Return or Refund?</h3>
+
+            <p>
+                Our support team can help you understand the
+                applicable return and refund process.
+            </p>
+
+            <a th:href="@{/contact}"
+               class="btn btn-dark">
+
+                <i class="fa-solid fa-envelope me-2"></i>
+
+                Contact Support
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             BACK TO SHOPPING
+             ===================================================== -->
+
+        <div class="text-center policy-bottom">
+
+            <a th:href="@{/products}"
+               class="btn btn-outline-dark">
+
+                <i class="fa-solid fa-store me-2"></i>
+
+                Continue Shopping
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EXISTING FOOTER
+         ===================================================== -->
+
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+
+
+    <!-- Bootstrap JS -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>
