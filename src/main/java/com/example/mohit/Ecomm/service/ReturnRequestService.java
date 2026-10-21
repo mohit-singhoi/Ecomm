@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import org.json.JSONObject;
+import com.razorpay.RazorpayException;
+import com.razorpay.Refund;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.repo.OrderItemRepository;
 import com.example.mohit.Ecomm.repo.ReturnRequestRepository;
 import com.example.mohit.Ecomm.repo.UserRepository;
+import com.example.mohit.Ecomm.service.RazorpayService;
 
 import jakarta.transaction.Transactional;
 
@@ -35,6 +41,9 @@ public class ReturnRequestService {
 
     @Autowired
     private ReturnEvidenceStorageService evidenceStorageService;
+    
+    @Autowired
+    private RazorpayService razorpayService;
 
     // =====================================================
     // ALLOWED RETURN REASONS
@@ -490,5 +499,246 @@ public class ReturnRequestService {
 
      return returnRequestRepository.save(request);
  }
+ 
+ 
+//=====================================================
+//ADMIN: INITIATE REFUND AFTER RETURN IS RECEIVED
+//=====================================================
+
+@Transactional
+public ReturnRequest initiateRefund(Long requestId) {
+
+  if (requestId == null) {
+      throw new RuntimeException("Invalid return request ID.");
+  }
+
+  ReturnRequest request = getReturnRequestForAdmin(requestId);
+
+  // 1. Validate return status.
+  if (!"RETURN_RECEIVED".equals(request.getStatus())) {
+      throw new RuntimeException(
+              "The returned product must be received before refunding.");
+  }
+
+  // 2. Prevent duplicate or unsafe retry attempts.
+  String refundStatus = request.getRefundStatus();
+
+  if ("INITIATED".equals(refundStatus)
+          || "REFUNDED".equals(refundStatus)
+          || "FAILED".equals(refundStatus)) {
+
+      throw new RuntimeException(
+              "A refund attempt already exists. Verify its status "
+              + "in Razorpay before taking further action.");
+  }
+
+  OrderItem item = request.getOrderItem();
+
+  if (item == null || item.getOrder() == null) {
+      throw new RuntimeException(
+              "Order information is unavailable.");
+  }
+
+  Orders order = item.getOrder();
+
+  // 3. Only process online Razorpay payments here.
+  if (!"ONLINE".equalsIgnoreCase(order.getPaymentMethod())) {
+      throw new RuntimeException(
+              "This is not an online payment. "
+              + "Please process the COD refund separately.");
+  }
+
+  if (!"PAID".equalsIgnoreCase(order.getPaymentStatus())) {
+      throw new RuntimeException(
+              "The original payment has not been confirmed as paid.");
+  }
+
+  String paymentId = order.getRazorpayPaymentId();
+
+  if (paymentId == null || paymentId.isBlank()) {
+      throw new RuntimeException(
+              "The original Razorpay payment ID is unavailable.");
+  }
+
+  // 4. Calculate the refund using the original purchase price.
+  Double purchasePrice = item.getPurchasePrice();
+
+  if (purchasePrice == null
+          || !Double.isFinite(purchasePrice)
+          || purchasePrice <= 0) {
+
+      throw new RuntimeException(
+              "The original purchase price is unavailable.");
+  }
+
+  int returnQuantity = request.getReturnQuantity();
+
+  if (returnQuantity <= 0
+          || returnQuantity > item.getQuantity()) {
+
+      throw new RuntimeException("Invalid return quantity.");
+  }
+
+  BigDecimal refundAmount = BigDecimal.valueOf(purchasePrice)
+          .multiply(BigDecimal.valueOf(returnQuantity))
+          .setScale(2, RoundingMode.HALF_UP);
+
+  long refundAmountInPaise = refundAmount
+          .multiply(BigDecimal.valueOf(100))
+          .longValueExact();
+
+  if (refundAmountInPaise <= 0) {
+      throw new RuntimeException(
+              "The calculated refund amount is invalid.");
+  }
+
+  try {
+
+      // 5. Retrieve the original payment details.
+      JSONObject payment = razorpayService.fetchPayment(paymentId);
+
+      long originalPaymentAmount =
+              payment.getLong("amount");
+
+      if (originalPaymentAmount <= 0) {
+          throw new RuntimeException(
+                  "The original payment amount is invalid.");
+      }
+
+      if (refundAmountInPaise > originalPaymentAmount) {
+          throw new RuntimeException(
+                  "The refund amount exceeds the original payment.");
+      }
+
+      // 6. Retrieve existing refunds for this payment.
+      List<Refund> existingRefunds =
+              razorpayService.fetchRefunds(paymentId);
+
+      long reservedRefundAmount = 0;
+
+      for (Refund existingRefund : existingRefunds) {
+
+          JSONObject refundJson = existingRefund.toJson();
+
+          String status = refundJson.optString("status", "");
+
+          // Failed refunds do not reserve the refundable balance.
+          // Pending, processed, and unknown statuses are conservatively
+          // counted to avoid issuing an excessive refund.
+          if (!"failed".equalsIgnoreCase(status)) {
+
+              long existingAmount = refundJson.getLong("amount");
+
+              if (existingAmount > 0) {
+                  reservedRefundAmount = Math.addExact(
+                          reservedRefundAmount,
+                          existingAmount);
+              }
+          }
+      }
+
+      // Include Razorpay's reported refunded amount as well.
+      long amountRefundedByPayment =
+              payment.optLong("amount_refunded", 0);
+
+      if (amountRefundedByPayment < 0) {
+          throw new RuntimeException(
+                  "Razorpay returned an invalid refunded amount.");
+      }
+
+      // Use the greater figure rather than adding the two values,
+      // because the payment total may already include listed refunds.
+      long alreadyRefundedOrReserved = Math.max(
+              reservedRefundAmount,
+              amountRefundedByPayment);
+
+      long remainingRefundableAmount = Math.subtractExact(
+              originalPaymentAmount,
+              alreadyRefundedOrReserved);
+
+      if (remainingRefundableAmount < 0) {
+          throw new RuntimeException(
+                  "Existing refunds exceed the original payment. "
+                  + "Please reconcile the payment in Razorpay.");
+      }
+
+      if (refundAmountInPaise > remainingRefundableAmount) {
+          throw new RuntimeException(
+                  "The requested refund exceeds the remaining "
+                  + "refundable balance. Remaining amount: ₹"
+                  + BigDecimal.valueOf(remainingRefundableAmount, 2));
+      }
+
+      // 7. Save the intent before submitting the refund.
+      request.setRefundAmount(refundAmount.doubleValue());
+      request.setRefundStatus("INITIATED");
+
+      returnRequestRepository.saveAndFlush(request);
+
+      // 8. Submit the refund to Razorpay.
+      JSONObject refundResponse = razorpayService.initiateRefund(
+              paymentId,
+              refundAmountInPaise);
+
+      String refundId = refundResponse.optString("id", "");
+
+      if (refundId.isBlank()) {
+          request.setAdminRemarks(
+                  "The refund response did not contain a refund ID. "
+                  + "Verify the refund in Razorpay before proceeding.");
+
+          return returnRequestRepository.save(request);
+      }
+
+      request.setRazorpayRefundId(refundId);
+
+      String providerStatus =
+              refundResponse.optString("status", "");
+
+      if ("processed".equalsIgnoreCase(providerStatus)) {
+
+          request.setRefundStatus("REFUNDED");
+
+          request.setAdminRemarks(
+                  "Razorpay reports that the refund has been processed.");
+
+      } else if ("failed".equalsIgnoreCase(providerStatus)) {
+
+          request.setRefundStatus("FAILED");
+
+          request.setAdminRemarks(
+                  "Razorpay reports a failed refund. "
+                  + "Verify the provider status before any retry.");
+
+      } else {
+
+          request.setRefundStatus("INITIATED");
+
+          request.setAdminRemarks(
+                  "Refund submitted to Razorpay. "
+                  + "Awaiting confirmation of completion.");
+      }
+
+      return returnRequestRepository.save(request);
+
+  } catch (RazorpayException ex) {
+
+      // A failed API response does not necessarily mean that Razorpay
+      // rejected the refund. Do not submit it again automatically.
+      request.setRefundStatus("INITIATED");
+
+      request.setAdminRemarks(
+              "The refund outcome could not be confirmed. "
+              + "Check Razorpay before taking further action.");
+
+      return returnRequestRepository.save(request);
+
+  } catch (ArithmeticException ex) {
+
+      throw new RuntimeException(
+              "The refund calculation exceeded the supported amount range.",
+              ex);
+  }
+}
 
 }

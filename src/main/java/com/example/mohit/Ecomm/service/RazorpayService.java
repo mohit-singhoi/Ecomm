@@ -1,5 +1,6 @@
 package com.example.mohit.Ecomm.service;
 
+import java.util.List;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import com.razorpay.Refund;
 
 @Service
 public class RazorpayService {
@@ -98,6 +100,7 @@ public class RazorpayService {
                     exception);
         }
     }
+    
     public JSONObject fetchPayment(String razorpayPaymentId)
             throws RazorpayException {
 
@@ -108,5 +111,60 @@ public class RazorpayService {
                 razorpayClient.payments.fetch(razorpayPaymentId);
 
         return payment.toJson();
+    }
+    
+    /**
+     * Initiate a full or partial refund through Razorpay.
+     *
+     * @param razorpayPaymentId the original Razorpay payment ID
+     * @param amountInPaise refund amount in paise
+     * @return Razorpay refund response
+     */
+    public JSONObject initiateRefund(
+            String razorpayPaymentId,
+            long amountInPaise) throws RazorpayException {
+
+        if (razorpayPaymentId == null
+                || razorpayPaymentId.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Razorpay payment ID is required.");
+        }
+
+        if (amountInPaise <= 0) {
+            throw new IllegalArgumentException(
+                    "Refund amount must be greater than zero.");
+        }
+
+        RazorpayClient razorpayClient =
+                new RazorpayClient(keyId, keySecret);
+
+        JSONObject refundRequest = new JSONObject();
+        refundRequest.put("amount", amountInPaise);
+
+        com.razorpay.Refund refund =
+                razorpayClient.payments.refund(
+                        razorpayPaymentId,
+                        refundRequest);
+
+        return refund.toJson();
+    }
+    
+    /**
+     * Fetch all refunds associated with a Razorpay payment.
+     */
+    public List<Refund> fetchRefunds(String razorpayPaymentId)
+            throws RazorpayException {
+
+        if (razorpayPaymentId == null
+                || razorpayPaymentId.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Razorpay payment ID is required.");
+        }
+
+        RazorpayClient razorpayClient =
+                new RazorpayClient(keyId, keySecret);
+
+        return razorpayClient.payments.fetchAllRefunds(
+                razorpayPaymentId);
     }
 }

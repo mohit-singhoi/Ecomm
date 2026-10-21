@@ -90,6 +90,7 @@ public class OrderService {
          orderItem.setOrder(order);
          orderItem.setProduct(product);
          orderItem.setQuantity(quantity);
+         orderItem.setPurchasePrice(product.getPrice());
 
          orderItems.add(orderItem);
 
@@ -138,11 +139,13 @@ public class OrderService {
              order.getOrderItems()
                      .stream()
                      .map(item -> new OrderItemDTO(
-                             item.getId(),
-                             item.getProduct().getName(),
-                             item.getProduct().getPrice(),
-                             item.getQuantity()
-                     ))
+                    	        item.getId(),
+                    	        item.getProduct().getName(),
+                    	        item.getPurchasePrice() != null
+                    	                ? item.getPurchasePrice()
+                    	                : item.getProduct().getPrice(),
+                    	        item.getQuantity()
+                    	))
                      .collect(Collectors.toList());
 
      return new OrderDTO(
@@ -274,6 +277,7 @@ public class OrderService {
          orderItem.setOrder(order);
          orderItem.setProduct(product);
          orderItem.setQuantity(quantity);
+         orderItem.setPurchasePrice(product.getPrice());
 
          orderItems.add(orderItem);
      }
