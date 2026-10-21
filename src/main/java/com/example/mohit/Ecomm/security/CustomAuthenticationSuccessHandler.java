@@ -165,4 +165,27 @@ public class CustomAuthenticationSuccessHandler
         // Normal user destination
         response.sendRedirect("/dashboard");
     }
+    
+ // =====================================================
+ // CHECK ADMIN SESSION
+ // =====================================================
+
+ private boolean isAdmin(HttpSession session) {
+
+     if (session == null) {
+         return false;
+     }
+
+     Object loggedInUser = session.getAttribute("loggedInUser");
+
+     if (!(loggedInUser instanceof com.example.mohit.Ecomm.model.User)) {
+         return false;
+     }
+
+     com.example.mohit.Ecomm.model.User user =
+             (com.example.mohit.Ecomm.model.User) loggedInUser;
+
+     return user.getRole() != null
+             && "ADMIN".equalsIgnoreCase(user.getRole());
+ }
 }

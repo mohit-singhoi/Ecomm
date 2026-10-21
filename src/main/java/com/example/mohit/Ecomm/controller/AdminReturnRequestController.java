@@ -301,4 +301,54 @@ public class AdminReturnRequestController {
 
      return "redirect:/admin/returns/view/" + id;
  }
+ 
+//=====================================================
+//ADMIN: INITIATE RAZORPAY REFUND
+//=====================================================
+
+@PostMapping("/initiate-refund/{id}")
+public String initiateRefund(
+      @PathVariable("id") Long requestId,
+      HttpSession session,
+      RedirectAttributes redirectAttributes) {
+
+  // Verify admin access.
+  if (!isAdmin(session)) {
+      return "redirect:/adminlogin";
+  }
+
+  try {
+      ReturnRequest request =
+              returnRequestService.initiateRefund(requestId);
+
+      if ("REFUNDED".equalsIgnoreCase(request.getRefundStatus())) {
+          redirectAttributes.addFlashAttribute(
+                  "successMessage",
+                  "Refund processed successfully.");
+
+      } else if ("INITIATED".equalsIgnoreCase(
+              request.getRefundStatus())) {
+
+          redirectAttributes.addFlashAttribute(
+                  "successMessage",
+                  "Refund submitted or awaiting confirmation. "
+                  + "Verify its status in Razorpay.");
+
+      } else {
+          redirectAttributes.addFlashAttribute(
+                  "errorMessage",
+                  "Refund status: " + request.getRefundStatus());
+      }
+
+  } catch (RuntimeException ex) {
+
+      redirectAttributes.addFlashAttribute(
+              "errorMessage",
+              ex.getMessage());
+  }
+
+  return "redirect:/admin/returns/view/" + requestId;
+}
+
+
 }

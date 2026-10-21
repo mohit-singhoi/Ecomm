@@ -1,455 +1,591 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
 
-    <title>Return Request Details | ShopSphere Admin</title>
+<title>Return Request Details | ShopSphere Admin</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-		
-		<link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
-		<link rel="stylesheet" th:href="@{/css/admin-footer.css}">
-		<link rel="stylesheet" th:href="@{/css/return-request-details.css}">
-		
-		
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    rel="stylesheet">
+
+<link
+    rel="stylesheet"
+    th:href="@{/css/admin-navbar.css}">
+
+<link
+    rel="stylesheet"
+    th:href="@{/css/admin/return-request-details.css}">
+
+<link
+    rel="stylesheet"
+    th:href="@{/css/admin-footer.css}">
+```
 
 </head>
 
 <body>
 
-    <!-- EXISTING ADMIN NAVBAR -->
+```
+<!-- ADMIN NAVBAR -->
+<div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
 
-    <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
+<main class="admin-return-details-page container py-4">
 
-    <main class="container py-5">
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
-        <div class="mb-4">
+        <div>
+            <h2 class="fw-bold mb-2">
+                <i class="fa-solid fa-rotate-left me-2"></i>
+                Return Request Details
+            </h2>
 
-            <a th:href="@{/admin/returns}"
-               class="btn btn-outline-secondary btn-sm mb-3">
-
-                <i class="fa-solid fa-arrow-left me-1"></i>
-                Back to Return Requests
-
-            </a>
-
-            <h1 class="fw-bold">
-
-                Return Request #
-
-                <span th:text="${returnRequest.id}">1</span>
-
-            </h1>
-
-            <p class="text-muted">
-                Review the customer's return request and supporting evidence.
+            <p class="text-muted mb-0">
+                Review the return request, manage pickup, and process eligible refunds.
             </p>
-
         </div>
 
-        <!-- MESSAGES -->
+        <a th:href="@{/admin/returns}"
+           class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Back to Return Requests
+        </a>
 
-        <div th:if="${successMessage}"
-             class="alert alert-success"
-             th:text="${successMessage}">
-        </div>
+    </div>
 
-        <div th:if="${errorMessage}"
-             class="alert alert-danger"
-             th:text="${errorMessage}">
-        </div>
+    <!-- SUCCESS MESSAGE -->
+    <div th:if="${successMessage != null}"
+         class="alert alert-success alert-dismissible fade show"
+         role="alert">
 
-        <div class="row g-4">
+        <i class="fa-solid fa-circle-check me-2"></i>
 
-            <!-- REQUEST INFORMATION -->
+        <span th:text="${successMessage}"></span>
 
-            <div class="col-lg-7">
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+    </div>
 
-                <div class="card border-0 shadow-sm">
+    <!-- ERROR MESSAGE -->
+    <div th:if="${errorMessage != null}"
+         class="alert alert-danger alert-dismissible fade show"
+         role="alert">
 
-                    <div class="card-body p-4">
+        <i class="fa-solid fa-circle-exclamation me-2"></i>
 
-                        <h4 class="fw-bold mb-4">
-                            Request Information
-                        </h4>
+        <span th:text="${errorMessage}"></span>
 
-                        <p>
-                            <strong>Customer:</strong>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+    </div>
 
-                            <span th:text="${returnRequest.user.name}">
-                                Customer
-                            </span>
+    <div class="row g-4">
+
+        <!-- RETURN REQUEST INFORMATION -->
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fa-solid fa-box-open me-2"></i>
+                        Return Request Information
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <!-- REQUEST ID -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Request ID</label>
+                        <p class="fw-semibold mb-0"
+                           th:text="${returnRequest.id}">
+                            1
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Email:</strong>
+                    <hr>
 
-                            <span th:text="${returnRequest.user.email}">
-                                customer@example.com
-                            </span>
+                    <!-- CUSTOMER NAME -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Customer Name</label>
+                        <p class="fw-semibold mb-0"
+                           th:text="${returnRequest.user.name}">
+                            Customer Name
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Order ID:</strong>
-
-                            #
-
-                            <span th:text="${returnRequest.orderItem.order.id}">
-                                1
-                            </span>
+                    <!-- CUSTOMER EMAIL -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Customer Email</label>
+                        <p class="mb-0"
+                           th:text="${returnRequest.user.email}">
+                            customer@example.com
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Product:</strong>
+                    <hr>
 
-                            <span th:text="${returnRequest.orderItem.product.name}">
-                                Product
-                            </span>
+                    <!-- ORDER ID -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Order ID</label>
+                        <p class="fw-semibold mb-0"
+                           th:text="${returnRequest.orderItem.order.id}">
+                            1001
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Return Quantity:</strong>
-
-                            <span th:text="${returnRequest.returnQuantity}">
-                                1
-                            </span>
+                    <!-- PRODUCT NAME -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Product Name</label>
+                        <p class="fw-semibold mb-0"
+                           th:text="${returnRequest.orderItem.product.name}">
+                            Product Name
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Reason:</strong>
-
-                            <span th:text="${returnRequest.reason}">
-                                Return reason
-                            </span>
+                    <!-- RETURN QUANTITY -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Return Quantity</label>
+                        <p class="fw-semibold mb-0"
+                           th:text="${returnRequest.returnQuantity}">
+                            1
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Description:</strong>
+                    <hr>
+
+                    <!-- RETURN REASON -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Return Reason</label>
+                        <p class="fw-semibold mb-0"
+                           th:text="${returnRequest.reason}">
+                            Damaged or defective product
                         </p>
+                    </div>
 
-                        <p class="text-muted"
-                           style="white-space: pre-wrap; overflow-wrap: anywhere;"
-                           th:text="${returnRequest.description != null
-                                and !#strings.isEmpty(returnRequest.description)
-                                ? returnRequest.description
-                                : 'No additional description provided.'}">
-                            Description
+                    <!-- DESCRIPTION -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Customer Description</label>
+
+                        <div class="border rounded p-3 bg-light">
+                            <p class="mb-0"
+                               style="white-space: pre-wrap;"
+                               th:text="${returnRequest.description != null
+                                        and !#strings.isEmpty(returnRequest.description)
+                                        ? returnRequest.description
+                                        : 'No additional description provided.'}">
+                                Return description
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- REQUEST DATE -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Request Date</label>
+                        <p class="mb-0"
+                           th:text="${returnRequest.requestDate}">
+                            Request date
                         </p>
+                    </div>
 
-                        <p>
-                            <strong>Submitted:</strong>
+                    <!-- REQUEST STATUS -->
+                    <div class="mb-3">
+                        <label class="text-muted small">Return Status</label>
 
-                            <span th:text="${#dates.format(
-                                returnRequest.requestDate,
-                                'dd MMM yyyy, hh:mm a')}">
-                                Date
-                            </span>
-                        </p>
-
-                        <p>
-                            <strong>Current Status:</strong>
-
-                            <span class="badge bg-info text-dark"
+                        <div>
+                            <span class="badge bg-primary fs-6"
                                   th:text="${returnRequest.status}">
                                 REQUESTED
                             </span>
-                        </p>
-
-                        <!-- SUPPORTING IMAGE -->
-
-                        <div th:if="${returnRequest.evidenceImagePath != null}">
-
-                            <hr>
-
-                            <h5 class="fw-bold mb-3">
-                                Customer's Product Photo
-                            </h5>
-
-                            <a th:href="@{/admin/returns/evidence/{id}(
-                                            id=${returnRequest.id})}"
-                               target="_blank"
-                               rel="noopener">
-
-                                View Uploaded Evidence
-
-                            </a>
-
                         </div>
+                    </div>
 
+                    <!-- EVIDENCE IMAGE -->
+                    <div class="mb-2"
+                         th:if="${returnRequest.evidenceImagePath != null
+                                 and !#strings.isEmpty(returnRequest.evidenceImagePath)}">
+
+                        <label class="text-muted small d-block mb-2">
+                            Customer Evidence
+                        </label>
+
+                        <a th:href="@{/admin/returns/evidence/{id}(id=${returnRequest.id})}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-outline-primary">
+
+                            <i class="fa-solid fa-image me-2"></i>
+                            View Evidence Image
+                        </a>
                     </div>
 
                 </div>
-
             </div>
+        </div>
 
-            <!-- ADMIN DECISION -->
+        <!-- ADMIN ACTIONS -->
+        <div class="col-lg-6">
 
-            <div class="col-lg-5">
+            <div class="card shadow-sm border-0 h-100">
 
-                <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="fa-solid fa-user-shield me-2"></i>
+                        Admin Actions
+                    </h5>
+                </div>
 
-                    <div class="card-body p-4">
+                <div class="card-body">
 
-                        <h4 class="fw-bold mb-3">
-                            Review Request
-                        </h4>
+                    <!-- APPROVE OR REJECT REQUEST -->
+                    <div th:if="${returnRequest.status == 'REQUESTED'}">
 
-                        <p class="text-muted">
-                            Approve an eligible request or reject it
-                            with an explanation for the customer.
-                        </p>
+                        <h6 class="fw-bold mb-3">
+                            Review Return Request
+                        </h6>
 
-                        <div th:if="${returnRequest.status == 'REQUESTED'}">
+                        <form th:action="@{/admin/returns/review/{id}(id=${returnRequest.id})}"
+                              method="post">
 
-                            <form
-                                th:action="@{/admin/returns/review/{id}(
-                                    id=${returnRequest.id})}"
-                                method="post">
+                            <!-- CSRF -->
+                            <input type="hidden"
+                                   th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
 
-                                <!-- CSRF Protection -->
+                            <div class="mb-3">
 
-                                <input type="hidden"
-                                       th:if="${_csrf != null}"
-                                       th:name="${_csrf.parameterName}"
-                                       th:value="${_csrf.token}">
+                                <label for="adminRemarks"
+                                       class="form-label">
+                                    Admin Remarks
+                                </label>
 
-                                <div class="mb-3">
+                                <textarea id="adminRemarks"
+                                          name="adminRemarks"
+                                          class="form-control"
+                                          rows="4"
+                                          maxlength="1000"
+                                          placeholder="Enter remarks. Remarks are required when rejecting a request."></textarea>
 
-                                    <label for="adminRemarks"
-                                           class="form-label fw-semibold">
+                            </div>
 
-                                        Admin Remarks
+                            <div class="d-flex flex-wrap gap-2">
 
-                                    </label>
-
-                                    <textarea
-                                        id="adminRemarks"
-                                        name="adminRemarks"
-                                        class="form-control"
-                                        rows="5"
-                                        maxlength="1000"
-                                        placeholder="Explain your decision. Remarks are required when rejecting a request."></textarea>
-
-                                </div>
-
-                                <div class="d-grid gap-3">
-
-                                    <button
-                                        type="submit"
+                                <button type="submit"
                                         name="decision"
                                         value="APPROVE"
                                         class="btn btn-success"
                                         onclick="return confirm('Approve this return request?');">
 
-                                        <i class="fa-solid fa-check me-2"></i>
-                                        Approve Return
+                                    <i class="fa-solid fa-check me-2"></i>
+                                    Approve Request
+                                </button>
 
-                                    </button>
-
-                                    <button
-                                        type="submit"
+                                <button type="submit"
                                         name="decision"
                                         value="REJECT"
-                                        class="btn btn-outline-danger"
+                                        class="btn btn-danger"
                                         onclick="return confirm('Reject this return request?');">
 
-                                        <i class="fa-solid fa-xmark me-2"></i>
-                                        Reject Return
+                                    <i class="fa-solid fa-xmark me-2"></i>
+                                    Reject Request
+                                </button>
 
-                                    </button>
+                            </div>
 
-                                </div>
+                        </form>
+                    </div>
 
-                            </form>
+                    <!-- EXISTING DECISION -->
+                    <div th:if="${returnRequest.status != 'REQUESTED'}">
 
+                        <div class="alert alert-secondary">
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            This request has already been reviewed.
                         </div>
 
-                        <div th:unless="${returnRequest.status == 'REQUESTED'}"
-                             class="alert alert-secondary mb-0">
+                        <div class="mb-3">
+                            <label class="text-muted small">
+                                Current Status
+                            </label>
 
-                            <strong>Decision recorded:</strong>
-
-                            <span th:text="${returnRequest.status}">
+                            <p class="fw-semibold mb-0"
+                               th:text="${returnRequest.status}">
                                 APPROVED
-                            </span>
-
-                            <hr>
-
-                            <strong>Admin Remarks:</strong>
-
-                            <p class="mb-0"
-                               th:text="${returnRequest.adminRemarks != null
-                                    and !#strings.isEmpty(returnRequest.adminRemarks)
-                                    ? returnRequest.adminRemarks
-                                    : 'No remarks provided.'}">
-                                Admin remarks
                             </p>
-
                         </div>
-						
-						<!-- =====================================================
-						     RETURN PICKUP AND RECEIPT MANAGEMENT
-						     ===================================================== -->
 
-						<div class="mt-4"
-						     th:if="${returnRequest.status == 'APPROVED'
-						             or returnRequest.status == 'PICKUP_PENDING'}">
+                        <div class="mb-3"
+                             th:if="${returnRequest.adminRemarks != null
+                                     and !#strings.isEmpty(returnRequest.adminRemarks)}">
 
-						    <hr>
+                            <label class="text-muted small">
+                                Admin Remarks
+                            </label>
 
-						    <h5 class="fw-bold mb-3">
-						        <i class="fa-solid fa-truck-fast me-2"></i>
-						        Return Pickup & Receipt
-						    </h5>
-
-						    <p class="text-muted small">
-						        Manage pickup arrangements and confirm when the
-						        returned product has been received.
-						    </p>
-
-						    <form
-						        th:action="@{/admin/returns/update-status/{id}(id=${returnRequest.id})}"
-						        method="post">
-
-						        <!-- CSRF Protection -->
-
-						        <input type="hidden"
-						               th:if="${_csrf != null}"
-						               th:name="${_csrf.parameterName}"
-						               th:value="${_csrf.token}">
-
-						        <!-- ADMIN REMARKS -->
-
-						        <div class="mb-3">
-
-						            <label for="pickupRemarks"
-						                   class="form-label fw-semibold">
-						                Update for Customer
-						            </label>
-
-						            <textarea
-						                id="pickupRemarks"
-						                name="adminRemarks"
-						                class="form-control"
-						                rows="3"
-						                maxlength="1000"
-						                placeholder="Enter pickup instructions or receipt confirmation..."></textarea>
-
-						        </div>
-
-						        <!-- APPROVED: START PICKUP -->
-
-						        <div th:if="${returnRequest.status == 'APPROVED'}">
-
-						            <input type="hidden"
-						                   name="status"
-						                   value="PICKUP_PENDING">
-
-						            <button type="submit"
-						                    class="btn btn-primary w-100"
-						                    onclick="return confirm('Start the pickup coordination process?');">
-
-						                <i class="fa-solid fa-truck-fast me-2"></i>
-						                Start Pickup Process
-
-						            </button>
-
-						        </div>
-
-						        <!-- PICKUP PENDING: CONFIRM RECEIPT -->
-
-						        <div th:if="${returnRequest.status == 'PICKUP_PENDING'}">
-
-						            <input type="hidden"
-						                   name="status"
-						                   value="RETURN_RECEIVED">
-
-						            <button type="submit"
-						                    class="btn btn-success w-100"
-						                    onclick="return confirm('Confirm that the returned product has actually been received?');">
-
-						                <i class="fa-solid fa-box-open me-2"></i>
-						                Confirm Product Received
-
-						            </button>
-
-						        </div>
-
-						    </form>
-
-						</div>
-
-						<!-- PRODUCT RECEIVED: REFUND NEXT -->
-
-						<div th:if="${returnRequest.status == 'RETURN_RECEIVED'}"
-						     class="alert alert-info mt-4">
-
-						    <i class="fa-solid fa-circle-info me-2"></i>
-
-						    The returned product has been received. Verify refund
-						    eligibility before processing the applicable refund.
-
-						</div>
+                            <div class="border rounded p-3 bg-light">
+                                <p class="mb-0"
+                                   style="white-space: pre-wrap;"
+                                   th:text="${returnRequest.adminRemarks}">
+                                    Admin remarks
+                                </p>
+                            </div>
+                        </div>
 
                     </div>
 
+                    <hr>
+
+					<!-- PICKUP AND RECEIVING WORKFLOW -->
+					<div th:if="${returnRequest.status == 'APPROVED'
+					            or returnRequest.status == 'PICKUP_PENDING'}">
+
+					    <h6 class="fw-bold mb-3">
+					        <i class="fa-solid fa-truck me-2"></i>
+					        Return Pickup Management
+					    </h6>
+
+					    <form th:action="@{/admin/returns/update-status/{id}(id=${returnRequest.id})}"
+					          method="post">
+
+					        <!-- CSRF TOKEN -->
+					        <input type="hidden"
+					               th:if="${_csrf != null}"
+					               th:name="${_csrf.parameterName}"
+					               th:value="${_csrf.token}">
+
+					        <!-- ADMIN REMARKS -->
+					        <div class="mb-3">
+					            <label for="pickupRemarks" class="form-label">
+					                Pickup / Receiving Remarks
+					            </label>
+
+					            <textarea id="pickupRemarks"
+					                      name="adminRemarks"
+					                      class="form-control"
+					                      rows="3"
+					                      maxlength="1000"
+					                      placeholder="Enter pickup or product receiving remarks"></textarea>
+					        </div>
+
+					        <!-- START PICKUP -->
+					        <div th:if="${returnRequest.status == 'APPROVED'}">
+
+					            <input type="hidden"
+					                   name="status"
+					                   value="PICKUP_PENDING">
+
+					            <button type="submit"
+					                    class="btn btn-primary w-100"
+					                    onclick="return confirm('Start the return pickup process?');">
+
+					                <i class="fa-solid fa-truck-fast me-2"></i>
+					                Start Pickup Process
+					            </button>
+
+					        </div>
+
+					        <!-- CONFIRM PRODUCT RECEIVED -->
+					        <div th:if="${returnRequest.status == 'PICKUP_PENDING'}">
+
+					            <input type="hidden"
+					                   name="status"
+					                   value="RETURN_RECEIVED">
+
+					            <button type="submit"
+					                    class="btn btn-success w-100"
+					                    onclick="return confirm('Confirm that the returned product has been received?');">
+
+					                <i class="fa-solid fa-box-check me-2"></i>
+					                Confirm Product Received
+					            </button>
+
+					        </div>
+
+					    </form>
+
+					</div>
+                    <!-- PRODUCT RECEIVED MESSAGE -->
+                    <div th:if="${returnRequest.status == 'RETURN_RECEIVED'}"
+                         class="alert alert-info mt-3">
+
+                        <i class="fa-solid fa-circle-check me-2"></i>
+
+                        The returned product has been received.
+                        Check the refund information below.
+                    </div>
+
+                    <!-- REFUND INFORMATION -->
+                    <div class="card border-0 bg-light mt-3"
+                         th:if="${returnRequest.refundStatus != null
+                                 and returnRequest.refundStatus != 'NOT_APPLICABLE'}">
+
+                        <div class="card-body">
+
+                            <h6 class="fw-bold mb-3">
+                                <i class="fa-solid fa-money-bill-transfer me-2"></i>
+                                Refund Information
+                            </h6>
+
+                            <!-- REFUND STATUS -->
+                            <div class="mb-3">
+
+                                <label class="text-muted small">
+                                    Refund Status
+                                </label>
+
+                                <div>
+                                    <span class="badge bg-info text-dark fs-6"
+                                          th:text="${returnRequest.refundStatus}">
+                                        INITIATED
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <!-- REFUND AMOUNT -->
+                            <div class="mb-3"
+                                 th:if="${returnRequest.refundAmount != null}">
+
+                                <label class="text-muted small">
+                                    Refund Amount
+                                </label>
+
+                                <p class="fw-bold mb-0">
+                                    ₹<span th:text="${#numbers.formatDecimal(returnRequest.refundAmount, 1, 2)}">0.00</span>
+                                </p>
+
+                            </div>
+
+                            <!-- RAZORPAY REFUND ID -->
+                            <div th:if="${returnRequest.razorpayRefundId != null
+                                         and !#strings.isEmpty(returnRequest.razorpayRefundId)}">
+
+                                <label class="text-muted small">
+                                    Razorpay Refund ID
+                                </label>
+
+                                <p class="small mb-0 text-break"
+                                   th:text="${returnRequest.razorpayRefundId}">
+                                    Refund ID
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- INITIATE RAZORPAY REFUND -->
+                    <div class="mt-3"
+                         th:if="${returnRequest.status == 'RETURN_RECEIVED'
+                                 and returnRequest.refundStatus == 'NOT_APPLICABLE'
+                                 and returnRequest.orderItem.order.paymentMethod == 'ONLINE'
+                                 and returnRequest.orderItem.order.paymentStatus == 'PAID'}">
+
+                        <div class="alert alert-warning">
+
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+
+                            Verify the original payment and refund amount before initiating the refund.
+                        </div>
+
+                        <form th:action="@{/admin/returns/initiate-refund/{id}(id=${returnRequest.id})}"
+                              method="post">
+
+                            <!-- CSRF -->
+                            <input type="hidden"
+                                   th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
+
+                            <button type="submit"
+                                    class="btn btn-success w-100"
+                                    onclick="return confirm('Are you sure you want to initiate the Razorpay refund for this return request?');">
+
+                                <i class="fa-solid fa-indian-rupee-sign me-2"></i>
+                                Initiate Razorpay Refund
+                            </button>
+
+                        </form>
+
+                        <p class="text-muted small mt-2 mb-0">
+                            Do not retry a refund if an earlier attempt has an uncertain outcome.
+                            Verify the refund status in Razorpay first.
+                        </p>
+
+                    </div>
+
+                    <!-- COD / NON-ONLINE PAYMENT MESSAGE -->
+                    <div class="alert alert-secondary mt-3"
+                         th:if="${returnRequest.status == 'RETURN_RECEIVED'
+                                 and returnRequest.orderItem.order.paymentMethod != 'ONLINE'}">
+
+                        <i class="fa-solid fa-circle-info me-2"></i>
+
+                        This order was not paid online through Razorpay.
+                        Follow your manual refund process if a refund is due.
+                    </div>
+
+                    <!-- ONLINE PAYMENT NOT PAID -->
+                    <div class="alert alert-warning mt-3"
+                         th:if="${returnRequest.status == 'RETURN_RECEIVED'
+                                 and returnRequest.orderItem.order.paymentMethod == 'ONLINE'
+                                 and returnRequest.orderItem.order.paymentStatus != 'PAID'}">
+
+                        <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                        A Razorpay refund cannot be initiated because the order payment status is not PAID.
+                    </div>
+
                 </div>
-
             </div>
-
         </div>
 
-    </main>
+    </div>
 
-    <!-- EXISTING ADMIN FOOTER -->
+</main>
 
-    <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
+<!-- ADMIN FOOTER -->
+<div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
-	
-	<!-- AUTO-HIDE SUCCESS / ERROR MESSAGES AFTER 3 SECONDS -->
+<!-- BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-	<script>
-	    document.addEventListener("DOMContentLoaded", function () {
+<!-- ADMIN NAVBAR SCRIPT -->
+<script th:src="@{/js/admin-navbar.js}"></script>
 
-	        const alerts = document.querySelectorAll(
-	            ".alert-success, .alert-danger"
-	        );
+<!-- ALERT AUTO-HIDE -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alerts = document.querySelectorAll(".alert-success, .alert-danger");
 
-	        alerts.forEach(function (alert) {
+        alerts.forEach(function (alert) {
+            window.setTimeout(function () {
+                if (alert && alert.isConnected) {
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                    bsAlert.close();
+                }
+            }, 5000);
+        });
+    });
+</script>
 
-	            setTimeout(function () {
-
-	                alert.style.transition = "opacity 0.4s ease";
-	                alert.style.opacity = "0";
-
-	                setTimeout(function () {
-	                    alert.remove();
-	                }, 400);
-
-	            }, 3000);
-
-	        });
-
-	    });
-	</script>
-	
-	<script th:src="@{/js/admin-navbar.js}"></script>
 
 </body>
-
 </html>
