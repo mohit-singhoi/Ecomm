@@ -83,6 +83,10 @@ public class ReturnRequest {
     // Razorpay refund reference, if applicable
     @Column(length = 100)
     private String razorpayRefundId;
+    
+ // Tracks whether the successful refund email has been sent
+    @Column(name = "refund_email_sent", nullable = false)
+    private boolean refundEmailSent = false;
 
     @PrePersist
     protected void onCreate() {
@@ -222,5 +226,13 @@ public class ReturnRequest {
 
     public void setEvidenceImagePath(String evidenceImagePath) {
         this.evidenceImagePath = evidenceImagePath;
+    }
+    
+    public boolean isRefundEmailSent() {
+        return refundEmailSent;
+    }
+
+    public void setRefundEmailSent(boolean refundEmailSent) {
+        this.refundEmailSent = refundEmailSent;
     }
 }

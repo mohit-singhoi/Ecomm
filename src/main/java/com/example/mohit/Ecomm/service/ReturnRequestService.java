@@ -44,6 +44,9 @@ public class ReturnRequestService {
     
     @Autowired
     private RazorpayService razorpayService;
+    
+    @Autowired
+    private EmailService emailService;
 
     // =====================================================
     // ALLOWED RETURN REASONS
@@ -500,7 +503,49 @@ public class ReturnRequestService {
      return returnRequestRepository.save(request);
  }
  
- 
+//=====================================================
+//SEND SUCCESSFUL REFUND EMAIL ONCE
+//=====================================================
+private void sendRefundSuccessEmailIfNeeded(ReturnRequest request) {
+
+  if (!"REFUNDED".equals(request.getRefundStatus())) {
+      return;
+  }
+
+  if (request.isRefundEmailSent()) {
+      return;
+  }
+
+  User customer = request.getUser();
+
+  if (customer == null
+          || customer.getEmail() == null
+          || customer.getEmail().isBlank()) {
+      return;
+  }
+
+  OrderItem item = request.getOrderItem();
+
+  try {
+      emailService.sendRefundSuccessEmail(
+              customer.getEmail(),
+              customer.getName(),
+              request.getId(),
+              request.getRefundAmount(),
+              request.getRazorpayRefundId()
+      );
+
+      request.setRefundEmailSent(true);
+
+  } catch (Exception ex) {
+      // Do not change the successful refund status if email fails.
+      request.setAdminRemarks(
+              "Refund processed successfully, but the customer "
+              + "notification email could not be sent."
+      );
+  }
+}
+
 //=====================================================
 //ADMIN: INITIATE REFUND AFTER RETURN IS RECEIVED
 //=====================================================
@@ -697,12 +742,13 @@ public ReturnRequest initiateRefund(Long requestId) {
 
       if ("processed".equalsIgnoreCase(providerStatus)) {
 
-          request.setRefundStatus("REFUNDED");
+    	    request.setRefundStatus("REFUNDED");
 
-          request.setAdminRemarks(
-                  "Razorpay reports that the refund has been processed.");
+    	    request.setAdminRemarks(
+    	            "Razorpay reports that the refund has been processed.");
 
-      } else if ("failed".equalsIgnoreCase(providerStatus)) {
+    	    sendRefundSuccessEmailIfNeeded(request);
+    	} else if ("failed".equalsIgnoreCase(providerStatus)) {
 
           request.setRefundStatus("FAILED");
 
@@ -780,6 +826,7 @@ try {
          request.setRefundStatus("REFUNDED");
          request.setAdminRemarks(
                  "Razorpay confirms that the refund has been processed.");
+         sendRefundSuccessEmailIfNeeded(request);
          break;
 
      case "failed":

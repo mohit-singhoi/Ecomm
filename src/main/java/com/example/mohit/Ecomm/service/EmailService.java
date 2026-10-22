@@ -158,6 +158,74 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    
+    
+ // ==========================================
+ // REFUND SUCCESS EMAIL
+ // Sent when a refund is successfully processed
+ // ==========================================
+
+ public void sendRefundSuccessEmail(
+         String recipientEmail,
+         String customerName,
+         Long returnRequestId,
+         Double refundAmount,
+         String razorpayRefundId) {
+
+     validateRecipientEmail(recipientEmail);
+
+     if (refundAmount == null || refundAmount <= 0) {
+         throw new IllegalArgumentException(
+                 "A valid refund amount is required."
+         );
+     }
+
+     String name = getCustomerName(customerName);
+
+     SimpleMailMessage message = new SimpleMailMessage();
+
+     message.setFrom(fromEmail);
+     message.setTo(recipientEmail.trim());
+
+     message.setSubject(
+             "ShopSphere - Your Refund Has Been Successfully Processed"
+     );
+
+     message.setText(
+             "Dear " + name + ",\n\n"
+
+             + "Your refund has been successfully processed.\n\n"
+
+             + "Here are your refund details:\n\n"
+
+             + "Return Request ID: " + returnRequestId + "\n"
+
+             + "Refund Amount: Rs. "
+             + String.format(java.util.Locale.US, "%.2f", refundAmount)
+             + "\n"
+
+             + "Refund Status: Successfully Refunded\n"
+
+             + "Razorpay Refund ID: "
+             + ((razorpayRefundId == null || razorpayRefundId.isBlank())
+                     ? "Not available"
+                     : razorpayRefundId.trim())
+             + "\n\n"
+
+             + "Depending on your bank or payment provider, "
+             + "it may take 3-5 working days to reflact "
+             + "in your account.\n\n"
+
+             + "Thank you for shopping with ShopSphere!\n\n"
+
+             + "Best regards,\n"
+             + "ShopSphere Support Team"
+     );
+
+     mailSender.send(message);
+ }
+ 
+
 
     // ==========================================
     // COMMON VALIDATION
