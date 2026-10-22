@@ -261,46 +261,98 @@ public class AdminReturnRequestController {
  // UPDATE RETURN PICKUP STATUS
  // =====================================================
 
- @PostMapping("/update-status/{id}")
- public String updateReturnStatus(
-         @PathVariable Long id,
-         @RequestParam String status,
-         @RequestParam(required = false) String adminRemarks,
-         HttpSession session,
-         RedirectAttributes redirectAttributes) {
+    @PostMapping("/update-status/{id}")
+    public String updateReturnStatus(
+    @PathVariable Long id,
+    @RequestParam String status,
+    @RequestParam(required = false) String adminRemarks,
+    HttpSession session,
+    RedirectAttributes redirectAttributes) {
 
-     if (!isAdmin(session)) {
+    
+    if (!isAdmin(session)) {
+        redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                "Please log in as an administrator.");
+        return "redirect:/adminlogin";
+    }
 
-         redirectAttributes.addFlashAttribute(
-                 "errorMessage",
-                 "Please log in as an administrator.");
+    try {
+        // Step 1: Update the return/pickup status.
+        ReturnRequest request =
+                returnRequestService.advanceReturnStatus(
+                        id,
+                        status,
+                        adminRemarks);
 
-         return "redirect:/adminlogin";
-     }
+        // Step 2: Automatically initiate a refund when the
+        // admin confirms receipt of the returned product.
+        if ("RETURN_RECEIVED".equalsIgnoreCase(request.getStatus())) {
 
-     try {
+            if (request.getOrderItem() == null
+                    || request.getOrderItem().getOrder() == null) {
+                throw new RuntimeException(
+                        "Order information is unavailable.");
+            }
 
-         ReturnRequest request =
-                 returnRequestService.advanceReturnStatus(
-                         id,
-                         status,
-                         adminRemarks);
+            String paymentMethod = request.getOrderItem()
+                    .getOrder()
+                    .getPaymentMethod();
 
-         redirectAttributes.addFlashAttribute(
-                 "successMessage",
-                 "Return request #" + request.getId()
-                         + " updated to "
-                         + request.getStatus() + ".");
+            if ("ONLINE".equalsIgnoreCase(paymentMethod)) {
 
-     } catch (RuntimeException ex) {
+                request = returnRequestService.initiateRefund(id);
 
-         redirectAttributes.addFlashAttribute(
-                 "errorMessage",
-                 ex.getMessage());
-     }
+                if ("REFUNDED".equalsIgnoreCase(
+                        request.getRefundStatus())) {
 
-     return "redirect:/admin/returns/view/" + id;
- }
+                    redirectAttributes.addFlashAttribute(
+                            "successMessage",
+                            "Returned product received and Razorpay "
+                            + "reports the refund as processed.");
+
+                } else if ("INITIATED".equalsIgnoreCase(
+                        request.getRefundStatus())) {
+
+                    redirectAttributes.addFlashAttribute(
+                            "successMessage",
+                            "Returned product received. The Razorpay "
+                            + "refund has been submitted or needs "
+                            + "status verification.");
+
+                } else {
+                    redirectAttributes.addFlashAttribute(
+                            "errorMessage",
+                            "Return received, but refund status is: "
+                            + request.getRefundStatus());
+                }
+
+            } else {
+                // COD/manual refund will be implemented separately.
+                redirectAttributes.addFlashAttribute(
+                        "successMessage",
+                        "Returned product received. This order requires "
+                        + "the manual refund process.");
+            }
+
+        } else {
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Return request #" + request.getId()
+                    + " updated to " + request.getStatus() + ".");
+        }
+
+    } catch (RuntimeException ex) {
+        redirectAttributes.addFlashAttribute(
+                "errorMessage",
+                ex.getMessage());
+    }
+
+    return "redirect:/admin/returns/view/" + id;
+    
+
+    }
+
  
 //=====================================================
 //ADMIN: INITIATE RAZORPAY REFUND
