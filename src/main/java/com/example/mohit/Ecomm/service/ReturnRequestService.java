@@ -741,4 +741,79 @@ public ReturnRequest initiateRefund(Long requestId) {
   }
 }
 
+//=====================================================
+//ADMIN: SYNCHRONIZE REFUND STATUS WITH RAZORPAY
+//=====================================================
+@Transactional
+public ReturnRequest synchronizeRefundStatus(Long requestId) {
+
+
+if (requestId == null) {
+ throw new RuntimeException("Invalid return request ID.");
+}
+
+ReturnRequest request = getReturnRequestForAdmin(requestId);
+
+if (!"RETURN_RECEIVED".equals(request.getStatus())) {
+ throw new RuntimeException(
+         "The returned product must be received before checking its refund.");
+}
+
+String refundId = request.getRazorpayRefundId();
+
+if (refundId == null || refundId.isBlank()) {
+ throw new RuntimeException(
+         "No Razorpay refund ID is available for this return request.");
+}
+
+try {
+ JSONObject refundResponse =
+         razorpayService.fetchRefund(refundId);
+
+ String providerStatus =
+         refundResponse.optString("status", "")
+                 .trim()
+                 .toLowerCase(Locale.ROOT);
+
+ switch (providerStatus) {
+     case "processed":
+         request.setRefundStatus("REFUNDED");
+         request.setAdminRemarks(
+                 "Razorpay confirms that the refund has been processed.");
+         break;
+
+     case "failed":
+         request.setRefundStatus("FAILED");
+         request.setAdminRemarks(
+                 "Razorpay reports that the refund failed. "
+                 + "Verify the provider details before attempting another refund.");
+         break;
+
+     case "pending":
+     case "queued":
+     case "created":
+         request.setRefundStatus("INITIATED");
+         request.setAdminRemarks(
+                 "Razorpay is still processing the refund.");
+         break;
+
+     default:
+         throw new RuntimeException(
+                 "Razorpay returned an unrecognized refund status: "
+                         + providerStatus);
+ }
+
+ return returnRequestRepository.save(request);
+
+} catch (RazorpayException ex) {
+ throw new RuntimeException(
+         "Unable to retrieve the refund status from Razorpay. "
+         + "Your existing refund status has not been deliberately changed.",
+         ex);
+}
+
+
+}
+
+
 }

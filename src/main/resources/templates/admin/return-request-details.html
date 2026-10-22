@@ -430,66 +430,96 @@
                         The returned product has been received.
                         Check the refund information below.
                     </div>
+					
 
-                    <!-- REFUND INFORMATION -->
-                    <div class="card border-0 bg-light mt-3"
-                         th:if="${returnRequest.refundStatus != null
-                                 and returnRequest.refundStatus != 'NOT_APPLICABLE'}">
+					<!-- REFUND INFORMATION -->
 
-                        <div class="card-body">
+					<div class="card border-0 bg-light mt-3"
+					     th:if="${returnRequest.refundStatus != null
+					             and returnRequest.refundStatus != 'NOT_APPLICABLE'}">
 
-                            <h6 class="fw-bold mb-3">
-                                <i class="fa-solid fa-money-bill-transfer me-2"></i>
-                                Refund Information
-                            </h6>
+					
+					<div class="card-body">
 
-                            <!-- REFUND STATUS -->
-                            <div class="mb-3">
+					    <h6 class="fw-bold mb-3">
+					        <i class="fa-solid fa-money-bill-transfer me-2"></i>
+					        Refund Information
+					    </h6>
 
-                                <label class="text-muted small">
-                                    Refund Status
-                                </label>
+					    <!-- REFUND STATUS -->
+					    <div class="mb-3">
 
-                                <div>
-                                    <span class="badge bg-info text-dark fs-6"
-                                          th:text="${returnRequest.refundStatus}">
-                                        INITIATED
-                                    </span>
-                                </div>
+					        <label class="text-muted small">
+					            Refund Status
+					        </label>
 
-                            </div>
+					        <div class="mb-2">
+					            <span class="badge fs-6"
+					                  th:classappend="${returnRequest.refundStatus == 'REFUNDED'} ? ' bg-success' :
+					                                  (${returnRequest.refundStatus == 'FAILED'} ? ' bg-danger' :
+					                                  (${returnRequest.refundStatus == 'INITIATED'} ? ' bg-warning text-dark' :
+					                                  ' bg-info text-dark'))"
+					                  th:text="${returnRequest.refundStatus}">
+					                INITIATED
+					            </span>
+					        </div>
 
-                            <!-- REFUND AMOUNT -->
-                            <div class="mb-3"
-                                 th:if="${returnRequest.refundAmount != null}">
+					        <!-- CHECK REFUND STATUS -->
+					        <form th:if="${returnRequest.razorpayRefundId != null
+					                      and !#strings.isEmpty(returnRequest.razorpayRefundId)
+					                      and returnRequest.refundStatus != 'REFUNDED'
+					                      and returnRequest.refundStatus != 'FAILED'}"
+					              th:action="@{/admin/returns/sync-refund/{id}(id=${returnRequest.id})}"
+					              method="post">
 
-                                <label class="text-muted small">
-                                    Refund Amount
-                                </label>
+					            <input type="hidden"
+					                   th:if="${_csrf != null}"
+					                   th:name="${_csrf.parameterName}"
+					                   th:value="${_csrf.token}">
 
-                                <p class="fw-bold mb-0">
-                                    ₹<span th:text="${#numbers.formatDecimal(returnRequest.refundAmount, 1, 2)}">0.00</span>
-                                </p>
+					            <button type="submit" class="btn btn-primary btn-sm">
+					                <i class="fa-solid fa-rotate me-1"></i>
+					                Check Refund Status
+					            </button>
 
-                            </div>
+					        </form>
 
-                            <!-- RAZORPAY REFUND ID -->
-                            <div th:if="${returnRequest.razorpayRefundId != null
-                                         and !#strings.isEmpty(returnRequest.razorpayRefundId)}">
+					    </div>
 
-                                <label class="text-muted small">
-                                    Razorpay Refund ID
-                                </label>
+					    <!-- REFUND AMOUNT -->
+					    <div class="mb-3"
+					         th:if="${returnRequest.refundAmount != null}">
 
-                                <p class="small mb-0 text-break"
-                                   th:text="${returnRequest.razorpayRefundId}">
-                                    Refund ID
-                                </p>
+					        <label class="text-muted small">
+					            Refund Amount
+					        </label>
 
-                            </div>
+					        <p class="fw-bold mb-0">
+					            ₹<span th:text="${#numbers.formatDecimal(returnRequest.refundAmount, 1, 2)}">0.00</span>
+					        </p>
 
-                        </div>
-                    </div>
+					    </div>
+
+					    <!-- RAZORPAY REFUND ID -->
+					    <div th:if="${returnRequest.razorpayRefundId != null
+					                 and !#strings.isEmpty(returnRequest.razorpayRefundId)}">
+
+					        <label class="text-muted small">
+					            Razorpay Refund ID
+					        </label>
+
+					        <p class="small mb-0 text-break"
+					           th:text="${returnRequest.razorpayRefundId}">
+					            Refund ID
+					        </p>
+
+					    </div>
+
+					</div>
+					
+
+					</div>
+
 
                     <!-- INITIATE RAZORPAY REFUND -->
                     <div class="mt-3"

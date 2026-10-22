@@ -402,5 +402,60 @@ public String initiateRefund(
   return "redirect:/admin/returns/view/" + requestId;
 }
 
+//=====================================================
+//ADMIN: SYNCHRONIZE RAZORPAY REFUND STATUS
+//URL: POST /admin/returns/sync-refund/{id}
+//=====================================================
+@PostMapping("/sync-refund/{id}")
+public String synchronizeRefundStatus(
+@PathVariable("id") Long requestId,
+HttpSession session,
+RedirectAttributes redirectAttributes) {
+
+
+if (!isAdmin(session)) {
+ redirectAttributes.addFlashAttribute(
+         "errorMessage",
+         "Please log in as an administrator.");
+ return "redirect:/adminlogin";
+}
+
+try {
+ ReturnRequest request =
+         returnRequestService.synchronizeRefundStatus(requestId);
+
+ String refundStatus = request.getRefundStatus();
+
+ if ("REFUNDED".equalsIgnoreCase(refundStatus)) {
+     redirectAttributes.addFlashAttribute(
+             "successMessage",
+             "Razorpay confirms that the refund has been processed.");
+ } else if ("INITIATED".equalsIgnoreCase(refundStatus)) {
+     redirectAttributes.addFlashAttribute(
+             "successMessage",
+             "The refund is still processing. Please check again later.");
+ } else if ("FAILED".equalsIgnoreCase(refundStatus)) {
+     redirectAttributes.addFlashAttribute(
+             "errorMessage",
+             "Razorpay reports that the refund failed. "
+             + "Verify the refund details before taking further action.");
+ } else {
+     redirectAttributes.addFlashAttribute(
+             "errorMessage",
+             "Refund status: " + refundStatus);
+ }
+
+} catch (RuntimeException ex) {
+ redirectAttributes.addFlashAttribute(
+         "errorMessage",
+         ex.getMessage());
+}
+
+return "redirect:/admin/returns/view/" + requestId;
+
+
+}
+
+
 
 }

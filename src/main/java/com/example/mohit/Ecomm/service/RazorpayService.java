@@ -167,4 +167,25 @@ public class RazorpayService {
         return razorpayClient.payments.fetchAllRefunds(
                 razorpayPaymentId);
     }
+    
+    /**
+
+    * Fetch a specific refund from Razorpay using its refund ID.
+      */
+      public JSONObject fetchRefund(String razorpayRefundId)
+      throws RazorpayException {
+
+      if (razorpayRefundId == null || razorpayRefundId.isBlank()) {
+      throw new IllegalArgumentException(
+      "Razorpay refund ID is required.");
+      }
+
+      RazorpayClient razorpayClient =
+      new RazorpayClient(keyId, keySecret);
+
+      Refund refund = razorpayClient.refunds.fetch(razorpayRefundId);
+
+      return refund.toJson();
+      }
+
 }
