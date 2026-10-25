@@ -167,6 +167,40 @@
                             1
                         </p>
                     </div>
+					
+					<!-- ORIGINAL PURCHASE PRICE DETAILS -->
+
+					<div class="mb-3">
+					    <label class="form-label">Original Purchase Price (Per Unit)</label>
+					    <div class="form-control bg-light">
+					        ₹<span th:text="${#numbers.formatDecimal(returnRequest.orderItem.purchasePrice != null ? returnRequest.orderItem.purchasePrice : returnRequest.orderItem.product.price, 1, 2)}">0.00</span>
+					    </div>
+					</div>
+
+					<div class="mb-3">
+					    <label class="form-label">Quantity Originally Purchased</label>
+					    <div class="form-control bg-light"
+					         th:text="${returnRequest.orderItem.quantity}">
+					        1
+					    </div>
+					</div>
+
+					<div class="mb-3">
+					    <label class="form-label">Quantity Being Returned</label>
+					    <div class="form-control bg-light"
+					         th:text="${returnRequest.returnQuantity}">
+					        1
+					    </div>
+					</div>
+
+					<div class="mb-3">
+					    <label class="form-label">Original Amount for Returned Quantity</label>
+					    <div class="form-control bg-light">
+					        ₹<span th:text="${#numbers.formatDecimal((returnRequest.orderItem.purchasePrice != null ? returnRequest.orderItem.purchasePrice : returnRequest.orderItem.product.price) * returnRequest.returnQuantity, 1, 2)}">0.00</span>
+					    </div>
+					</div>
+					<!-- END ORIGINAL PURCHASE PRICE DETAILS -->
+
 
                     <hr>
 
@@ -641,6 +675,64 @@
 									       <label for="codRefundAmount" class="form-label">
 									           Refund Amount (₹) <span class="text-danger">*</span>
 									       </label>
+										   
+										   
+										   <!-- REFUND METHOD -->
+										   <div class="mb-3">
+										       <label for="refundMethod" class="form-label">
+										           Refund Method <span class="text-danger">*</span>
+										       </label>
+
+										       <select id="refundMethod"
+										               name="refundMethod"
+										               class="form-select"
+										               required>
+										           <option value="">Select refund method</option>
+										           <option value="UPI">UPI</option>
+										           <option value="BANK_TRANSFER">Bank Transfer</option>
+										           <option value="OTHER">Other</option>
+										       </select>
+										   </div>
+
+										   <!-- TRANSACTION REFERENCE -->
+										   <div class="mb-3">
+										       <label for="refundReference" class="form-label">
+										           Transaction Reference / UTR
+										           <span class="text-danger">*</span>
+										       </label>
+
+										       <input type="text"
+										              id="refundReference"
+										              name="refundReference"
+										              class="form-control"
+										              maxlength="150"
+										              required>
+										   </div>
+
+										   <!-- REFUND DATE -->
+										   <div class="mb-3">
+										       <label for="refundDate" class="form-label">
+										           Refund Date <span class="text-danger">*</span>
+										       </label>
+
+										       <input type="date"
+										              id="refundDate"
+										              name="refundDate"
+										              class="form-control"
+										              th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+										              required>
+										   </div>
+
+										   <!-- SUBMIT BUTTON -->
+										   <button type="submit" class="btn btn-primary"
+										           onclick="return confirm('Have you transferred the refund and verified the transaction reference?');">
+										       <i class="fa-solid fa-check me-2"></i>
+										       Record COD Refund
+										   </button>
+										   
+
+										   </form>
+ 
 
 									   
 									   <input type="number"
