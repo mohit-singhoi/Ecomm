@@ -84,6 +84,28 @@ public class ReturnRequest {
     @Column(length = 100)
     private String razorpayRefundId;
     
+ // =====================================================
+ // COD MANUAL REFUND DETAILS
+ // =====================================================
+
+ // UPI, BANK_TRANSFER, or another supported manual method
+ @Column(name = "cod_refund_method", length = 40)
+ private String codRefundMethod;
+
+ // UTR number or payment transaction reference
+ @Column(name = "cod_refund_reference", length = 150)
+ private String codRefundReference;
+
+ // Date the manual refund was actually sent
+ @Temporal(TemporalType.TIMESTAMP)
+ @Column(name = "cod_refund_date")
+ private Date codRefundDate;
+
+ // Tracks whether the COD refund was recorded by the admin
+ @Column(name = "cod_refund_recorded", nullable = false)
+ private boolean codRefundRecorded = false;
+ 
+    
  // Tracks whether the successful refund email has been sent
     @Column(name = "refund_email_sent", nullable = false)
     private boolean refundEmailSent = false;
@@ -235,4 +257,40 @@ public class ReturnRequest {
     public void setRefundEmailSent(boolean refundEmailSent) {
         this.refundEmailSent = refundEmailSent;
     }
+    
+ // =====================================================
+ // COD REFUND GETTERS AND SETTERS
+ // =====================================================
+
+ public String getCodRefundMethod() {
+     return codRefundMethod;
+ }
+
+ public void setCodRefundMethod(String codRefundMethod) {
+     this.codRefundMethod = codRefundMethod;
+ }
+
+ public String getCodRefundReference() {
+     return codRefundReference;
+ }
+
+ public void setCodRefundReference(String codRefundReference) {
+     this.codRefundReference = codRefundReference;
+ }
+
+ public Date getCodRefundDate() {
+     return codRefundDate;
+ }
+
+ public void setCodRefundDate(Date codRefundDate) {
+     this.codRefundDate = codRefundDate;
+ }
+
+ public boolean isCodRefundRecorded() {
+     return codRefundRecorded;
+ }
+
+ public void setCodRefundRecorded(boolean codRefundRecorded) {
+     this.codRefundRecorded = codRefundRecorded;
+ }
 }

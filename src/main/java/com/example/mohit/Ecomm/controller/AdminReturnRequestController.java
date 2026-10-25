@@ -1,5 +1,11 @@
 package com.example.mohit.Ecomm.controller;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -454,6 +460,72 @@ try {
 return "redirect:/admin/returns/view/" + requestId;
 
 
+}
+
+//=====================================================
+//ADMIN: RECORD COD MANUAL REFUND
+//URL: POST /admin/returns/record-cod-refund/{id}
+//=====================================================
+
+@PostMapping("/record-cod-refund/{id}")
+public String recordCodRefund(
+     @PathVariable("id") Long requestId,
+     @RequestParam String refundMethod,
+     @RequestParam String refundReference,
+     @RequestParam String refundDate,
+     @RequestParam BigDecimal refundAmount,
+     HttpSession session,
+     RedirectAttributes redirectAttributes) {
+
+ // 1. Verify administrator access.
+ if (!isAdmin(session)) {
+     redirectAttributes.addFlashAttribute(
+             "errorMessage",
+             "Please log in as an administrator.");
+
+     return "redirect:/adminlogin";
+ }
+
+ try {
+     // 2. Parse the date submitted by the form.
+     SimpleDateFormat dateFormat =
+             new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
+
+     dateFormat.setLenient(false);
+
+     Date parsedRefundDate;
+
+     try {
+         parsedRefundDate = dateFormat.parse(refundDate);
+     } catch (ParseException ex) {
+         throw new RuntimeException(
+                 "Please enter a valid refund date.");
+     }
+
+     // 3. Record the manual refund through the service.
+     ReturnRequest request =
+             returnRequestService.recordCodRefund(
+                     requestId,
+                     refundMethod,
+                     refundReference,
+                     parsedRefundDate,
+                     refundAmount);
+
+     // 4. Show success feedback.
+     redirectAttributes.addFlashAttribute(
+             "successMessage",
+             "COD refund recorded successfully for return request #"
+                     + request.getId()
+                     + ". Refund amount: ₹"
+                     + request.getRefundAmount());
+
+ } catch (RuntimeException ex) {
+     redirectAttributes.addFlashAttribute(
+             "errorMessage",
+             ex.getMessage());
+ }
+
+ return "redirect:/admin/returns/view/" + requestId;
 }
 
 

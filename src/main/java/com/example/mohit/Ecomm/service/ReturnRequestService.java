@@ -862,5 +862,170 @@ try {
 
 }
 
+//=====================================================
+//ADMIN: RECORD COD MANUAL REFUND
+//=====================================================
+
+@Transactional
+public ReturnRequest recordCodRefund(
+     Long requestId,
+     String refundMethod,
+     String refundReference,
+     Date refundDate,
+     BigDecimal refundAmount) {
+
+ // 1. Validate request ID.
+ if (requestId == null) {
+     throw new RuntimeException("Invalid return request ID.");
+ }
+
+ // 2. Load the return request.
+ ReturnRequest request = getReturnRequestForAdmin(requestId);
+
+ // 3. The returned product must have been received.
+ if (!"RETURN_RECEIVED".equals(request.getStatus())) {
+     throw new RuntimeException(
+             "The returned product must be received before recording a refund.");
+ }
+
+ // 4. Load order details.
+ OrderItem item = request.getOrderItem();
+
+ if (item == null || item.getOrder() == null) {
+     throw new RuntimeException("Order information is unavailable.");
+ }
+
+ Orders order = item.getOrder();
+
+ // 5. Only COD orders can use this method.
+ String paymentMethod = order.getPaymentMethod();
+
+ if (paymentMethod == null
+         || !("COD".equalsIgnoreCase(paymentMethod.trim())
+         || "CASH_ON_DELIVERY".equalsIgnoreCase(paymentMethod.trim()))) {
+
+     throw new RuntimeException(
+             "This refund method is only for Cash on Delivery orders.");
+ }
+
+ // 6. Prevent duplicate refunds.
+ if (request.isCodRefundRecorded()
+         || "REFUNDED".equalsIgnoreCase(request.getRefundStatus())) {
+
+     throw new RuntimeException(
+             "A refund has already been recorded for this request.");
+ }
+
+ // Do not use the COD method for an existing online refund.
+ if (request.getRazorpayRefundId() != null
+         && !request.getRazorpayRefundId().isBlank()) {
+
+     throw new RuntimeException(
+             "A Razorpay refund already exists for this request.");
+ }
+
+ // 7. Validate refund method.
+ if (refundMethod == null || refundMethod.isBlank()) {
+     throw new RuntimeException("Please select a refund method.");
+ }
+
+ String normalizedMethod =
+         refundMethod.trim().toUpperCase(Locale.ROOT);
+
+ if (!Set.of("UPI", "BANK_TRANSFER", "OTHER")
+         .contains(normalizedMethod)) {
+
+     throw new RuntimeException(
+             "Invalid refund method. Choose UPI, bank transfer, or other.");
+ }
+
+ // 8. Validate transaction reference / UTR.
+ if (refundReference == null || refundReference.isBlank()) {
+     throw new RuntimeException(
+             "Please enter the UTR or transaction reference.");
+ }
+
+ String cleanReference = refundReference.trim();
+
+ if (cleanReference.length() > 150) {
+     throw new RuntimeException(
+             "The refund reference cannot exceed 150 characters.");
+ }
+
+ // 9. Validate refund date.
+ if (refundDate == null) {
+     throw new RuntimeException("Please provide the refund date.");
+ }
+
+ if (refundDate.after(new Date())) {
+     throw new RuntimeException(
+             "The refund date cannot be in the future.");
+ }
+
+ // 10. Calculate the maximum refundable amount.
+ Double purchasePrice = item.getPurchasePrice();
+
+ if (purchasePrice == null
+         || !Double.isFinite(purchasePrice)
+         || purchasePrice <= 0) {
+
+     throw new RuntimeException(
+             "The original purchase price is unavailable.");
+ }
+
+ int returnQuantity = request.getReturnQuantity();
+
+ if (returnQuantity <= 0
+         || returnQuantity > item.getQuantity()) {
+
+     throw new RuntimeException("Invalid return quantity.");
+ }
+
+ BigDecimal maximumRefund = BigDecimal.valueOf(purchasePrice)
+         .multiply(BigDecimal.valueOf(returnQuantity))
+         .setScale(2, RoundingMode.HALF_UP);
+
+ // 11. Validate the actual refund amount.
+ if (refundAmount == null) {
+     throw new RuntimeException("Please enter the refund amount.");
+ }
+
+ BigDecimal actualRefund = refundAmount.setScale(
+         2, RoundingMode.UNNECESSARY);
+
+ if (actualRefund.compareTo(BigDecimal.ZERO) <= 0) {
+     throw new RuntimeException(
+             "The refund amount must be greater than zero.");
+ }
+
+ if (actualRefund.compareTo(maximumRefund) > 0) {
+     throw new RuntimeException(
+             "The refund cannot exceed the refundable product amount of ₹"
+                     + maximumRefund);
+ }
+
+ // 12. Record the refund already sent by the administrator.
+ request.setCodRefundMethod(normalizedMethod);
+ request.setCodRefundReference(cleanReference);
+ request.setCodRefundDate(refundDate);
+ request.setRefundAmount(actualRefund.doubleValue());
+ request.setCodRefundRecorded(true);
+ request.setRefundStatus("REFUNDED");
+
+ request.setAdminRemarks(
+         "COD refund recorded by administrator. "
+         + "Method: " + normalizedMethod
+         + ". Reference: " + cleanReference + ".");
+
+ // 13. Save the refund details.
+ ReturnRequest savedRequest =
+         returnRequestRepository.saveAndFlush(request);
+
+ // 14. Send the success email if your email method is available.
+ sendRefundSuccessEmailIfNeeded(savedRequest);
+
+ return returnRequestRepository.save(savedRequest);
+}
+
 
 }
