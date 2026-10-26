@@ -6,793 +6,973 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+```
 <title>Return Request Details | ShopSphere Admin</title>
 
+<!-- BOOTSTRAP -->
 <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet">
 
+<!-- FONT AWESOME -->
 <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     rel="stylesheet">
 
-<link
-    rel="stylesheet"
-    th:href="@{/css/admin-navbar.css}">
-
-<link
-    rel="stylesheet"
-    th:href="@{/css/admin/return-request-details.css}">
-
-<link
-    rel="stylesheet"
-    th:href="@{/css/admin-footer.css}">
-
+<!-- EXISTING CSS: PRESERVED -->
+<link rel="stylesheet" th:href="@{/css/admin-navbar.css}">
+<link rel="stylesheet" th:href="@{/css/admin/return-request-details.css}">
+<link rel="stylesheet" th:href="@{/css/admin-footer.css}">
+```
 
 </head>
 
 <body>
 
-
 <!-- ADMIN NAVBAR -->
+
 <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
 
 <main class="admin-return-details-page container py-4">
 
-    <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+```
+<!-- PAGE HEADER -->
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
-        <div>
-            <h2 class="fw-bold mb-2">
-                <i class="fa-solid fa-rotate-left me-2"></i>
-                Return Request Details
-            </h2>
+    <div>
+        <h2 class="fw-bold mb-2">
+            <i class="fa-solid fa-rotate-left me-2"></i>
+            Return Request Details
+        </h2>
 
-            <p class="text-muted mb-0">
-                Review the return request, manage pickup, and process eligible refunds.
-            </p>
-        </div>
-
-        <a th:href="@{/admin/returns}"
-           class="btn btn-outline-secondary">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Back to Return Requests
-        </a>
-
+        <p class="text-muted mb-0">
+            Review the return request, manage pickup, and process eligible refunds.
+        </p>
     </div>
 
-    <!-- SUCCESS MESSAGE -->
-    <div th:if="${successMessage != null}"
-         class="alert alert-success alert-dismissible fade show"
-         role="alert">
+    <a th:href="@{/admin/returns}"
+       class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Back to Return Requests
+    </a>
 
-        <i class="fa-solid fa-circle-check me-2"></i>
+</div>
 
-        <span th:text="${successMessage}"></span>
+<!-- SUCCESS MESSAGE -->
+<div th:if="${successMessage != null}"
+     class="alert alert-success alert-dismissible fade show"
+     role="alert">
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close">
-        </button>
-    </div>
+    <i class="fa-solid fa-circle-check me-2"></i>
 
-    <!-- ERROR MESSAGE -->
-    <div th:if="${errorMessage != null}"
-         class="alert alert-danger alert-dismissible fade show"
-         role="alert">
+    <span th:text="${successMessage}"></span>
 
-        <i class="fa-solid fa-circle-exclamation me-2"></i>
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+    </button>
 
-        <span th:text="${errorMessage}"></span>
+</div>
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close">
-        </button>
-    </div>
+<!-- ERROR MESSAGE -->
+<div th:if="${errorMessage != null}"
+     class="alert alert-danger alert-dismissible fade show"
+     role="alert">
 
-    <div class="row g-4">
+    <i class="fa-solid fa-circle-exclamation me-2"></i>
 
-        <!-- RETURN REQUEST INFORMATION -->
-        <div class="col-lg-6">
+    <span th:text="${errorMessage}"></span>
 
-            <div class="card shadow-sm border-0 h-100">
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+    </button>
 
-                <div class="card-header bg-white py-3">
-                    <h5 class="fw-bold mb-0">
-                        <i class="fa-solid fa-box-open me-2"></i>
-                        Return Request Information
-                    </h5>
+</div>
+
+<div class="row g-4">
+
+    <!-- ================================================== -->
+    <!-- RETURN REQUEST INFORMATION                         -->
+    <!-- ================================================== -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="fa-solid fa-box-open me-2"></i>
+                    Return Request Information
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                <!-- REQUEST ID -->
+                <div class="mb-3">
+                    <label class="text-muted small">Request ID</label>
+
+                    <p class="fw-semibold mb-0"
+                       th:text="${returnRequest.id}">
+                        1
+                    </p>
                 </div>
 
-                <div class="card-body">
+                <hr>
 
-                    <!-- REQUEST ID -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Request ID</label>
-                        <p class="fw-semibold mb-0"
-                           th:text="${returnRequest.id}">
-                            1
-                        </p>
+                <!-- CUSTOMER NAME -->
+                <div class="mb-3">
+                    <label class="text-muted small">Customer Name</label>
+
+                    <p class="fw-semibold mb-0"
+                       th:text="${returnRequest.user.name}">
+                        Customer Name
+                    </p>
+                </div>
+
+                <!-- CUSTOMER EMAIL -->
+                <div class="mb-3">
+                    <label class="text-muted small">Customer Email</label>
+
+                    <p class="mb-0"
+                       th:text="${returnRequest.user.email}">
+                        customer@example.com
+                    </p>
+                </div>
+
+                <hr>
+
+                <!-- ORDER ID -->
+                <div class="mb-3">
+                    <label class="text-muted small">Order ID</label>
+
+                    <p class="fw-semibold mb-0"
+                       th:text="${returnRequest.orderItem.order.id}">
+                        1001
+                    </p>
+                </div>
+
+                <!-- PRODUCT NAME -->
+                <div class="mb-3">
+                    <label class="text-muted small">Product Name</label>
+
+                    <p class="fw-semibold mb-0"
+                       th:text="${returnRequest.orderItem.product.name}">
+                        Product Name
+                    </p>
+                </div>
+
+                <!-- RETURN QUANTITY -->
+                <div class="mb-3">
+                    <label class="text-muted small">Return Quantity</label>
+
+                    <p class="fw-semibold mb-0"
+                       th:text="${returnRequest.returnQuantity}">
+                        1
+                    </p>
+                </div>
+
+                <!-- ORIGINAL PURCHASE PRICE -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Original Purchase Price (Per Unit)
+                    </label>
+
+                    <div class="form-control bg-light">
+                        ₹<span
+                            th:text="${#numbers.formatDecimal(
+                                returnRequest.orderItem.purchasePrice != null
+                                ? returnRequest.orderItem.purchasePrice
+                                : returnRequest.orderItem.product.price,
+                                1, 2)}">0.00</span>
                     </div>
+                </div>
 
-                    <hr>
+                <!-- QUANTITY ORIGINALLY PURCHASED -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Quantity Originally Purchased
+                    </label>
 
-                    <!-- CUSTOMER NAME -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Customer Name</label>
-                        <p class="fw-semibold mb-0"
-                           th:text="${returnRequest.user.name}">
-                            Customer Name
-                        </p>
+                    <div class="form-control bg-light"
+                         th:text="${returnRequest.orderItem.quantity}">
+                        1
                     </div>
+                </div>
 
-                    <!-- CUSTOMER EMAIL -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Customer Email</label>
+                <!-- QUANTITY BEING RETURNED -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Quantity Being Returned
+                    </label>
+
+                    <div class="form-control bg-light"
+                         th:text="${returnRequest.returnQuantity}">
+                        1
+                    </div>
+                </div>
+
+                <!-- ORIGINAL AMOUNT FOR RETURNED QUANTITY -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Original Amount for Returned Quantity
+                    </label>
+
+                    <div class="form-control bg-light">
+                        ₹<span
+                            th:text="${#numbers.formatDecimal(
+                                (returnRequest.orderItem.purchasePrice != null
+                                ? returnRequest.orderItem.purchasePrice
+                                : returnRequest.orderItem.product.price)
+                                * returnRequest.returnQuantity,
+                                1, 2)}">0.00</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- RETURN REASON -->
+                <div class="mb-3">
+                    <label class="text-muted small">Return Reason</label>
+
+                    <p class="fw-semibold mb-0"
+                       th:text="${returnRequest.reason}">
+                        Damaged or defective product
+                    </p>
+                </div>
+
+                <!-- CUSTOMER DESCRIPTION -->
+                <div class="mb-3">
+                    <label class="text-muted small">
+                        Customer Description
+                    </label>
+
+                    <div class="border rounded p-3 bg-light">
                         <p class="mb-0"
-                           th:text="${returnRequest.user.email}">
-                            customer@example.com
+                           style="white-space: pre-wrap;"
+                           th:text="${returnRequest.description != null
+                               and !#strings.isEmpty(returnRequest.description)
+                               ? returnRequest.description
+                               : 'No additional description provided.'}">
+                            Return description
                         </p>
                     </div>
+                </div>
 
-                    <hr>
+                <!-- REQUEST DATE -->
+                <div class="mb-3">
+                    <label class="text-muted small">Request Date</label>
 
-                    <!-- ORDER ID -->
+                    <p class="mb-0"
+                       th:text="${returnRequest.requestDate}">
+                        Request date
+                    </p>
+                </div>
+
+                <!-- RETURN STATUS -->
+                <div class="mb-3">
+                    <label class="text-muted small">Return Status</label>
+
+                    <div>
+                        <span class="badge bg-primary fs-6"
+                              th:text="${returnRequest.status}">
+                            REQUESTED
+                        </span>
+                    </div>
+                </div>
+
+                <!-- CUSTOMER EVIDENCE -->
+                <div class="mb-2"
+                     th:if="${returnRequest.evidenceImagePath != null
+                         and !#strings.isEmpty(returnRequest.evidenceImagePath)}">
+
+                    <label class="text-muted small d-block mb-2">
+                        Customer Evidence
+                    </label>
+
+                    <a th:href="@{/admin/returns/evidence/{id}(id=${returnRequest.id})}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-outline-primary">
+
+                        <i class="fa-solid fa-image me-2"></i>
+                        View Evidence Image
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- ADMIN ACTIONS                                      -->
+    <!-- ================================================== -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="fa-solid fa-user-shield me-2"></i>
+                    Admin Actions
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                <!-- APPROVE OR REJECT REQUEST -->
+                <div th:if="${returnRequest.status == 'REQUESTED'}">
+
+                    <h6 class="fw-bold mb-3">
+                        Review Return Request
+                    </h6>
+
+                    <form th:action="@{/admin/returns/review/{id}(id=${returnRequest.id})}"
+                          method="post">
+
+                        <!-- CSRF -->
+                        <input type="hidden"
+                               th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
+
+                        <div class="mb-3">
+                            <label for="adminRemarks" class="form-label">
+                                Admin Remarks
+                            </label>
+
+                            <textarea id="adminRemarks"
+                                      name="adminRemarks"
+                                      class="form-control"
+                                      rows="4"
+                                      maxlength="1000"
+                                      placeholder="Enter remarks. Remarks are required when rejecting a request."></textarea>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <button type="submit"
+                                    name="decision"
+                                    value="APPROVE"
+                                    class="btn btn-success"
+                                    onclick="return confirm('Approve this return request?');">
+
+                                <i class="fa-solid fa-check me-2"></i>
+                                Approve Request
+                            </button>
+
+                            <button type="submit"
+                                    name="decision"
+                                    value="REJECT"
+                                    class="btn btn-danger"
+                                    onclick="return confirm('Reject this return request?');">
+
+                                <i class="fa-solid fa-xmark me-2"></i>
+                                Reject Request
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+
+                <!-- EXISTING DECISION -->
+                <div th:if="${returnRequest.status != 'REQUESTED'}">
+
+                    <div class="alert alert-secondary">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        This request has already been reviewed.
+                    </div>
+
                     <div class="mb-3">
-                        <label class="text-muted small">Order ID</label>
+                        <label class="text-muted small">
+                            Current Status
+                        </label>
+
                         <p class="fw-semibold mb-0"
-                           th:text="${returnRequest.orderItem.order.id}">
-                            1001
+                           th:text="${returnRequest.status}">
+                            APPROVED
                         </p>
                     </div>
 
-                    <!-- PRODUCT NAME -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Product Name</label>
-                        <p class="fw-semibold mb-0"
-                           th:text="${returnRequest.orderItem.product.name}">
-                            Product Name
-                        </p>
-                    </div>
+                    <div class="mb-3"
+                         th:if="${returnRequest.adminRemarks != null
+                             and !#strings.isEmpty(returnRequest.adminRemarks)}">
 
-                    <!-- RETURN QUANTITY -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Return Quantity</label>
-                        <p class="fw-semibold mb-0"
-                           th:text="${returnRequest.returnQuantity}">
-                            1
-                        </p>
-                    </div>
-					
-					<!-- ORIGINAL PURCHASE PRICE DETAILS -->
-
-					<div class="mb-3">
-					    <label class="form-label">Original Purchase Price (Per Unit)</label>
-					    <div class="form-control bg-light">
-					        ₹<span th:text="${#numbers.formatDecimal(returnRequest.orderItem.purchasePrice != null ? returnRequest.orderItem.purchasePrice : returnRequest.orderItem.product.price, 1, 2)}">0.00</span>
-					    </div>
-					</div>
-
-					<div class="mb-3">
-					    <label class="form-label">Quantity Originally Purchased</label>
-					    <div class="form-control bg-light"
-					         th:text="${returnRequest.orderItem.quantity}">
-					        1
-					    </div>
-					</div>
-
-					<div class="mb-3">
-					    <label class="form-label">Quantity Being Returned</label>
-					    <div class="form-control bg-light"
-					         th:text="${returnRequest.returnQuantity}">
-					        1
-					    </div>
-					</div>
-
-					<div class="mb-3">
-					    <label class="form-label">Original Amount for Returned Quantity</label>
-					    <div class="form-control bg-light">
-					        ₹<span th:text="${#numbers.formatDecimal((returnRequest.orderItem.purchasePrice != null ? returnRequest.orderItem.purchasePrice : returnRequest.orderItem.product.price) * returnRequest.returnQuantity, 1, 2)}">0.00</span>
-					    </div>
-					</div>
-					<!-- END ORIGINAL PURCHASE PRICE DETAILS -->
-
-
-                    <hr>
-
-                    <!-- RETURN REASON -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Return Reason</label>
-                        <p class="fw-semibold mb-0"
-                           th:text="${returnRequest.reason}">
-                            Damaged or defective product
-                        </p>
-                    </div>
-
-                    <!-- DESCRIPTION -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Customer Description</label>
+                        <label class="text-muted small">
+                            Admin Remarks
+                        </label>
 
                         <div class="border rounded p-3 bg-light">
                             <p class="mb-0"
                                style="white-space: pre-wrap;"
-                               th:text="${returnRequest.description != null
-                                        and !#strings.isEmpty(returnRequest.description)
-                                        ? returnRequest.description
-                                        : 'No additional description provided.'}">
-                                Return description
+                               th:text="${returnRequest.adminRemarks}">
+                                Admin remarks
                             </p>
                         </div>
                     </div>
-
-                    <!-- REQUEST DATE -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Request Date</label>
-                        <p class="mb-0"
-                           th:text="${returnRequest.requestDate}">
-                            Request date
-                        </p>
-                    </div>
-
-                    <!-- REQUEST STATUS -->
-                    <div class="mb-3">
-                        <label class="text-muted small">Return Status</label>
-
-                        <div>
-                            <span class="badge bg-primary fs-6"
-                                  th:text="${returnRequest.status}">
-                                REQUESTED
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- EVIDENCE IMAGE -->
-                    <div class="mb-2"
-                         th:if="${returnRequest.evidenceImagePath != null
-                                 and !#strings.isEmpty(returnRequest.evidenceImagePath)}">
-
-                        <label class="text-muted small d-block mb-2">
-                            Customer Evidence
-                        </label>
-
-                        <a th:href="@{/admin/returns/evidence/{id}(id=${returnRequest.id})}"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="btn btn-outline-primary">
-
-                            <i class="fa-solid fa-image me-2"></i>
-                            View Evidence Image
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- ADMIN ACTIONS -->
-        <div class="col-lg-6">
-
-            <div class="card shadow-sm border-0 h-100">
-
-                <div class="card-header bg-white py-3">
-                    <h5 class="fw-bold mb-0">
-                        <i class="fa-solid fa-user-shield me-2"></i>
-                        Admin Actions
-                    </h5>
                 </div>
 
-                <div class="card-body">
+                <hr>
 
-                    <!-- APPROVE OR REJECT REQUEST -->
-                    <div th:if="${returnRequest.status == 'REQUESTED'}">
+                <!-- PICKUP AND RECEIVING WORKFLOW -->
+                <div th:if="${returnRequest.status == 'APPROVED'
+                          or returnRequest.status == 'PICKUP_PENDING'}">
 
-                        <h6 class="fw-bold mb-3">
-                            Review Return Request
-                        </h6>
+                    <h6 class="fw-bold mb-3">
+                        <i class="fa-solid fa-truck me-2"></i>
+                        Return Pickup Management
+                    </h6>
 
-                        <form th:action="@{/admin/returns/review/{id}(id=${returnRequest.id})}"
-                              method="post">
+                    <form th:action="@{/admin/returns/update-status/{id}(id=${returnRequest.id})}"
+                          method="post">
 
-                            <!-- CSRF -->
-                            <input type="hidden"
-                                   th:if="${_csrf != null}"
-                                   th:name="${_csrf.parameterName}"
-                                   th:value="${_csrf.token}">
+                        <!-- CSRF TOKEN -->
+                        <input type="hidden"
+                               th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
 
-                            <div class="mb-3">
-
-                                <label for="adminRemarks"
-                                       class="form-label">
-                                    Admin Remarks
-                                </label>
-
-                                <textarea id="adminRemarks"
-                                          name="adminRemarks"
-                                          class="form-control"
-                                          rows="4"
-                                          maxlength="1000"
-                                          placeholder="Enter remarks. Remarks are required when rejecting a request."></textarea>
-
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2">
-
-                                <button type="submit"
-                                        name="decision"
-                                        value="APPROVE"
-                                        class="btn btn-success"
-                                        onclick="return confirm('Approve this return request?');">
-
-                                    <i class="fa-solid fa-check me-2"></i>
-                                    Approve Request
-                                </button>
-
-                                <button type="submit"
-                                        name="decision"
-                                        value="REJECT"
-                                        class="btn btn-danger"
-                                        onclick="return confirm('Reject this return request?');">
-
-                                    <i class="fa-solid fa-xmark me-2"></i>
-                                    Reject Request
-                                </button>
-
-                            </div>
-
-                        </form>
-                    </div>
-
-                    <!-- EXISTING DECISION -->
-                    <div th:if="${returnRequest.status != 'REQUESTED'}">
-
-                        <div class="alert alert-secondary">
-                            <i class="fa-solid fa-circle-info me-2"></i>
-                            This request has already been reviewed.
-                        </div>
-
+                        <!-- PICKUP / RECEIVING REMARKS -->
                         <div class="mb-3">
-                            <label class="text-muted small">
-                                Current Status
+                            <label for="pickupRemarks" class="form-label">
+                                Pickup / Receiving Remarks
                             </label>
 
-                            <p class="fw-semibold mb-0"
-                               th:text="${returnRequest.status}">
-                                APPROVED
-                            </p>
+                            <textarea id="pickupRemarks"
+                                      name="adminRemarks"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="1000"
+                                      placeholder="Enter pickup or product receiving remarks"></textarea>
                         </div>
 
-                        <div class="mb-3"
-                             th:if="${returnRequest.adminRemarks != null
-                                     and !#strings.isEmpty(returnRequest.adminRemarks)}">
+                        <!-- START PICKUP -->
+                        <div th:if="${returnRequest.status == 'APPROVED'}">
 
-                            <label class="text-muted small">
-                                Admin Remarks
-                            </label>
-
-                            <div class="border rounded p-3 bg-light">
-                                <p class="mb-0"
-                                   style="white-space: pre-wrap;"
-                                   th:text="${returnRequest.adminRemarks}">
-                                    Admin remarks
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-					<!-- PICKUP AND RECEIVING WORKFLOW -->
-					<div th:if="${returnRequest.status == 'APPROVED'
-					            or returnRequest.status == 'PICKUP_PENDING'}">
-
-					    <h6 class="fw-bold mb-3">
-					        <i class="fa-solid fa-truck me-2"></i>
-					        Return Pickup Management
-					    </h6>
-
-					    <form th:action="@{/admin/returns/update-status/{id}(id=${returnRequest.id})}"
-					          method="post">
-
-					        <!-- CSRF TOKEN -->
-					        <input type="hidden"
-					               th:if="${_csrf != null}"
-					               th:name="${_csrf.parameterName}"
-					               th:value="${_csrf.token}">
-
-					        <!-- ADMIN REMARKS -->
-					        <div class="mb-3">
-					            <label for="pickupRemarks" class="form-label">
-					                Pickup / Receiving Remarks
-					            </label>
-
-					            <textarea id="pickupRemarks"
-					                      name="adminRemarks"
-					                      class="form-control"
-					                      rows="3"
-					                      maxlength="1000"
-					                      placeholder="Enter pickup or product receiving remarks"></textarea>
-					        </div>
-
-					        <!-- START PICKUP -->
-					        <div th:if="${returnRequest.status == 'APPROVED'}">
-
-					            <input type="hidden"
-					                   name="status"
-					                   value="PICKUP_PENDING">
-
-					            <button type="submit"
-					                    class="btn btn-primary w-100"
-					                    onclick="return confirm('Start the return pickup process?');">
-
-					                <i class="fa-solid fa-truck-fast me-2"></i>
-					                Start Pickup Process
-					            </button>
-
-					        </div>
-
-					        <!-- CONFIRM PRODUCT RECEIVED -->
-					        <div th:if="${returnRequest.status == 'PICKUP_PENDING'}">
-
-					            <input type="hidden"
-					                   name="status"
-					                   value="RETURN_RECEIVED">
-
-					            <button type="submit"
-					                    class="btn btn-success w-100"
-					                    onclick="return confirm('Confirm that the returned product has been received?');">
-
-					                <i class="fa-solid fa-box-check me-2"></i>
-					                Confirm Product Received
-					            </button>
-
-					        </div>
-
-					    </form>
-
-					</div>
-                    <!-- PRODUCT RECEIVED MESSAGE -->
-                    <div th:if="${returnRequest.status == 'RETURN_RECEIVED'}"
-                         class="alert alert-info mt-3">
-
-                        <i class="fa-solid fa-circle-check me-2"></i>
-
-                        The returned product has been received.
-                        Check the refund information below.
-                    </div>
-					
-
-					<!-- REFUND INFORMATION -->
-
-					<div class="card border-0 bg-light mt-3"
-					     th:if="${returnRequest.refundStatus != null
-					             and returnRequest.refundStatus != 'NOT_APPLICABLE'}">
-
-					
-					<div class="card-body">
-
-					    <h6 class="fw-bold mb-3">
-					        <i class="fa-solid fa-money-bill-transfer me-2"></i>
-					        Refund Information
-					    </h6>
-
-					    <!-- REFUND STATUS -->
-					    <div class="mb-3">
-
-					        <label class="text-muted small">
-					            Refund Status
-					        </label>
-
-					        <div class="mb-2">
-					            <span class="badge fs-6"
-					                  th:classappend="${returnRequest.refundStatus == 'REFUNDED'} ? ' bg-success' :
-					                                  (${returnRequest.refundStatus == 'FAILED'} ? ' bg-danger' :
-					                                  (${returnRequest.refundStatus == 'INITIATED'} ? ' bg-warning text-dark' :
-					                                  ' bg-info text-dark'))"
-					                  th:text="${returnRequest.refundStatus}">
-					                INITIATED
-					            </span>
-					        </div>
-
-					        <!-- CHECK REFUND STATUS -->
-					        <form th:if="${returnRequest.razorpayRefundId != null
-					                      and !#strings.isEmpty(returnRequest.razorpayRefundId)
-					                      and returnRequest.refundStatus != 'REFUNDED'
-					                      and returnRequest.refundStatus != 'FAILED'}"
-					              th:action="@{/admin/returns/sync-refund/{id}(id=${returnRequest.id})}"
-					              method="post">
-
-					            <input type="hidden"
-					                   th:if="${_csrf != null}"
-					                   th:name="${_csrf.parameterName}"
-					                   th:value="${_csrf.token}">
-
-					            <button type="submit" class="btn btn-primary btn-sm">
-					                <i class="fa-solid fa-rotate me-1"></i>
-					                Check Refund Status
-					            </button>
-
-					        </form>
-
-					    </div>
-
-					    <!-- REFUND AMOUNT -->
-					    <div class="mb-3"
-					         th:if="${returnRequest.refundAmount != null}">
-
-					        <label class="text-muted small">
-					            Refund Amount
-					        </label>
-
-					        <p class="fw-bold mb-0">
-					            ₹<span th:text="${#numbers.formatDecimal(returnRequest.refundAmount, 1, 2)}">0.00</span>
-					        </p>
-
-					    </div>
-
-					    <!-- RAZORPAY REFUND ID -->
-					    <div th:if="${returnRequest.razorpayRefundId != null
-					                 and !#strings.isEmpty(returnRequest.razorpayRefundId)}">
-
-					        <label class="text-muted small">
-					            Razorpay Refund ID
-					        </label>
-
-					        <p class="small mb-0 text-break"
-					           th:text="${returnRequest.razorpayRefundId}">
-					            Refund ID
-					        </p>
-
-					    </div>
-
-					</div>
-					
-
-					</div>
-
-
-                    <!-- INITIATE RAZORPAY REFUND -->
-                    <div class="mt-3"
-                         th:if="${returnRequest.status == 'RETURN_RECEIVED'
-                                 and returnRequest.refundStatus == 'NOT_APPLICABLE'
-                                 and returnRequest.orderItem.order.paymentMethod == 'ONLINE'
-                                 and returnRequest.orderItem.order.paymentStatus == 'PAID'}">
-
-                        <div class="alert alert-warning">
-
-                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
-
-                            Verify the original payment and refund amount before initiating the refund.
-                        </div>
-
-                        <form th:action="@{/admin/returns/initiate-refund/{id}(id=${returnRequest.id})}"
-                              method="post">
-
-                            <!-- CSRF -->
                             <input type="hidden"
-                                   th:if="${_csrf != null}"
-                                   th:name="${_csrf.parameterName}"
-                                   th:value="${_csrf.token}">
+                                   name="status"
+                                   value="PICKUP_PENDING">
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100"
+                                    onclick="return confirm('Start the return pickup process?');">
+
+                                <i class="fa-solid fa-truck-fast me-2"></i>
+                                Start Pickup Process
+                            </button>
+                        </div>
+
+                        <!-- CONFIRM PRODUCT RECEIVED -->
+                        <div th:if="${returnRequest.status == 'PICKUP_PENDING'}">
+
+                            <input type="hidden"
+                                   name="status"
+                                   value="RETURN_RECEIVED">
 
                             <button type="submit"
                                     class="btn btn-success w-100"
-                                    onclick="return confirm('Are you sure you want to initiate the Razorpay refund for this return request?');">
+                                    onclick="return confirm('Confirm that the returned product has been received?');">
 
-                                <i class="fa-solid fa-indian-rupee-sign me-2"></i>
-                                Initiate Razorpay Refund
+                                <i class="fa-solid fa-box me-2"></i>
+                                Confirm Product Received
                             </button>
+                        </div>
 
-                        </form>
-
-                        <p class="text-muted small mt-2 mb-0">
-                            Do not retry a refund if an earlier attempt has an uncertain outcome.
-                            Verify the refund status in Razorpay first.
-                        </p>
-
-                    </div>
-
-					<!-- COD MANUAL REFUND SECTION -->
-
-					<div class="mt-3"
-					     th:if="${returnRequest.status == 'RETURN_RECEIVED'
-					             and (returnRequest.orderItem.order.paymentMethod == 'COD'
-					                  or returnRequest.orderItem.order.paymentMethod == 'CASH_ON_DELIVERY')}">
-
-					
-					<!-- COD REFUND ALREADY RECORDED -->
-					<div class="alert alert-success"
-					     th:if="${returnRequest.codRefundRecorded}">
-
-					    <i class="fa-solid fa-circle-check me-2"></i>
-					    The COD refund has already been recorded.
-
-					    <div class="mt-2">
-					        <strong>Refund Method:</strong>
-					        <span th:text="${returnRequest.codRefundMethod}">UPI</span>
-					    </div>
-
-					    <div class="mt-1">
-					        <strong>Transaction Reference / UTR:</strong>
-					        <span class="text-break"
-					              th:text="${returnRequest.codRefundReference}">Transaction reference</span>
-					    </div>
-
-					    <div class="mt-1">
-					        <strong>Refund Date:</strong>
-					        <span th:text="${returnRequest.codRefundDate != null
-					                        ? #dates.format(returnRequest.codRefundDate, 'dd-MM-yyyy')
-					                        : 'Not available'}">25-10-2026</span>
-					    </div>
-
-					    <div class="mt-1">
-					        <strong>Refund Amount:</strong>
-					        ₹<span th:text="${returnRequest.refundAmount != null
-					                        ? #numbers.formatDecimal(returnRequest.refundAmount, 1, 2)
-					                        : '0.00'}">0.00</span>
-					    </div>
-					</div>
-
-					<!-- COD REFUND FORM -->
-					<div class="card border-0 shadow-sm"
-					     th:if="${!returnRequest.codRefundRecorded
-					             and returnRequest.refundStatus != 'REFUNDED'
-					             and (returnRequest.razorpayRefundId == null
-					                  or #strings.isEmpty(returnRequest.razorpayRefundId))}">
-
-					    <div class="card-header bg-white py-3">
-					        <h6 class="fw-bold mb-0">
-					            <i class="fa-solid fa-money-bill-transfer me-2"></i>
-					            Record COD Manual Refund
-					        </h6>
-					    </div>
-
-					    <div class="card-body">
-
-					        <div class="alert alert-info">
-					            <i class="fa-solid fa-circle-info me-2"></i>
-					            First transfer the refund to the customer through UPI or bank transfer.
-					            Then record the actual transaction details below.
-					            This form does not transfer money automatically.
-					        </div>
-
-					        <form th:action="@{/admin/returns/record-cod-refund/{id}(id=${returnRequest.id})}"
-					              method="post">
-
-					            <!-- CSRF TOKEN -->
-					            <input type="hidden"
-					                   th:if="${_csrf != null}"
-					                   th:name="${_csrf.parameterName}"
-					                   th:value="${_csrf.token}">
-									   
-
-									   <!-- REFUND AMOUNT -->
-
-									   <div class="mb-3">
-									       <label for="codRefundAmount" class="form-label">
-									           Refund Amount (₹) <span class="text-danger">*</span>
-									       </label>
-										   
-										   
-										   <!-- REFUND METHOD -->
-										   <div class="mb-3">
-										       <label for="refundMethod" class="form-label">
-										           Refund Method <span class="text-danger">*</span>
-										       </label>
-
-										       <select id="refundMethod"
-										               name="refundMethod"
-										               class="form-select"
-										               required>
-										           <option value="">Select refund method</option>
-										           <option value="UPI">UPI</option>
-										           <option value="BANK_TRANSFER">Bank Transfer</option>
-										           <option value="OTHER">Other</option>
-										       </select>
-										   </div>
-
-										   <!-- TRANSACTION REFERENCE -->
-										   <div class="mb-3">
-										       <label for="refundReference" class="form-label">
-										           Transaction Reference / UTR
-										           <span class="text-danger">*</span>
-										       </label>
-
-										       <input type="text"
-										              id="refundReference"
-										              name="refundReference"
-										              class="form-control"
-										              maxlength="150"
-										              required>
-										   </div>
-
-										   <!-- REFUND DATE -->
-										   <div class="mb-3">
-										       <label for="refundDate" class="form-label">
-										           Refund Date <span class="text-danger">*</span>
-										       </label>
-
-										       <input type="date"
-										              id="refundDate"
-										              name="refundDate"
-										              class="form-control"
-										              th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
-										              required>
-										   </div>
-
-										   <!-- SUBMIT BUTTON -->
-										   <button type="submit" class="btn btn-primary"
-										           onclick="return confirm('Have you transferred the refund and verified the transaction reference?');">
-										       <i class="fa-solid fa-check me-2"></i>
-										       Record COD Refund
-										   </button>
-										   
-
-										   </form>
- 
-
-									   
-									   <input type="number"
-									          id="codRefundAmount"
-									          name="refundAmount"
-									          class="form-control"
-									          min="0.01"
-									          step="0.01"
-									          required>
-									   
-
-									   </div>
-
-									   <!-- ONLINE PAYMENT NOT PAID -->
-
-
-                    <!-- ONLINE PAYMENT NOT PAID -->
-                    <div class="alert alert-warning mt-3"
-                         th:if="${returnRequest.status == 'RETURN_RECEIVED'
-                                 and returnRequest.orderItem.order.paymentMethod == 'ONLINE'
-                                 and returnRequest.orderItem.order.paymentStatus != 'PAID'}">
-
-                        <i class="fa-solid fa-circle-exclamation me-2"></i>
-
-                        A Razorpay refund cannot be initiated because the order payment status is not PAID.
-                    </div>
-
+                    </form>
                 </div>
+
+                <!-- PRODUCT RECEIVED MESSAGE -->
+                <div th:if="${returnRequest.status == 'RETURN_RECEIVED'}"
+                     class="alert alert-info mt-3">
+
+                    <i class="fa-solid fa-circle-check me-2"></i>
+                    The returned product has been received.
+                    Check the refund information below.
+                </div>
+
+                <!-- ================================================== -->
+                <!-- REFUND INFORMATION                                 -->
+                <!-- ================================================== -->
+
+                <div class="card border-0 bg-light mt-3"
+                     th:if="${returnRequest.refundStatus != null
+                         and returnRequest.refundStatus != 'NOT_APPLICABLE'}">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-3">
+                            <i class="fa-solid fa-money-bill-transfer me-2"></i>
+                            Refund Information
+                        </h6>
+
+                        <!-- REFUND STATUS -->
+                        <div class="mb-3">
+
+                            <label class="text-muted small">
+                                Refund Status
+                            </label>
+
+                            <div class="mb-2">
+                                <span class="badge fs-6"
+                                      th:classappend="${returnRequest.refundStatus == 'REFUNDED'}
+                                          ? ' bg-success'
+                                          : (${returnRequest.refundStatus == 'FAILED'}
+                                              ? ' bg-danger'
+                                              : (${returnRequest.refundStatus == 'INITIATED'}
+                                                  ? ' bg-warning text-dark'
+                                                  : ' bg-info text-dark'))"
+                                      th:text="${returnRequest.refundStatus}">
+                                    INITIATED
+                                </span>
+                            </div>
+
+                            <!-- CHECK RAZORPAY REFUND STATUS -->
+                            <form th:if="${returnRequest.razorpayRefundId != null
+                                          and !#strings.isEmpty(returnRequest.razorpayRefundId)
+                                          and returnRequest.refundStatus != 'REFUNDED'
+                                          and returnRequest.refundStatus != 'FAILED'}"
+                                  th:action="@{/admin/returns/sync-refund/{id}(id=${returnRequest.id})}"
+                                  method="post">
+
+                                <input type="hidden"
+                                       th:if="${_csrf != null}"
+                                       th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}">
+
+                                <button type="submit"
+                                        class="btn btn-primary btn-sm">
+                                    <i class="fa-solid fa-rotate me-1"></i>
+                                    Check Refund Status
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- REFUND AMOUNT -->
+                        <div class="mb-3"
+                             th:if="${returnRequest.refundAmount != null}">
+
+                            <label class="text-muted small">
+                                Refund Amount
+                            </label>
+
+                            <p class="fw-bold mb-0">
+                                ₹<span
+                                    th:text="${#numbers.formatDecimal(returnRequest.refundAmount, 1, 2)}">0.00</span>
+                            </p>
+                        </div>
+
+                        <!-- RAZORPAY REFUND ID -->
+                        <div th:if="${returnRequest.razorpayRefundId != null
+                                     and !#strings.isEmpty(returnRequest.razorpayRefundId)}">
+
+                            <label class="text-muted small">
+                                Razorpay Refund ID
+                            </label>
+
+                            <p class="small mb-0 text-break"
+                               th:text="${returnRequest.razorpayRefundId}">
+                                Refund ID
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================================================== -->
+                <!-- INITIATE RAZORPAY REFUND                           -->
+                <!-- ================================================== -->
+
+                <div class="mt-3"
+                     th:if="${returnRequest.status == 'RETURN_RECEIVED'
+                         and returnRequest.refundStatus == 'NOT_APPLICABLE'
+                         and returnRequest.orderItem.order.paymentMethod == 'ONLINE'
+                         and returnRequest.orderItem.order.paymentStatus == 'PAID'}">
+
+                    <div class="alert alert-warning">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        Verify the original payment and refund amount before
+                        initiating the refund.
+                    </div>
+
+                    <form th:action="@{/admin/returns/initiate-refund/{id}(id=${returnRequest.id})}"
+                          method="post">
+
+                        <!-- CSRF -->
+                        <input type="hidden"
+                               th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
+
+                        <button type="submit"
+                                class="btn btn-success w-100"
+                                onclick="return confirm('Are you sure you want to initiate the Razorpay refund for this return request?');">
+
+                            <i class="fa-solid fa-indian-rupee-sign me-2"></i>
+                            Initiate Razorpay Refund
+                        </button>
+                    </form>
+
+                    <p class="text-muted small mt-2 mb-0">
+                        Do not retry a refund if an earlier attempt has an
+                        uncertain outcome. Verify the refund status in
+                        Razorpay first.
+                    </p>
+                </div>
+
+                <!-- ================================================== -->
+                <!-- COD MANUAL REFUND SECTION                          -->
+                <!-- ================================================== -->
+
+                <div class="mt-3"
+                     th:if="${returnRequest.status == 'RETURN_RECEIVED'
+                         and (returnRequest.orderItem.order.paymentMethod == 'COD'
+                              or returnRequest.orderItem.order.paymentMethod == 'CASH_ON_DELIVERY')}">
+
+                    <!-- COD REFUND ALREADY RECORDED -->
+                    <div class="alert alert-success"
+                         th:if="${returnRequest.codRefundRecorded}">
+
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        The COD refund has already been recorded.
+
+                        <div class="mt-2">
+                            <strong>Refund Method:</strong>
+
+                            <span th:text="${returnRequest.codRefundMethod}">
+                                UPI
+                            </span>
+                        </div>
+
+                        <div class="mt-1">
+                            <strong>Transaction Reference / UTR:</strong>
+
+                            <span class="text-break"
+                                  th:text="${returnRequest.codRefundReference}">
+                                Transaction reference
+                            </span>
+                        </div>
+
+                        <div class="mt-1">
+                            <strong>Refund Date:</strong>
+
+                            <span th:text="${returnRequest.codRefundDate != null
+                                ? #dates.format(returnRequest.codRefundDate, 'dd-MM-yyyy')
+                                : 'Not available'}">
+                                25-10-2026
+                            </span>
+                        </div>
+
+                        <div class="mt-1">
+                            <strong>Refund Amount:</strong>
+
+                            ₹<span
+                                th:text="${returnRequest.refundAmount != null
+                                    ? #numbers.formatDecimal(returnRequest.refundAmount, 1, 2)
+                                    : '0.00'}">0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- COD REFUND FORM -->
+                    <div class="card border-0 shadow-sm"
+                         th:if="${!returnRequest.codRefundRecorded
+                             and returnRequest.refundStatus != 'REFUNDED'
+                             and (returnRequest.razorpayRefundId == null
+                                  or #strings.isEmpty(returnRequest.razorpayRefundId))}">
+
+                        <div class="card-header bg-white py-3">
+                            <h6 class="fw-bold mb-0">
+                                <i class="fa-solid fa-money-bill-transfer me-2"></i>
+                                Record COD Manual Refund
+                            </h6>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="alert alert-info">
+                                <i class="fa-solid fa-circle-info me-2"></i>
+
+                                First transfer the refund to the customer
+                                through UPI or bank transfer. Then record
+                                the actual transaction details below.
+                                This form does not transfer money
+                                automatically.
+                            </div>
+
+                            <form id="codRefundForm"
+                                  th:action="@{/admin/returns/record-cod-refund/{id}(id=${returnRequest.id})}"
+                                  method="post">
+
+                                <!-- CSRF TOKEN -->
+                                <input type="hidden"
+                                       th:if="${_csrf != null}"
+                                       th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}">
+
+                                <!-- EXPECTED REFUND AMOUNT -->
+                                <input type="hidden"
+                                       id="expectedRefundAmount"
+                                       th:value="${(returnRequest.orderItem.purchasePrice != null
+                                           ? returnRequest.orderItem.purchasePrice
+                                           : returnRequest.orderItem.product.price)
+                                           * returnRequest.returnQuantity}">
+
+                                <!-- REFUND AMOUNT -->
+                                <div class="mb-3">
+
+                                    <label for="codRefundAmount"
+                                           class="form-label">
+
+                                        Refund Amount (₹)
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="number"
+                                           id="codRefundAmount"
+                                           name="refundAmount"
+                                           class="form-control"
+                                           min="0.01"
+                                           step="0.01"
+                                           required>
+
+                                    <div class="form-text">
+                                        Enter the actual amount refunded.
+                                        The amount must match the original
+                                        purchase amount for the returned
+                                        quantity.
+                                    </div>
+
+                                    <!-- MISMATCH WARNING -->
+                                    <div id="refundAmountWarning"
+                                         class="alert alert-danger mt-2 mb-0 d-none"
+                                         role="alert">
+
+                                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+
+                                        The refund amount does not match
+                                        the original purchase amount for
+                                        the returned quantity. Verify the
+                                        amount before submitting.
+                                    </div>
+                                </div>
+
+                                <!-- REFUND METHOD -->
+                                <div class="mb-3">
+
+                                    <label for="refundMethod"
+                                           class="form-label">
+
+                                        Refund Method
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select id="refundMethod"
+                                            name="refundMethod"
+                                            class="form-select"
+                                            required>
+
+                                        <option value="">
+                                            Select refund method
+                                        </option>
+
+                                        <option value="UPI">UPI</option>
+
+                                        <option value="BANK_TRANSFER">
+                                            Bank Transfer
+                                        </option>
+
+                                        <option value="OTHER">Other</option>
+
+                                    </select>
+                                </div>
+
+                                <!-- TRANSACTION REFERENCE -->
+                                <div class="mb-3">
+
+                                    <label for="refundReference"
+                                           class="form-label">
+
+                                        Transaction Reference / UTR
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                           id="refundReference"
+                                           name="refundReference"
+                                           class="form-control"
+                                           maxlength="150"
+                                           required>
+                                </div>
+
+                                <!-- REFUND DATE -->
+                                <div class="mb-3">
+
+                                    <label for="refundDate"
+                                           class="form-label">
+
+                                        Refund Date
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="date"
+                                           id="refundDate"
+                                           name="refundDate"
+                                           class="form-control"
+                                           th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                           required>
+                                </div>
+
+                                <!-- SUBMIT BUTTON -->
+                                <button type="submit"
+                                        class="btn btn-primary">
+
+                                    <i class="fa-solid fa-check me-2"></i>
+                                    Record COD Refund
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================================================== -->
+                <!-- ONLINE PAYMENT NOT PAID                            -->
+                <!-- ================================================== -->
+
+                <div class="alert alert-warning mt-3"
+                     th:if="${returnRequest.status == 'RETURN_RECEIVED'
+                         and returnRequest.orderItem.order.paymentMethod == 'ONLINE'
+                         and returnRequest.orderItem.order.paymentStatus != 'PAID'}">
+
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                    A Razorpay refund cannot be initiated because the
+                    order payment status is not PAID.
+                </div>
+
             </div>
         </div>
-
     </div>
+</div>
+```
 
 </main>
 
 <!-- ADMIN FOOTER -->
+
 <div th:replace="~{fragments/admin-footer :: adminFooter}"></div>
 
-<!-- BOOTSTRAP -->
+<!-- BOOTSTRAP SCRIPT -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- ADMIN NAVBAR SCRIPT -->
+
 <script th:src="@{/js/admin-navbar.js}"></script>
 
 <!-- ALERT AUTO-HIDE -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const alerts = document.querySelectorAll(".alert-success, .alert-danger");
 
-        alerts.forEach(function (alert) {
-            window.setTimeout(function () {
-                if (alert && alert.isConnected) {
-                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                    bsAlert.close();
-                }
-            }, 5000);
-        });
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const alerts = document.querySelectorAll(
+        ".alert-success, .alert-danger"
+    );
+
+    alerts.forEach(function (alert) {
+
+        window.setTimeout(function () {
+
+            if (alert && alert.isConnected) {
+
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                bsAlert.close();
+            }
+
+        }, 5000);
     });
+});
 </script>
 
+<!-- COD REFUND AMOUNT VALIDATION -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("codRefundForm");
+
+    // The form only exists for eligible COD return requests.
+    if (!form) {
+        return;
+    }
+
+    const amountInput = document.getElementById("codRefundAmount");
+    const expectedInput = document.getElementById("expectedRefundAmount");
+    const warning = document.getElementById("refundAmountWarning");
+
+    function amountsMatch() {
+
+        const enteredAmount = Number(amountInput.value);
+        const expectedAmount = Number(expectedInput.value);
+
+        if (
+            amountInput.value.trim() === "" ||
+            !Number.isFinite(enteredAmount) ||
+            !Number.isFinite(expectedAmount)
+        ) {
+            return false;
+        }
+
+        // Allow only a tiny floating-point rounding tolerance.
+        return Math.abs(enteredAmount - expectedAmount) < 0.005;
+    }
+
+    // Show or hide the warning while the admin types.
+    amountInput.addEventListener("input", function () {
+
+        if (amountInput.value.trim() === "" || amountsMatch()) {
+
+            warning.classList.add("d-none");
+
+        } else {
+
+            warning.classList.remove("d-none");
+        }
+    });
+
+    // Prevent form submission if the entered amount is incorrect.
+    form.addEventListener("submit", function (event) {
+
+        if (!amountsMatch()) {
+
+            event.preventDefault();
+
+            warning.classList.remove("d-none");
+
+            amountInput.focus();
+
+            alert(
+                "Refund amount mismatch! Please enter the original " +
+                "purchase amount for the returned quantity before submitting."
+            );
+
+            return;
+        }
+
+        // The browser-side amount comparison passed.
+        // Existing server-side validation is still required.
+        if (!confirm(
+            "Have you transferred the refund and verified the transaction reference?"
+        )) {
+            event.preventDefault();
+        }
+    });
+});
+</script>
 
 </body>
 </html>
