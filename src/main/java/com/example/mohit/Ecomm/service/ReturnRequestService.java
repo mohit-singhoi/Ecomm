@@ -503,6 +503,7 @@ public class ReturnRequestService {
      return returnRequestRepository.save(request);
  }
  
+ 
 //=====================================================
 //SEND SUCCESSFUL REFUND EMAIL ONCE
 //=====================================================
@@ -787,6 +788,7 @@ public ReturnRequest initiateRefund(Long requestId) {
   }
 }
 
+
 //=====================================================
 //ADMIN: SYNCHRONIZE REFUND STATUS WITH RAZORPAY
 //=====================================================
@@ -998,11 +1000,11 @@ public ReturnRequest recordCodRefund(
              "The refund amount must be greater than zero.");
  }
 
- if (actualRefund.compareTo(maximumRefund) > 0) {
-     throw new RuntimeException(
-             "The refund cannot exceed the refundable product amount of ₹"
-                     + maximumRefund);
- }
+ if (actualRefund.compareTo(maximumRefund) != 0) {
+	    throw new RuntimeException(
+	            "Only the full eligible refund amount is allowed. "
+	                    + "Required refund amount: ₹" + maximumRefund);
+	}
 
  // 12. Record the refund already sent by the administrator.
  request.setCodRefundMethod(normalizedMethod);

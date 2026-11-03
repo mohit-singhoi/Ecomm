@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 public class SecurityConfig {
@@ -203,6 +204,23 @@ public class SecurityConfig {
                 	    "/wishlist/**"
                 	)
                 	.hasAnyRole("USER", "ADMIN")
+                	
+                	
+                	// -------------------------------------------------
+                	// USER API SECURITY
+                	// -------------------------------------------------
+
+                	// Public registration
+                	.requestMatchers(HttpMethod.POST, "/users/register")
+                	.permitAll()
+
+                	// Public login
+                	.requestMatchers(HttpMethod.POST, "/users/login")
+                	.permitAll()
+
+                	// Only ADMIN can view all users
+                	.requestMatchers(HttpMethod.GET, "/users")
+                	.hasRole("ADMIN")
 
 
                 // -------------------------------------------------
@@ -250,7 +268,6 @@ public class SecurityConfig {
 
                 .permitAll()
             );
-
 
         return http.build();
     }

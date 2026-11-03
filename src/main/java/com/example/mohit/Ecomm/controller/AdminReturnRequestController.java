@@ -46,11 +46,24 @@ public class AdminReturnRequestController {
 
     private boolean isAdmin(HttpSession session) {
 
-        User admin =
-                (User) session.getAttribute("loggedInUser");
+        if (session == null) {
+            return false;
+        }
 
-        return admin != null
-                && "ROLE_ADMIN".equals(admin.getRole());
+        Object loggedInUser = session.getAttribute("loggedInUser");
+
+        if (!(loggedInUser instanceof User)) {
+            return false;
+        }
+
+        User admin = (User) loggedInUser;
+
+        if (admin.getRole() == null) {
+            return false;
+        }
+
+        return "ADMIN".equalsIgnoreCase(admin.getRole())
+                || "ROLE_ADMIN".equalsIgnoreCase(admin.getRole());
     }
 
 
@@ -262,6 +275,7 @@ public class AdminReturnRequestController {
                     "Return evidence was not found.");
         }
     }
+    
     
  // =====================================================
  // UPDATE RETURN PICKUP STATUS

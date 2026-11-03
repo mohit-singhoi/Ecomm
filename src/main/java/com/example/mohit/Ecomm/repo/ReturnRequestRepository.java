@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import jakarta.persistence.LockModeType;
+
+import org.springframework.data.jpa.repository.Lock;
 
 import com.example.mohit.Ecomm.model.ReturnRequest;
 
@@ -67,4 +70,18 @@ public interface ReturnRequestRepository
             Long orderItemId,
             Collection<String> statuses
     );
+    
+ // =====================================================
+ // LOCK RETURN REQUEST BEFORE FINANCIAL OPERATIONS
+ // =====================================================
+
+ @Lock(LockModeType.PESSIMISTIC_WRITE)
+ @Query("""
+         SELECT r
+         FROM ReturnRequest r
+         WHERE r.id = :requestId
+         """)
+ Optional<ReturnRequest> findByIdForUpdate(
+         @Param("requestId") Long requestId
+ ); 
 }

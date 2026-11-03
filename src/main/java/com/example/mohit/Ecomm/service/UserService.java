@@ -8,33 +8,48 @@ import org.springframework.stereotype.Service;
 
 import com.example.mohit.Ecomm.model.User;
 import com.example.mohit.Ecomm.repo.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    // Register User Method 
+    
     public User registerUser(User user) {
 
-        try {
-            // New accounts should be active by default
-            user.setActive(true);
-
-            User newUser = userRepository.save(user);
-
-            System.out.println("User Successfully Registered");
-
-            return newUser;
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (user == null
+                || user.getPassword() == null
+                || user.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password is required.");
         }
 
-        return null;
+        // Never allow public registration to create an admin.
+        user.setRole("USER");
+
+        // New accounts are active by default.
+        user.setActive(true);
+
+        // Encode password using BCrypt.
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
+
+        return userRepository.save(user);
     }
 
+    // Login User Method 
+    
     public User loginUser(String email, String password) {
+
+        if (email == null || password == null) {
+            return null;
+        }
 
         Optional<User> userOptional =
                 userRepository.findByEmail(email);
@@ -43,14 +58,15 @@ public class UserService {
 
             User user = userOptional.get();
 
-            // Reject deactivated accounts
             if (!user.isActive()) {
                 return null;
             }
 
-            // Validate password
             if (user.getPassword() != null
-                    && user.getPassword().equals(password)) {
+                    && passwordEncoder.matches(
+                            password,
+                            user.getPassword())) {
+
                 return user;
             }
         }
