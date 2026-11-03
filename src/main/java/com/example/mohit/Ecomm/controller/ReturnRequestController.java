@@ -154,7 +154,15 @@ public class ReturnRequestController {
 
         // Verify customer login
         if (loggedInUser == null) {
+        	
+        	if (loggedInUser.getId() == null) {
+        	    redirectAttributes.addFlashAttribute(
+        	            "errorMessage",
+        	            "Invalid customer session. Please log in again."
+        	    );
 
+        	    return "redirect:/userlogin";
+        	}
             session.setAttribute(
                     "redirectAfterLogin",
                     "/my-orders/return/" + orderItemId

@@ -92,7 +92,7 @@ public class ReturnRequestService {
 
         // Find the order item
         OrderItem orderItem = orderItemRepository
-                .findById(orderItemId)
+                .findByIdForUpdate(orderItemId)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "Order item not found."));
@@ -240,6 +240,7 @@ public class ReturnRequestService {
         request.setReason(reason.trim());
         request.setDescription(cleanDescription);
         request.setStatus("REQUESTED");
+        request.setRequestDate(new Date());
         request.setRefundStatus("NOT_APPLICABLE");
 
         // Store the optional evidence image
@@ -361,8 +362,7 @@ public class ReturnRequestService {
             String adminRemarks) {
 
         // Find the request with its associated details
-        ReturnRequest request =
-                getReturnRequestForAdmin(requestId);
+    	ReturnRequest request = getReturnRequestForUpdate(requestId);
 
         // Only requests awaiting review can be reviewed
         if (!"REQUESTED".equals(request.getStatus())) {
@@ -442,11 +442,7 @@ public class ReturnRequestService {
                  "Invalid return request ID.");
      }
 
-     ReturnRequest request = returnRequestRepository
-             .findById(requestId)
-             .orElseThrow(() ->
-                     new RuntimeException(
-                             "Return request not found."));
+     ReturnRequest request = getReturnRequestForUpdate(requestId);
 
      String currentStatus = request.getStatus();
 
@@ -558,7 +554,7 @@ public ReturnRequest initiateRefund(Long requestId) {
       throw new RuntimeException("Invalid return request ID.");
   }
 
-  ReturnRequest request = getReturnRequestForAdmin(requestId);
+  ReturnRequest request = getReturnRequestForUpdate(requestId);
 
   // 1. Validate return status.
   if (!"RETURN_RECEIVED".equals(request.getStatus())) {
@@ -641,10 +637,41 @@ public ReturnRequest initiateRefund(Long requestId) {
   try {
 
       // 5. Retrieve the original payment details.
-      JSONObject payment = razorpayService.fetchPayment(paymentId);
+	  JSONObject payment = razorpayService.fetchPayment(paymentId);
 
-      long originalPaymentAmount =
-              payment.getLong("amount");
+	// Verify payment ID.
+	String providerPaymentId = payment.optString("id", "");
+
+	if (!paymentId.equals(providerPaymentId)) {
+	    throw new RuntimeException(
+	            "Razorpay payment ID does not match the original order.");
+	}
+
+	// Verify payment status.
+	String providerPaymentStatus =
+	        payment.optString("status", "");
+
+	if (!"captured".equalsIgnoreCase(providerPaymentStatus)) {
+	    throw new RuntimeException(
+	            "Razorpay has not confirmed successful payment capture.");
+	}
+
+	// Verify currency.
+	String currency = payment.optString("currency", "");
+
+	if (!"INR".equalsIgnoreCase(currency)) {
+	    throw new RuntimeException(
+	            "Only INR payments are supported for refunds.");
+	}
+
+	// Verify original payment amount.
+	long originalPaymentAmount =
+	        payment.getLong("amount");
+
+	if (originalPaymentAmount <= 0) {
+	    throw new RuntimeException(
+	            "The original payment amount is invalid.");
+	}
 
       if (originalPaymentAmount <= 0) {
           throw new RuntimeException(
@@ -800,7 +827,7 @@ if (requestId == null) {
  throw new RuntimeException("Invalid return request ID.");
 }
 
-ReturnRequest request = getReturnRequestForAdmin(requestId);
+ReturnRequest request = getReturnRequestForUpdate(requestId);
 
 if (!"RETURN_RECEIVED".equals(request.getStatus())) {
  throw new RuntimeException(
@@ -882,7 +909,7 @@ public ReturnRequest recordCodRefund(
  }
 
  // 2. Load the return request.
- ReturnRequest request = getReturnRequestForAdmin(requestId);
+ ReturnRequest request = getReturnRequestForUpdate(requestId);
 
  // 3. The returned product must have been received.
  if (!"RETURN_RECEIVED".equals(request.getStatus())) {
@@ -1027,6 +1054,18 @@ public ReturnRequest recordCodRefund(
  sendRefundSuccessEmailIfNeeded(savedRequest);
 
  return returnRequestRepository.save(savedRequest);
+}
+
+
+private ReturnRequest getReturnRequestForUpdate(Long requestId) {
+
+    if (requestId == null) {
+        throw new RuntimeException("Return request ID cannot be null.");
+    }
+
+    return returnRequestRepository.findByIdForUpdate(requestId)
+            .orElseThrow(() ->
+                    new RuntimeException("Return request not found."));
 }
 
 
