@@ -1,4 +1,4 @@
-// ContactMessage Pqge
+// ContactMessage Entity 
 
 package com.example.mohit.Ecomm.model;
 
