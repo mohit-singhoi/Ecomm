@@ -1,4 +1,4 @@
-// Feedback Page
+// Feedback Entity 
 
 package com.example.mohit.Ecomm.model;
 
