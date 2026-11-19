@@ -1,4 +1,4 @@
-// CartItem Page
+// CartItem Entity 
 
 package com.example.mohit.Ecomm.model;
 
