@@ -1,3 +1,5 @@
+// ProductImage Entity 
+
 package com.example.mohit.Ecomm.model;
 
 import jakarta.persistence.Entity;
