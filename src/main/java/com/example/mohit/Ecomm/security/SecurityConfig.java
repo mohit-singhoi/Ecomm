@@ -1,3 +1,5 @@
+// Security Config Page
+
 package com.example.mohit.Ecomm.security;
 
 import org.springframework.context.annotation.Bean;
